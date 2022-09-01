@@ -1,0 +1,68 @@
+#!/bin/bash
+
+function ask(){
+	local message=$1
+	local default=$2
+	[ -z ${2} ] && local default="NULL"
+	local choice=""
+	local loop=1
+
+	if [ ${default} == "y" ]; then
+		printf "${message} (Y/n) "
+	elif [ ${default} == "n" ]; then
+		printf "${message} (y/N) "
+	else
+		printf "${message} (y/n) "
+	fi
+
+	read -n 1 choice
+	printf "\n"
+	choice=${choice,,}
+	if [ ${choice} != "y" ] && [ ${choice} != "n" ]; then
+		[ ${default} == "y" ] && return 1
+		[ ${default} == "n" ] && return 0
+	fi
+	[ ${choice} == "y" ] && return 1
+	[ ${choice} == "n" ] && return 0
+}
+
+function install_bashrc()
+{
+	do_bashrc='1'
+	if [ -f ${HOME}/.bashrc ]; then
+		ask "file ${HOME}/.bashrc exists, do you wan't to overwrite it " "n"
+		[ "$?" == "1" ] || do_bashrc='0'
+	fi
+	if [ "${do_bashrc}" == "1" ]; then
+		cp ${BASHRC_PATH} ${HOME}/.bashrc
+	fi
+}
+
+function install_bash_aliases()
+{
+	do_bash_aliases='1'
+	if [ -f ${HOME}/.bash_aliases ]; then
+		ask "file ${HOME}/.bash_aliases exists, do you wan't to overwrite it " "n"
+		[ "$?" == "1" ] || do_bash_aliases='0'
+	fi
+	if [ "${do_bashrc}" == "1" ]; then
+		cp ${BASH_ALIASES_PATH} ${HOME}/.bash_aliases
+	fi
+}
+
+function post_install()
+{
+	printf "to make effect you have to reopen bash session\n"
+}
+
+function main()
+{
+	install_bashrc
+	install_bash_aliases
+	post_install
+}
+
+
+source .config
+
+main
