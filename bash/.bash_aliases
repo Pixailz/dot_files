@@ -5,8 +5,8 @@
 ## APT ALL
 function aptall() {
 	sudo apt update
-	sudo apt upgrade -y
-	sudo apt autoremove -y
+	sudo apt upgrade
+	sudo apt autoremove
 	if [ -f /var/run/reboot-required ]; then
 		printf "Reboot required, rebooting in...\n"
 		printf "3...\r"
@@ -57,16 +57,23 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # Alias
+
+## ENABLE ALIAS FOR SUDO COMMAND
+alias sudo="sudo "
+
+## IP
 alias ip="ip --color=auto"
 
 ## LS
 LS_OPTIONS="-vhF"
-
 if [ "${LS_COLOR}" == "y" ]; then
 	LS_OPTIONS="--color=auto ${LS_OPTIONS}"
 fi
-
 alias ls="ls ${LS_OPTIONS}"
 alias ll="ls -oA"
 alias la="ls -la"
 alias l="ls"
+
+## APT
+APT_OPTIONS="-y"
+alias apt="apt ${APT_OPTIONS}"
