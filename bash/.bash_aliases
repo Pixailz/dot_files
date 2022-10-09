@@ -77,3 +77,6 @@ alias l="ls"
 ## APT
 APT_OPTIONS="-y"
 alias apt="apt ${APT_OPTIONS}"
+
+## John
+alias john="/usr/local/bin/john"

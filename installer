@@ -26,43 +26,18 @@ function ask(){
 	[ ${choice} == "n" ] && return 0
 }
 
-function install_bashrc()
-{
-	do_bashrc='1'
-	if [ -f ${HOME}/.bashrc ]; then
-		ask "file ${HOME}/.bashrc exists, do you wan't to overwrite it " "n"
-		[ "$?" == "1" ] || do_bashrc='0'
-	fi
-	if [ "${do_bashrc}" == "1" ]; then
-		cp ${BASHRC_PATH} ${HOME}/.bashrc
-	fi
-}
-
-function install_bash_aliases()
-{
-	do_bash_aliases='1'
-	if [ -f ${HOME}/.bash_aliases ]; then
-		ask "file ${HOME}/.bash_aliases exists, do you wan't to overwrite it " "n"
-		[ "$?" == "1" ] || do_bash_aliases='0'
-	fi
-	if [ "${do_bashrc}" == "1" ]; then
-		cp ${BASH_ALIASES_PATH} ${HOME}/.bash_aliases
-	fi
-}
-
-function post_install()
-{
-	printf "to make effect you have to reopen bash session\n"
-}
-
-function main()
-{
-	install_bashrc
-	install_bash_aliases
-	post_install
-}
-
-
 source .config
 
-main
+function main(){
+	source bash/install
+	source gdb/install
+	source vim/install
+
+	install_bash_config
+	install_gdb_config
+	install_vim_config
+}
+
+if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
+	main
+fi

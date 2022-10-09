@@ -1,0 +1,21 @@
+#!/bin/bash
+
+function install_vim_config(){
+	do_install='1'
+	if [ -f ${HOME}/.vimrc ]; then
+		ask "file ${HOME}/.vimrc exists, do you wan't to overwrite it " "n"
+		[ "$?" == "1" ] || do_install='0'
+	fi
+	if [ "${do_install}" == "1" ]; then
+		cp ${VIMRC_PATH} ${HOME}/.vimrc
+	fi
+}
+
+if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
+	if [ "${0}" -ef "vim/install" ]; then
+		source installer
+	else
+		source ../installer
+	fi
+	install_vim_config
+fi

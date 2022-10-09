@@ -1,0 +1,22 @@
+#!/bin/bash
+
+function install_gdb_config()
+{
+	do_install='1'
+	if [ -f ${HOME}/.gdbinit ]; then
+		ask "file ${HOME}/.gdbinit exists, do you wan't to overwrite it " "n"
+		[ "$?" == "1" ] || do_install='0'
+	fi
+	if [ "${do_install}" == "1" ]; then
+		cp ${BASH_ALIASES_PATH} ${HOME}/.gdbinit
+	fi
+}
+
+if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
+	if [ "${0}" -ef "gdb/install" ]; then
+		source installer
+	else
+		source ../installer
+	fi
+	install_gdb_config
+fi
