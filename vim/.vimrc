@@ -1,4 +1,5 @@
 " Config
+
 "" Line number
 set number
 set relativenumber
@@ -9,6 +10,11 @@ set mouse=a
 "" Tabulation
 set tabstop=4
 set smartindent autoindent
+
+"" Show all character
+set list
+set listchars=tab:>-
+set listchars+=space:_
 
 "" Cursor
 " Reference chart of values:
@@ -23,6 +29,8 @@ let &t_SI = "\e[5 q"
 let &t_EI = "\e[1 q"
 
 " Function
+
+"" MapKey to all mode
 function	MapKey(key, act)
 	exe 'nmap '.a:key.' '.a:act.'<CR>'
 	exe 'vmap '.a:key.' <esc>'.a:act.'<CR>'
@@ -30,6 +38,7 @@ function	MapKey(key, act)
 endfunction
 
 " KeyMap
+
 "" New Tab
 call MapKey('<C-t>', ':tabnew')
 
@@ -38,3 +47,6 @@ call MapKey('<C-s>', ':wa!')
 
 "" Save and quit
 call MapKey('<C-q>', ':xa!')
+
+" Usefull shortcut
+""
