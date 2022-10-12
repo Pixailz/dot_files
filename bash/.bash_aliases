@@ -82,6 +82,10 @@ alias apt="apt ${APT_OPTIONS}"
 if [ -f "/usr/bin/batcat" ]; then
 	export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 	alias cat="batcat"
+	function batdiff()
+	{
+		git diff --name-only --relative --diff-filter=d | xargs batcat --diff
+	}
 fi
 
 ## John
