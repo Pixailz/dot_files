@@ -1,0 +1,8 @@
+# Set no pager like vim
+--pager=never
+
+# Set theme
+--theme='Monokai Extended Origin'
+
+# Ansi character
+--map-syntax='*.log:Plain Text'

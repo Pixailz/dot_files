@@ -1,0 +1,22 @@
+#!/bin/bash
+
+function install_batcat_config()
+{
+	batcat_dir=$(batcat --config-dir)
+	do_batcat='1'
+	[ ! -d "${batcat_dir}" ] && mkdir ${batcat_dir}
+	if [ -f "${batcat_dir}/config" ]; then
+		ask "file ${batcat_dir}/config exists, do you wan't to overwrite it " "n"
+		[ "$?" == "1" ] || do_batcat='0'
+	fi
+	[ "${do_batcat}" -eq "1" ] && cp ${BATCAT_CONF_PATH} ${batcat_dir}/config
+}
+
+if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
+	if [ "${0}" -ef "batcat/install" ]; then
+		source installer
+	else
+		source ../installer
+	fi
+	install_batcat_config
+fi

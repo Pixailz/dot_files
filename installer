@@ -39,10 +39,13 @@ function main()
 	source bash/install
 	source gdb/install
 	source vim/install
+	source batcat/install
 
 	install_bash_config
 	install_gdb_config
 	install_vim_config
+	install_batcat_config
+	post_install
 }
 
 if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
