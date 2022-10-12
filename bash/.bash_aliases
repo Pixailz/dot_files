@@ -82,6 +82,7 @@ alias apt="apt ${APT_OPTIONS}"
 
 if [ -f "/usr/bin/batcat" ]; then
 	BATCAT_OPTIONS="--pager=never --theme='Monokai Extended Origin'"
+	export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 	alias cat="batcat ${BATCAT_OPTIONS}"
 fi
 
