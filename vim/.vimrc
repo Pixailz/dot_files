@@ -47,6 +47,3 @@ call MapKey('<C-s>', ':wa!')
 
 "" Save and quit
 call MapKey('<C-q>', ':xa!')
-
-" Usefull shortcut
-""
