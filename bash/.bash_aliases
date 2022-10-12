@@ -65,7 +65,7 @@ alias sudo="sudo "
 alias ip="ip --color=auto"
 
 ## LS
-LS_OPTIONS="-vhF"
+export LS_OPTIONS="-vhF"
 if [ "${LS_COLOR}" == "y" ]; then
 	LS_OPTIONS="--color=auto ${LS_OPTIONS}"
 fi
@@ -75,8 +75,15 @@ alias la="ls -la"
 alias l="ls"
 
 ## APT
-APT_OPTIONS="-y"
+export APT_OPTIONS="-y"
 alias apt="apt ${APT_OPTIONS}"
+
+## batcat
+
+if [ -f "/usr/bin/batcat" ]; then
+	BATCAT_OPTIONS="--pager=never --theme='Monokai Extended Origin'"
+	alias cat="batcat ${BATCAT_OPTIONS}"
+fi
 
 ## John
 alias john="/usr/local/bin/john"
