@@ -1,6 +1,7 @@
 #!/bin/bash
 
-function install_vim_config(){
+function install_vim_config()
+{
 	do_install='1'
 	if [ -f ${HOME}/.vimrc ]; then
 		ask "file ${HOME}/.vimrc exists, do you wan't to overwrite it " "n"

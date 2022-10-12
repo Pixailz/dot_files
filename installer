@@ -1,6 +1,7 @@
 #!/bin/bash
 
-function ask(){
+function ask()
+{
 	local message=$1
 	local default=$2
 	[ -z ${2} ] && local default="NULL"
@@ -28,7 +29,8 @@ function ask(){
 
 source .config
 
-function main(){
+function main()
+{
 	source bash/install
 	source gdb/install
 	source vim/install
