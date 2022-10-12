@@ -27,6 +27,11 @@ function ask()
 	[ ${choice} == "n" ] && return 0
 }
 
+function post_install()
+{
+	printf "to make effect you have to reopen bash session\n"
+}
+
 source .config
 
 function main()

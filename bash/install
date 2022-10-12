@@ -24,16 +24,10 @@ function install_bash_aliases()
 	fi
 }
 
-function post_install()
-{
-	printf "to make effect you have to reopen bash session\n"
-}
-
 function install_bash_config()
 {
 	install_bashrc
 	install_bash_aliases
-	post_install
 }
 
 if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
