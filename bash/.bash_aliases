@@ -5,8 +5,8 @@
 ## APT ALL
 function aptall() {
 	sudo apt update
-	sudo apt upgrade
-	sudo apt autoremove
+	sudo apt upgrade -y
+	sudo apt autoremove --purge -y
 	if [ -f /var/run/reboot-required ]; then
 		printf "Reboot required, rebooting in...\n"
 		printf "3...\r"
