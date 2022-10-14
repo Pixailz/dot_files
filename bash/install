@@ -4,7 +4,7 @@ function install_bashrc()
 {
 	do_bashrc='1'
 	if [ -f ${HOME}/.bashrc ]; then
-		ask "file ${HOME}/.bashrc exists, do you wan't to overwrite it " "n"
+		ask "file ${HOME}/.bashrc exists, do you wan't to overwrite it " "y"
 		[ "$?" == "1" ] || do_bashrc='0'
 	fi
 	if [ "${do_bashrc}" == "1" ]; then
@@ -16,7 +16,7 @@ function install_bash_aliases()
 {
 	do_bash_aliases='1'
 	if [ -f ${HOME}/.bash_aliases ]; then
-		ask "file ${HOME}/.bash_aliases exists, do you wan't to overwrite it " "n"
+		ask "file ${HOME}/.bash_aliases exists, do you wan't to overwrite it " "y"
 		[ "$?" == "1" ] || do_bash_aliases='0'
 	fi
 	if [ "${do_bashrc}" == "1" ]; then

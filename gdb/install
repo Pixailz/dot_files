@@ -4,7 +4,7 @@ function install_gdb_config()
 {
 	do_install='1'
 	if [ -f ${HOME}/.gdbinit ]; then
-		ask "file ${HOME}/.gdbinit exists, do you wan't to overwrite it " "n"
+		ask "file ${HOME}/.gdbinit exists, do you wan't to overwrite it " "y"
 		[ "$?" == "1" ] || do_install='0'
 	fi
 	if [ "${do_install}" == "1" ]; then
