@@ -8,7 +8,7 @@ function install_gdb_config()
 		[ "$?" == "1" ] || do_install='0'
 	fi
 	if [ "${do_install}" == "1" ]; then
-		cp ${BASH_ALIASES_PATH} ${HOME}/.gdbinit
+		cp ${GDBINIT_PATH} ${HOME}/.gdbinit
 	fi
 }
 
