@@ -37,10 +37,28 @@ function	MapKey(key, act)
 	exe 'imap '.a:key.' <esc>'.a:act.'<CR>a'
 endfunction
 
-function TrimeSpace()
-	let l:save =
-	%s/^\s\+//e
-	%s/\s\+$//e
+"" Trim leading space
+function TrimLeadingSpace()
+	let l:save = winsaveview()
+	keeppatterns %s/\s\+$//e
+	call winrestview(l:save)
+endfunction
+
+"" trim before save
+function Save()
+	call TrimLeadingSpace()
+	exe ':wa!'
+endfunction
+
+let g:TermOpened = 'false'
+
+function ToggleTerm()
+	if g:TermOpened == 'false'
+		exe ':term bot'
+		TermOpened = 'true'
+	else
+		TermOpened = 'false'
+	endif
 endfunction
 
 " KeyMap
@@ -49,7 +67,10 @@ endfunction
 call MapKey('<C-t>', ':tabnew')
 
 "" Save
-call MapKey('<C-s>', ':wa!')
+call MapKey('<C-s>', ':call Save()')
 
 "" Save and quit
 call MapKey('<C-q>', ':xa!')
+
+"" open term
+call MapKey('<C-`>', ':call ToggleTerm')
