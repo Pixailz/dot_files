@@ -2,25 +2,35 @@
 
 function install_bashrc()
 {
-	do_bashrc='1'
-	if [ -f ${HOME}/.bashrc ]; then
+	local	do_install='1'
+
+	if [ -z "${FORCE_REPLACE}" ] && [ -f ${HOME}/.bashrc ]; then
 		ask "file ${HOME}/.bashrc exists, do you wan't to overwrite it " "y"
-		[ "$?" == "1" ] || do_bashrc='0'
+		if [ "$?" == "0" ]; then
+			do_install='0'
+			p_done "bashrc configuration skiped." 1
+		fi
 	fi
-	if [ "${do_bashrc}" == "1" ]; then
+	if [ "${do_install}" == "1" ]; then
 		cp ${BASHRC_PATH} ${HOME}/.bashrc
+		p_done "bashrc configuration done."
 	fi
 }
 
 function install_bash_aliases()
 {
-	do_bash_aliases='1'
-	if [ -f ${HOME}/.bash_aliases ]; then
+	local	do_install='1'
+
+	if [ -z "${FORCE_REPLACE}" ] && [ -f ${HOME}/.bash_aliases ]; then
 		ask "file ${HOME}/.bash_aliases exists, do you wan't to overwrite it " "y"
-		[ "$?" == "1" ] || do_bash_aliases='0'
+		if [ "$?" == "0" ]; then
+			do_install='0'
+			p_done "bash_aliases configuration skiped." 1
+		fi
 	fi
-	if [ "${do_bashrc}" == "1" ]; then
+	if [ "${do_install}" == "1" ]; then
 		cp ${BASH_ALIASES_PATH} ${HOME}/.bash_aliases
+		p_done "bash_aliases configuration done."
 	fi
 }
 

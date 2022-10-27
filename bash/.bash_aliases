@@ -7,6 +7,7 @@ function aptall() {
 	sudo apt update
 	sudo apt upgrade -y
 	sudo apt autoremove --purge -y
+	sudo do-release-upgrade
 	if [ -f /var/run/reboot-required ]; then
 		printf "Reboot required, rebooting in...\n"
 		printf "3...\r"
@@ -15,7 +16,7 @@ function aptall() {
 		sleep 1
 		printf "1.  \n"
 		sleep 1
-		shutdown --reboot now
+		sudo shutdown --reboot now
 	fi
 }
 
@@ -31,10 +32,10 @@ function feed() {
 	[ -z "$2" ] && printFeedHelp "need title" && return
 	[ -z "$3" ] && printFeedHelp "need command" && return
 
-	feed_name=$1
-	feed_title=$2
-	feed_command=$3
-	feed_file_path="${HOME}/.backup"
+	local	feed_name=$1
+	local	feed_title=$2
+	local	feed_command=$3
+	local	feed_file_path="${HOME}/.backup"
 
 	[ ! -d "${feed_file_path}" ] && mkdir ${feed_file_path}
 
@@ -81,7 +82,7 @@ alias apt="apt ${APT_OPTIONS}"
 ## batcat
 if [ -f "/usr/bin/batcat" ]; then
 	export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
-	alias bcat="batcat --pager=never"
+	alias bat="batcat --pager=never"
 	function batdiff()
 	{
 		git diff --name-only --relative --diff-filter=d | xargs batcat --diff

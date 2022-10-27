@@ -1,53 +1,163 @@
 #!/bin/bash
 
+##Bash Color
+green='\e[32m'
+red='\e[31m'
+yellow='\e[33m'
+blue='\e[34m'
+orange='\e[38;5;208m'
+lgreen='\e[92m'
+lyellow='\e[93m'
+lblue='\e[94m'
+lmagenta='\e[95m'
+lcyan='\e[96m'
+blink_red='\033[05;31m'
+restore='\033[0m'
+reset='\e[0m'
+
+# print function
+
+## print information
+function p_info()
+{
+	printf "${lcyan}[ INFO ]${reset} $*${reset}\n"
+}
+
+## print warn
+function p_warn()
+{
+	printf "${orange}[ WARN ]${reset} $*${reset}\n"
+}
+
+## print question
+function p_ques()
+{
+	if [ "${2}" == '1' ]; then
+		printf "${green}[ ???? ]${reset} $1${reset}\b"
+	else
+		printf "${green}[ ???? ]${reset} $1${reset}\n"
+	fi
+}
+
+## print success or not
+function p_done() {
+	if [ -z $2 ]; then
+		printf "${green}[ DONE ]${reset} $1${reset}\n"
+	else
+		printf "${red}[ FAIL ]${reset} $1${reset}\n"
+	fi
+}
+
+## print error and quit
+function p_erro()
+{
+	printf "${red}[ ERRO ]${reset} $*${reset}\n"
+	exit
+}
+
+## print pause and wait
+function p_pause()
+{
+	p_info "Press [Enter] to continue.."
+	read readEnterkey
+}
+
+## ASK, my version of ask (http://djm.me/ask)
 function ask()
 {
 	local message=$1
-	local default=$2
-	[ -z ${2} ] && local default="NULL"
+	local default=${2-NULL}
 	local choice=""
-	local loop=1
 
-	if [ ${default} == "y" ]; then
-		printf "${message} (Y/n) "
-	elif [ ${default} == "n" ]; then
-		printf "${message} (y/N) "
-	else
-		printf "${message} (y/n) "
-	fi
-
-	read -n 1 choice
-	choice=${choice,,}
-	if [ "${choice}" != "y" ] && [ "${choice}" != "n" ]; then
-		[ "${default}" == "y" ] && return 1
-		[ "${default}" == "n" ] && return 0
-	fi
-	printf "\n"
-	[ "${choice}" == "y" ] && return 1
-	[ "${choice}" == "n" ] && return 0
+	while true; do
+		if [ ${default} == "y" ]; then
+			p_ques "${message} (Y/n)  " 1
+		elif [ ${default} == "n" ]; then
+			p_ques "${message} (y/N)  " 1
+		else
+			p_ques "${message} (y/n)  " 1
+		fi
+		read -n 1 choice
+		choice=${choice,,}
+		[ ${choice} ] && printf "\n"
+		case ${choice} in
+			y) return 1 ;;
+			n) return 0 ;;
+			*)  if [ "${default}" == 'y' ]; then
+					return 1
+				elif [ "${default}" == 'n' ]; then
+					return 0
+				else
+					p_warn "[${choice}] wrong choice (y|n)"
+				fi
+				;;
+		esac
+	done
 }
 
+# Running after installation
 function post_install()
 {
-	printf "to make effect you have to reopen bash session\n"
+	p_warn "to make effect you have to reopen bash session"
 }
 
-source .config
-
-function main()
+# differente source for each modules
+function module_source()
 {
 	source bash/install
 	source gdb/install
 	source vim/install
 	source batcat/install
+}
 
+# install function for all modules
+function module_install()
+{
 	install_bash_config
 	install_gdb_config
 	install_vim_config
 	install_batcat_config
+}
+
+function main_entry()
+{
+	module_source
+	module_install
 	post_install
 }
 
+# print help and quit
+function usage() {
+	printf "Usage : ${0} [-f]\n"
+	printf "\t-h : show this help\n"
+	printf "\t-f : to force install\n"
+	exit
+}
+
+# start
+# Source config file
+source .config
+
+# pars args, keep parsing even if launch modules
+# if -f force install
+# if -h help
+while [ "${1}" != "" ]; do
+	case ${1} in
+		-f)
+			export FORCE_REPLACE=1
+			shift
+			;;
+		-h)
+			usage
+			;;
+		*)
+			p_warn "Wrongs args"
+			usage
+			;;
+	esac
+done
+
+# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
 if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
-	main
+	main_entry
 fi

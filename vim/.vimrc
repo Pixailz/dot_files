@@ -37,6 +37,12 @@ function	MapKey(key, act)
 	exe 'imap '.a:key.' <esc>'.a:act.'<CR>a'
 endfunction
 
+function TrimeSpace()
+	let l:save =
+	%s/^\s\+//e
+	%s/\s\+$//e
+endfunction
+
 " KeyMap
 
 "" New Tab
