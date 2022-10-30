@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function install_gdb_config()
+function	install_gdb_config()
 {
 	local	do_install='1'
 

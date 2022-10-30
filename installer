@@ -18,29 +18,29 @@ reset='\e[0m'
 # print function
 
 ## print information
-function p_info()
+function	p_info()
 {
 	printf "${lcyan}[ INFO ]${reset} $*${reset}\n"
 }
 
 ## print warn
-function p_warn()
+function	p_warn()
 {
 	printf "${orange}[ WARN ]${reset} $*${reset}\n"
 }
 
 ## print question
-function p_ques()
+function	p_ques()
 {
 	if [ "${2}" == '1' ]; then
-		printf "${green}[ ???? ]${reset} $1${reset}\b"
+		printf "${blue}[ ???? ]${reset} $1${reset}\b"
 	else
-		printf "${green}[ ???? ]${reset} $1${reset}\n"
+		printf "${blue}[ ???? ]${reset} $1${reset}\n"
 	fi
 }
 
 ## print success or not
-function p_done() {
+function	p_done() {
 	if [ -z $2 ]; then
 		printf "${green}[ DONE ]${reset} $1${reset}\n"
 	else
@@ -49,21 +49,21 @@ function p_done() {
 }
 
 ## print error and quit
-function p_erro()
+function	p_erro()
 {
 	printf "${red}[ ERRO ]${reset} $*${reset}\n"
 	exit
 }
 
 ## print pause and wait
-function p_pause()
+function	p_pause()
 {
 	p_info "Press [Enter] to continue.."
 	read readEnterkey
 }
 
 ## ASK, my version of ask (http://djm.me/ask)
-function ask()
+function	ask()
 {
 	local message=$1
 	local default=${2-NULL}
@@ -96,13 +96,13 @@ function ask()
 }
 
 # Running after installation
-function post_install()
+function	post_install()
 {
 	p_warn "to make effect you have to reopen bash session"
 }
 
 # differente source for each modules
-function module_source()
+function	module_source()
 {
 	source bash/install
 	source gdb/install
@@ -111,7 +111,7 @@ function module_source()
 }
 
 # install function for all modules
-function module_install()
+function	module_install()
 {
 	install_bash_config
 	install_gdb_config
@@ -119,7 +119,7 @@ function module_install()
 	install_batcat_config
 }
 
-function main_entry()
+function	main_entry()
 {
 	module_source
 	module_install
@@ -127,7 +127,8 @@ function main_entry()
 }
 
 # print help and quit
-function usage() {
+function	usage()
+{
 	printf "Usage : ${0} [-f]\n"
 	printf "\t-h : show this help\n"
 	printf "\t-f : to force install\n"

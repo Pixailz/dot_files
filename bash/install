@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function install_bashrc()
+function	install_bashrc()
 {
 	local	do_install='1'
 
@@ -17,7 +17,7 @@ function install_bashrc()
 	fi
 }
 
-function install_bash_aliases()
+function	install_bash_aliases()
 {
 	local	do_install='1'
 
@@ -34,7 +34,7 @@ function install_bash_aliases()
 	fi
 }
 
-function install_bash_config()
+function	install_bash_config()
 {
 	install_bashrc
 	install_bash_aliases

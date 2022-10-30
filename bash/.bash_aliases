@@ -3,7 +3,8 @@
 # utils functions
 
 ## APT ALL
-function aptall() {
+function	aptall()
+{
 	sudo apt update
 	sudo apt upgrade -y
 	sudo apt autoremove --purge -y
@@ -22,12 +23,14 @@ function aptall() {
 
 ## pentest utils
 
-function printFeedHelp(){
+function	printFeedHelp()
+{
 	printf "Usage: feed EXEC_NAME TITLE COMMAND\n"
 	[ ! -z "$1" ] && printf "ERROR: $1\n"
 }
 
-function feed() {
+function	feed()
+{
 	[ -z "$1" ] && printFeedHelp "need exec name" && return
 	[ -z "$2" ] && printFeedHelp "need title" && return
 	[ -z "$3" ] && printFeedHelp "need command" && return
@@ -51,7 +54,7 @@ function feed() {
 	fi
 }
 
-# enable color support of ls and also add handy aliases
+# Enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
 	test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
 	LS_COLOR=y
@@ -62,10 +65,10 @@ fi
 ## ENABLE ALIAS FOR SUDO COMMAND
 alias sudo="sudo "
 
-## IP
+## Ip
 alias ip="ip --color=auto"
 
-## LS
+## Ls
 export LS_OPTIONS="-vhF"
 if [ "${LS_COLOR}" == "y" ]; then
 	LS_OPTIONS="--color=auto ${LS_OPTIONS}"
@@ -75,14 +78,14 @@ alias ll="ls -oA"
 alias la="ls -la"
 alias l="ls"
 
-## APT
+## Apt
 export APT_OPTIONS="-y"
 alias apt="apt ${APT_OPTIONS}"
 
 ## batcat
 if [ -f "/usr/bin/batcat" ]; then
 	export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
-	alias bat="batcat --pager=never"
+	alias cat="batcat"
 	function batdiff()
 	{
 		git diff --name-only --relative --diff-filter=d | xargs batcat --diff
@@ -91,3 +94,7 @@ fi
 
 ## John
 alias john="/usr/local/bin/john"
+
+## Docker
+alias docker="sudo docker"
+alias docker-compose="sudo docker-compose"
