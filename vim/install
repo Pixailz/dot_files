@@ -5,7 +5,7 @@ function	install_vim_config()
 	local	do_install='1'
 
 	if [ -z "${FORCE_REPLACE}" ] && [ -f ${HOME}/.vimrc ]; then
-		ask "file ${HOME}/.vimrc exists, do you wan't to overwrite it " "y"
+		ask "file ${HOME}/.vimrc exists, do you wan't to overwrite it" "y"
 		[ "$?" == "0" ] && do_install='0'
 	fi
 	if [ "${do_install}" == "1" ]; then

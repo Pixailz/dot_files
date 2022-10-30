@@ -7,7 +7,7 @@ function	install_batcat_config()
 
 	[ ! -d "${batcat_dir}" ] && mkdir ${batcat_dir}
 	if [ -z "${FORCE_REPLACE}" ] && [ -f "${batcat_dir}/config" ]; then
-		ask "file ${batcat_dir}/config exists, do you wan't to overwrite it " "y"
+		ask "file ${batcat_dir}/config exists, do you wan't to overwrite it" "y"
 		if [ "$?" == "0" ]; then
 			do_install='0'
 			p_done "batcat configuration skiped." 1
