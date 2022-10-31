@@ -1,5 +1,10 @@
 #!/bin/bash
 
+function	post_install_bash()
+{
+	p_warn "to make effect you have to ${orange}reopen all${reset} terminal"
+}
+
 function	install_bash()
 {
 	move_if_file_exist ${PATH_BASHRC_FILE_IN} ${PATH_BASHRC_FILE_OUT}
@@ -16,4 +21,5 @@ if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
 		source ./run
 	fi
 	install_bash
+	post_install_bash
 fi

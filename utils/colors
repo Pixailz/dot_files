@@ -3,19 +3,22 @@
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#==#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #> Bash Color
 
-green='\e[32m'
-red='\e[31m'
-yellow='\e[33m'
-blue='\e[34m'
-orange='\e[38;5;208m'
-lgreen='\e[92m'
-lyellow='\e[93m'
-lblue='\e[94m'
-lmagenta='\e[95m'
-lcyan='\e[96m'
-blink_red='\033[05;31m'
-restore='\033[0m'
-reset='\e[0m'
+# BEG_ESC='\001'
+# END_ESC='\002'
+
+green="${BEG_ESC}\e[32m${END_ESC}"
+red="${BEG_ESC}\e[31m${END_ESC}"
+yellow="${BEG_ESC}\e[33m${END_ESC}"
+blue="${BEG_ESC}\e[34m${END_ESC}"
+orange="${BEG_ESC}\e[38;5;208m${END_ESC}"
+lgreen="${BEG_ESC}\e[92m${END_ESC}"
+lyellow="${BEG_ESC}\e[93m${END_ESC}"
+lblue="${BEG_ESC}\e[94m${END_ESC}"
+lmagenta="${BEG_ESC}\e[95m${END_ESC}"
+lcyan="${BEG_ESC}\e[96m${END_ESC}"
+blink_red="${BEG_ESC}\033[05;31m${END_ESC}"
+restore="${BEG_ESC}\033[0m${END_ESC}"
+reset="${BEG_ESC}\e[0m${END_ESC}"
 
 P_INFO="${lcyan}[INFO]${reset}"
 P_WARN="${orange}[WARN]${reset}"
@@ -28,6 +31,30 @@ P_ERRO="${red}[ERRO]${reset}"
 
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#==#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #> print helper
+
+# remove colors
+function	p_remove_colors()
+{
+	P_INFO="[INFO]"
+	P_WARN="[WARN]"
+	P_QUES="[QUE?]"
+	P_PASS="[PASS]"
+	P_FAIL="[FAIL]"
+	P_ERRO="[ERRO]"
+	green=""
+	red=""
+	yellow=""
+	blue=""
+	orange=""
+	lgreen=""
+	lyellow=""
+	lblue=""
+	lmagenta=""
+	lcyan=""
+	blink_red=""
+	restore=""
+	reset=""
+}
 
 # print function
 

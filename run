@@ -1,56 +1,59 @@
 #!/bin/bash
 
-# Running after installation
-function	post_install()
-{
-	p_warn "to make effect you have to reopen all terminal"
-}
-
+: ' install_module MODULE
+    install_file        install file to source
+    install_func        entry func of module
+    post_install_func   post install func of module
+'
 function	install_module()
 {
+	local	install_file="${DIR_MODULE}/${module}/install"
+	local	install_func="${PREFIX_INSTALL_MODULE}${module}"
+	local	post_install_func="${PREFIX_POST_INSTALL_MODULE}${module}"
+
 	# source each module install file
-	source ${DIR_MODULE}/${module}/install
-	install_${module}
+	source ${install_file}
+	${install_func}
+	if [ "$(type -t ${post_install_func})" == "function" ]; then
+		${post_install_func}
+	fi
 }
 
-# install function for all modules
+: ' install function for all modules
+    DO_PART : specific array to do
+    if len DO_PART == 0 do all
+'
 function	install_modules()
 {
-	if [ "${DO_ALL}" == 1 ]; then
-		for module in ${MODULE[*]}; do
-			install_module
-		done
-	elif [ ${#DO_PART[*]} != 0 ]; then
-		for module in ${DO_PART[*]}; do
-			install_module
-		done
-	else
-		p_warn "do part not empty"
-		usage
+	if [ ${#DO_PART[*]} == 0 ]; then
+		DO_PART=${MODULE[*]}
 	fi
+	for module in ${DO_PART[*]}; do
+		install_module
+	done
 }
 
 function	main_entry()
 {
 	install_modules
-	post_install
 }
 
 # print help and quit
 function	usage()
 {
-	printf "Usage : ${0} [-f] [-a|-p PART1... PARTN]\n"
-	printf "  -h, --help        show this help\n"
+	printf "Usage : ${0} [-f|-n] [-p PART1... PARTN]\n"
 	printf "  -f, --force       to force install\n"
-	printf "  -a, --all         install all\n"
+	printf "  -n, --no-color    to disable colors\n"
+	printf "  -h, --help        show this help\n"
+	#printf "  -u, --user        install for specified user, default to current"
+	#TODO
+	printf "\n"
 	printf "  -p, --part        install part, available part:\n"
 	printf "                        - bash\n"
 	printf "                        - batcat\n"
 	printf "                        - gdb\n"
 	printf "                        - vim\n"
 	printf "                    should be at the end of command\n"
-	#printf "  -u, --user        install for specified user, default to current"
-	#TODO
 	exit
 }
 

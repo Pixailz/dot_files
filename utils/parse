@@ -1,12 +1,17 @@
 #!/bin/bash
 
 : ' parse_short
-
+    parse space separated and option separated
 '
 function	parse_short()
 {
+	local	to_shift=0
+
 	PARSED_ARG=()
+	shift
 	for item in ${*}; do
+		is_option ${item}
+		[ ${?} != 0 ] && break
 		PARSED_ARG[${#PARSED_ARG[@]}]=${item}
 	done
 	return ${#PARSED_ARG[@]}
@@ -14,8 +19,7 @@ function	parse_short()
 
 function	debug_print_parse_arg()
 {
-	debug_print_var 1 'FORCE_REPLACE'
-	debug_print_var 1 'DO_ALL'
+	debug_print_var 'FORCE_INSTALL' 1
 	debug_print_array 'DO_PART' ${DO_PART[*]}
 }
 
@@ -23,10 +27,6 @@ function	post_parsing()
 {
 	local	is_good
 
-	if [ "${DO_ALL}" == 1 ] && [ "${#DO_PART[@]}" != 0 ]; then
-		p_warn "wrong usage. see --help"
-		usage
-	fi
 	if [ "${HAVE_PART}" != "" ] && [ ${#DO_PART[@]} == 0 ]; then
 		p_warn "wrong usage. see --help"
 		usage
@@ -47,40 +47,36 @@ function	post_parsing()
 }
 
 # pars args, keep parsing even if launch modules
-## if -f, --force				set FORCE_REPLACE=1
+## if -f, --force				set FORCE_INSTALL=1
+## if -n, --no-color			disable_color
 ## if -h, --help				help
-## if -a, --all					set DO_ALL=1
+
 ## if -p, --part				set DO_PART=part1 ... partn
 
 ## -p && -a						false
-## -f && -p | --part | -all		true
+## -f|-n && -p | --part | -all		true
 function	parse_arg()
 {
 	while [ "${1}" != "" ]; do
-		TO_SHIFT=1
 		case ${1} in
 			-f|--force)
-				export FORCE_REPLACE=1
+				export FORCE_INSTALL=1
 				;;
 			-h|--help)
 				usage
 				;;
-			-a|--all)
-				DO_ALL=1
-				;;
 			-p|--part)
-				shift
 				parse_short ${*}
 				shift $?
 				DO_PART=${PARSED_ARG[*]}
 				HAVE_PART=1
 				;;
-			-h|--help)
-				usage
+			-n|--no-color)
+				p_remove_colors
 				;;
 			*)
-				p_warn "Wrongs args"
-				# usage
+				p_warn "Wrongs options ${red}[${reset}${1}${red}]${reset}"
+				usage
 				;;
 		esac
 		shift

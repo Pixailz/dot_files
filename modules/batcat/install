@@ -2,8 +2,9 @@
 
 function	post_install_batcat()
 {
+	p_warn "rebuilding ${orange}batcat${reset} cache"
 	batcat cache --build
-	p_pass "batcat configured"
+	p_pass "batcat ${green}configured${reset}"
 }
 
 function	install_batcat_themes()
@@ -24,7 +25,6 @@ function	install_batcat()
 {
 	install_batcat_config
 	install_batcat_themes
-	post_install_batcat
 }
 
 # if not sourced, BASH_SOURCE keep current file when $0 keep launched file
@@ -37,4 +37,5 @@ if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
 		source ./run
 	fi
 	install_batcat
+	post_install_batcat
 fi

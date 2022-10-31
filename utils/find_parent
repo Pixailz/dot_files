@@ -5,8 +5,8 @@ TO_FIND     folder / file name to search
 MODE        could be d for directory of f for file, default f
 
 return      set FILE_PATH according if TO_FIND is in parent folder,
-            otherwise FILE_PATH is set to nothing'
-
+            otherwise FILE_PATH is set to nothing
+'
 function	find_file()
 {
 	local	to_find=${1}
