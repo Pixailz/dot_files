@@ -1,0 +1,79 @@
+#!/bin/bash
+
+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#==#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+#> Bash Color
+
+green='\e[32m'
+red='\e[31m'
+yellow='\e[33m'
+blue='\e[34m'
+orange='\e[38;5;208m'
+lgreen='\e[92m'
+lyellow='\e[93m'
+lblue='\e[94m'
+lmagenta='\e[95m'
+lcyan='\e[96m'
+blink_red='\033[05;31m'
+restore='\033[0m'
+reset='\e[0m'
+
+P_INFO="${lcyan}[INFO]${reset}"
+P_WARN="${orange}[WARN]${reset}"
+P_QUES="${blue}[QUE?]${reset}"
+P_PASS="${green}[PASS]${reset}"
+P_FAIL="${red}[FAIL]${reset}"
+P_ERRO="${red}[ERRO]${reset}"
+
+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#==#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+
+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#==#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+#> print helper
+
+# print function
+
+## print information
+function	p_info()
+{
+	printf "${P_INFO} $1${reset}\n"
+}
+
+## print warn
+function	p_warn()
+{
+	printf "${P_WARN} $1${reset}\n"
+}
+
+## print question
+function	p_ques()
+{
+	if [ "${2}" == '1' ]; then
+		printf "${P_QUES} $1${reset}\b"
+	else
+		printf "${P_QUES} $1${reset}\n"
+	fi
+}
+
+## print success or not
+function	p_pass() {
+	if [ -z ${2} ] || [ ${2} == 0 ]; then
+		printf "${P_PASS} $1${reset}\n"
+	else
+		printf "${P_FAIL} $1${reset}\n"
+	fi
+}
+
+## print error and quit
+function	p_erro()
+{
+	printf "${P_ERRO} $1${reset}\n"
+	exit
+}
+
+## print pause and wait
+function	p_pause()
+{
+	p_info "Press [Enter] to continue.."
+	read readEnterkey
+}
+
+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#==#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#

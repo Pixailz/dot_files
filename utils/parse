@@ -1,0 +1,90 @@
+#!/bin/bash
+
+: ' parse_short
+
+'
+function	parse_short()
+{
+	PARSED_ARG=()
+	for item in ${*}; do
+		PARSED_ARG[${#PARSED_ARG[@]}]=${item}
+	done
+	return ${#PARSED_ARG[@]}
+}
+
+function	debug_print_parse_arg()
+{
+	debug_print_var 1 'FORCE_REPLACE'
+	debug_print_var 1 'DO_ALL'
+	debug_print_array 'DO_PART' ${DO_PART[*]}
+}
+
+function	post_parsing()
+{
+	local	is_good
+
+	if [ "${DO_ALL}" == 1 ] && [ "${#DO_PART[@]}" != 0 ]; then
+		p_warn "wrong usage. see --help"
+		usage
+	fi
+	if [ "${HAVE_PART}" != "" ] && [ ${#DO_PART[@]} == 0 ]; then
+		p_warn "wrong usage. see --help"
+		usage
+	fi
+	for to_str in ${DO_PART[*]}; do
+		is_good=0
+		for from_str in ${MODULE[*]}; do
+			if [ ${to_str} == ${from_str} ]; then
+				is_good=1
+				break
+			fi
+		done
+		if [ ${is_good} != 1 ]; then
+			p_warn "wrong ${green}part name${reset} ${red}${to_str}${reset}"
+			usage
+		fi
+	done
+}
+
+# pars args, keep parsing even if launch modules
+## if -f, --force				set FORCE_REPLACE=1
+## if -h, --help				help
+## if -a, --all					set DO_ALL=1
+## if -p, --part				set DO_PART=part1 ... partn
+
+## -p && -a						false
+## -f && -p | --part | -all		true
+function	parse_arg()
+{
+	while [ "${1}" != "" ]; do
+		TO_SHIFT=1
+		case ${1} in
+			-f|--force)
+				export FORCE_REPLACE=1
+				;;
+			-h|--help)
+				usage
+				;;
+			-a|--all)
+				DO_ALL=1
+				;;
+			-p|--part)
+				shift
+				parse_short ${*}
+				shift $?
+				DO_PART=${PARSED_ARG[*]}
+				HAVE_PART=1
+				;;
+			-h|--help)
+				usage
+				;;
+			*)
+				p_warn "Wrongs args"
+				# usage
+				;;
+		esac
+		shift
+	done
+	post_parsing
+	# debug_print_parse_arg
+}

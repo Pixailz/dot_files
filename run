@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# Running after installation
+function	post_install()
+{
+	p_warn "to make effect you have to reopen all terminal"
+}
+
+function	install_module()
+{
+	# source each module install file
+	source ${DIR_MODULE}/${module}/install
+	install_${module}
+}
+
+# install function for all modules
+function	install_modules()
+{
+	if [ "${DO_ALL}" == 1 ]; then
+		for module in ${MODULE[*]}; do
+			install_module
+		done
+	elif [ ${#DO_PART[*]} != 0 ]; then
+		for module in ${DO_PART[*]}; do
+			install_module
+		done
+	else
+		p_warn "do part not empty"
+		usage
+	fi
+}
+
+function	main_entry()
+{
+	install_modules
+	post_install
+}
+
+# print help and quit
+function	usage()
+{
+	printf "Usage : ${0} [-f] [-a|-p PART1... PARTN]\n"
+	printf "  -h, --help        show this help\n"
+	printf "  -f, --force       to force install\n"
+	printf "  -a, --all         install all\n"
+	printf "  -p, --part        install part, available part:\n"
+	printf "                        - bash\n"
+	printf "                        - batcat\n"
+	printf "                        - gdb\n"
+	printf "                        - vim\n"
+	printf "                    should be at the end of command\n"
+	#printf "  -u, --user        install for specified user, default to current"
+	#TODO
+	exit
+}
+
+# source .config
+source ./.config
+
+parse_arg ${*}
+
+# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
+if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
+	main_entry
+fi

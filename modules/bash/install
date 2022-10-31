@@ -1,0 +1,19 @@
+#!/bin/bash
+
+function	install_bash()
+{
+	move_if_file_exist ${PATH_BASHRC_FILE_IN} ${PATH_BASHRC_FILE_OUT}
+	move_if_file_exist ${PATH_BASH_ALIASES_IN} ${PATH_BASH_ALIASES_OUT}
+}
+
+# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
+if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
+	if [ "${0}" -ef "install" ]; then
+		source ../../run
+	elif [ "${0}" -ef "bash/install" ]; then
+		source ../run
+	else
+		source ./run
+	fi
+	install_bash
+fi
