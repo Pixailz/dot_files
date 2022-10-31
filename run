@@ -20,15 +20,15 @@ function	install_module()
 }
 
 : ' install function for all modules
-    DO_PART : specific array to do
-    if len DO_PART == 0 do all
+    DO_MODULE : specific array to do
+    if len DO_MODULE == 0 do all
 '
 function	install_modules()
 {
-	if [ ${#DO_PART[*]} == 0 ]; then
-		DO_PART=${MODULE[*]}
+	if [ ${#DO_MODULE[*]} == 0 ]; then
+		DO_MODULE=${MODULE[*]}
 	fi
-	for module in ${DO_PART[*]}; do
+	for module in ${DO_MODULE[*]}; do
 		install_module
 	done
 }

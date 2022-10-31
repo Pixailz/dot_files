@@ -98,3 +98,23 @@ alias john="/usr/local/bin/john"
 ## Docker
 alias docker="sudo docker"
 alias docker-compose="sudo docker-compose"
+
+## bash
+
+: ' debug_bash
+${1}    cmd to debug
+return  return debug in  in ${PWD}/exec.log. if DEBUG_OUT is set, ouput
+        debug in ${PWD}/DEBUG_OUT
+'
+function	debug_bash()
+{
+	local	cmd="${1}"
+	local	options="-x"
+	if [ -z "${DEBUG_OUT}" ];then
+		local debug_file="exec.log"
+	else
+		local debug_file=${DEBUG_OUT}
+	fi
+
+	bash "${options}" ${cmd} 2>${debug_file}
+}

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-: ' is_options OPTIONS_STR
-    OPTIONS_STR         check if string is an options
+: ' is_option OPTION_STR
+    OPTION_STR         check if string is an options
     return              0 if no, 1 if long and 2 if short ; options
 '
 function	is_option()

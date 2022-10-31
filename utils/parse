@@ -20,18 +20,18 @@ function	parse_short()
 function	debug_print_parse_arg()
 {
 	debug_print_var 'FORCE_INSTALL' 1
-	debug_print_array 'DO_PART' ${DO_PART[*]}
+	debug_print_array 'DO_MODULE' ${DO_MODULE[*]}
 }
 
 function	post_parsing()
 {
 	local	is_good
 
-	if [ "${HAVE_PART}" != "" ] && [ ${#DO_PART[@]} == 0 ]; then
+	if [ "${HAVE_PART}" != "" ] && [ ${#DO_MODULE[@]} == 0 ]; then
 		p_warn "wrong usage. see --help"
 		usage
 	fi
-	for to_str in ${DO_PART[*]}; do
+	for to_str in ${DO_MODULE[*]}; do
 		is_good=0
 		for from_str in ${MODULE[*]}; do
 			if [ ${to_str} == ${from_str} ]; then
@@ -51,7 +51,7 @@ function	post_parsing()
 ## if -n, --no-color			disable_color
 ## if -h, --help				help
 
-## if -p, --part				set DO_PART=part1 ... partn
+## if -p, --part				set DO_MODULE=part1 ... partn
 
 ## -p && -a						false
 ## -f|-n && -p | --part | -all		true
@@ -68,14 +68,14 @@ function	parse_arg()
 			-p|--part)
 				parse_short ${*}
 				shift $?
-				DO_PART=${PARSED_ARG[*]}
+				DO_MODULE=${PARSED_ARG[*]}
 				HAVE_PART=1
 				;;
 			-n|--no-color)
 				p_remove_colors
 				;;
 			*)
-				p_warn "Wrongs options ${red}[${reset}${1}${red}]${reset}"
+				p_warn "wrong options ${red}[${reset}${1}${red}]${reset}"
 				usage
 				;;
 		esac

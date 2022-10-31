@@ -5,5 +5,5 @@ source ${DIR_UTILS}/colors
 source ${DIR_UTILS}/debug
 source ${DIR_UTILS}/find_parent
 source ${DIR_UTILS}/if/file_exist
-source ${DIR_UTILS}/is/option
+source ${DIR_UTILS}/if/option
 source ${DIR_UTILS}/parse
