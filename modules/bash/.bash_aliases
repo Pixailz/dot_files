@@ -54,6 +54,16 @@ function	feed()
 	fi
 }
 
+## Docker
+function	dockc()
+{
+	docker system prune -af
+	docker network prune -f
+	docker volume prune -f
+}
+
+# Alias
+
 # Enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
 	test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -95,12 +105,7 @@ fi
 ## John
 alias john="/usr/local/bin/john"
 
-## Docker
-alias docker="sudo docker"
-alias docker-compose="sudo docker-compose"
-
 ## bash
-
 : ' debug_bash
 ${1}    cmd to debug
 return  return debug in  in ${PWD}/exec.log. if DEBUG_OUT is set, ouput
