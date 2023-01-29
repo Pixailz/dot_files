@@ -1,0 +1,24 @@
+{
+	"C/CPP Comment \"Part\"": {
+		"description": "C/C++ Header Protection, for class",
+		"scope": "c,cpp",
+		"prefix": ["c_cpp_part_comment"],
+		"body": [
+			"/*#BEGIN#___________________________>#_|${1/(.*)/${1:/upcase}/}|_#<________________________________##*/",
+			"${0}",
+			"/*#END#_____________________________<#_|${1/(.*)/${1:/upcase}/}|_#>________________________________##*/",
+		]
+	},
+
+	"C/CPP Include": {
+		"description": "C/C++ Include with comment to print what you need",
+		"scope": "c,cpp",
+		"prefix": ["c_cpp_include_lib"],
+		"body": [
+			"#include <${1:not_a_library}>",
+			"/****************",
+			" * <object>\t${2:not_a_object}()",
+			" */",
+		]
+	}
+}
