@@ -2,6 +2,7 @@
 
 function	install_vscode()
 {
+	[ ! -d ${PATH_VS_SNIPPET_OUT} ] && mkdir -p ${PATH_VS_SNIPPET_OUT}
 	for file in $(ls ${PATH_VS_SNIPPET_IN}); do
 		move_if_file_exist "${PATH_VS_SNIPPET_IN}/${file}" "${PATH_VS_SNIPPET_OUT}/${file}"
 	done
