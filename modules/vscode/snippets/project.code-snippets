@@ -35,7 +35,7 @@
 		"scope": "c,cpp",
 		"body": [
 			"#include <${1:not_a_library}>",
-			"/****************",
+			"/**",
 			" * <object>\t${2:not_a_object}()",
 			" */",
 		]
