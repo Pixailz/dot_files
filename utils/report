@@ -1,0 +1,235 @@
+#!/bin/bash
+
+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#==#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+#> TEST
+
+: ' clean_out_user_cmd
+take ${out_user} and clean it for diff
+1. remove all escaped character, from 01 to 02
+2. remove prompt and all unecessary line from ${out_user}
+
+${out_user} is set from exec_command function
+'
+function	clean_out_user_cmd()
+{
+	# remove the ansi escaped character, should begin with \001 and finish with \002
+	out_user="$(echo "${out_user}" | sed "s/\o001.*\o002//g")"
+	# remove line with the command and the three last command
+	out_user="$(echo "${out_user}" | tail -n +${tail_arg} | head -n -${head_arg} )"
+}
+
+: ' report_out
+1. compare ${out_expected} and ${out_user} and display like follow
+  1. if ${out_user} differ from ${out_expected}
+    - print error on deepfile and stdout
+    - show ${out_expected} and ${out_user}
+  2. else
+    - display pass on deepfile only
+    - display ${out_user} only
+
+${out_user} and ${out_expected} is set from exec_command function
+'
+function	report_out()
+{
+	# if str of expected equal str of out user, in exec_command
+	if [ "${out_expected}" == "${out_user}" ]; then
+		# display log: {offset: 3, mode: pass, msg: 'diff ok, print_out: false'}
+		echo_log 3 1 "diff ok"
+	else
+		# display log: {offset: 3, mode: failed, msg: 'diff ok, print_out:true'}
+		echo_log 3 0 "diff not ok" 1
+	fi
+	# display log: {offset: 4, mode: raw, msg: 'expected:'}
+	echo_log 4 -1 "${green}expected${reset}:"
+	# display log: {offset: 5, mode: raw, msg: '${out_expected}'}
+	echo_log 5 -1 "${out_expected}"
+	# display log: {offset: 4, mode: raw, msg: 'yours:'}
+	echo_log 4 -1 "${red}yours${reset}:"
+	# display log: {offset: 5, mode: raw, msg: '${out_user}'}
+	echo_log 5 -1 "${out_user}"
+}
+
+: ' report_return_value
+1. check
+  1. if ${same_return_value} equal to 1
+    - report return value are the same, on deepfile
+  2. else
+    - report return value are the same, on deepfile and stdout
+    - print ${return_value_expected} and ${return_value_user}
+
+${same_return_value}, ${return_value_expected} and ${return_value_user},
+is set from exec_command function
+'
+function	report_return_value()
+{
+	if [ ${same_return_value} == 1 ]; then
+		echo_log 3 1 "return value are the same [${return_value_expected}]"
+	else
+		echo_log 3 0 "return value are not the same" 1
+		echo_log 4 -1 "${green}expected${reset}(${return_value_expected}) \
+| ${red}yours${reset}:(${return_value_user})"
+	fi
+}
+
+function	report_diff_dir()
+{
+	local	cmd="${1}"
+	local	bash_have=0
+	local	user_have=0
+	local	first_part=""
+	local	second_part=""
+	local	file_in_user=($(ls ${TMP_DIR_USER}))
+	local	file_in_bash=($(ls ${TMP_DIR_BASH}))
+	local	joined=${file_in_user[*]}
+
+	for file_in_bash in $(ls ${TMP_DIR_BASH}); do
+		is_already=0
+		for file_in_user in $(ls ${TMP_DIR_USER}); do
+			[ ${file_in_bash} ==  ${file_in_user} ] && is_already=1 && break
+		done
+		[ ${is_already} == 0 ] && joined+=(${file_in_bash})
+	done
+
+	if [ "${diff_dir}" == "" ]; then
+		echo_log 3 1 "diff dir ${green}ok${reset}"
+	else
+		echo_log 3 0 "diff dir ${red}not ok${reset}" 1
+	fi
+
+	for file in ${joined[*]}; do
+		first_part="${blue}${file}${reset} :"
+		[ -f "${TMP_DIR_BASH}/${file}" ] && bash_have=1 || bash_have=0
+		[ -f "${TMP_DIR_USER}/${file}" ] && user_have=1 || user_have=0
+		if [ ${bash_have} == ${user_have} ]; then
+			bash_str=$(cat "${TMP_DIR_BASH}/${file}")
+			user_str=$(cat "${TMP_DIR_USER}/${file}")
+			if [ "${bash_str}" == "${user_str}" ]; then
+				echo_log 4 1 "${first_part} diff file ${green}ok${reset}"
+			else
+				echo_log 4 0 "${first_part} diff file ${red}not ok${reset}" 1
+				echo_log 5 -1 "${green}bash${reset}:"
+				echo_log 6 -1 "${bash_str}"
+				echo_log 5 -1 "${red}user${reset}:"
+				echo_log 6 -1 "${user_str}"
+			fi
+		else
+			if [ ${bash_have} == 1 ]; then
+				second_part="user ${red}not${reset} here, bash ${green}here${reset}"
+				to_print=$(cat ${TMP_DIR_BASH}/${file})
+			else
+				second_part="bash ${red}not${reset} here, user ${green}here${reset}"
+				to_print=$(cat ${TMP_DIR_USER}/${file})
+			fi
+			echo_log 4 0 "${first_part} ${second_part}" 1
+			echo_log 5 -1 "${to_print}"
+		fi
+	done
+}
+
+function	replace_tmp_file()
+{
+	local	mode=${1}
+	local	str="${2}"
+	local	level=0
+
+	for id in ${TMP_FILE_REPL[*]}; do
+		if [ "${mode}" == 1 ]; then
+			str=$(echo ${str} | sed "s|${TMP_FILE_REPL[${level}]}|${TMP_FILE_BASH[${level}]}|g")
+		else
+			str=$(echo ${str} | sed "s|${TMP_FILE_REPL[${level}]}|${TMP_FILE_USER[${level}]}|g")
+		fi
+		level=$((${level} + 1))
+	done
+	REPLACED=${str}
+}
+
+function	clean_test_dir()
+{
+	[ -d ${TMP_DIR_USER} ] || [ -f ${TMP_DIR_USER} ] && rm -rf ${TMP_DIR_USER}
+	mkdir -p ${TMP_DIR_USER}
+	[ -d ${TMP_DIR_BASH} ] || [ -f ${TMP_DIR_BASH} ] && rm -rf ${TMP_DIR_BASH}
+	mkdir -p ${TMP_DIR_BASH}
+}
+
+function	exec_command()
+{
+	local	out_expected
+	local	cmd=${1}
+	local	cmd_bash=${cmd}
+	local	cmd_user=${cmd}
+	local	return_value_expected
+	local	same_return_value
+	[ "${EXEC_MODE}" == "" ] && EXEC_MODE=1
+
+	[ "${2}" == "" ] && tail_arg=${DFL_TAIL_ARG} || tail_arg=${2}
+	[ "${3}" == "" ] && head_arg=${DFL_HEAD_ARG} || head_arg=${3}
+	# exec real bash
+	if [ ${EXEC_MODE} == 3 ]; then
+		replace_tmp_file 1 "${cmd}"
+		cmd_bash=${REPLACED}
+		replace_tmp_file 0 "${cmd}"
+		cmd_user=${REPLACED}
+	fi
+
+	out_expected=$(echo -e "${cmd_bash}" | bash 2>&1)
+	# catch real bash return value
+	return_value_expected=${?}
+	# exec minishell
+	if [ ${EXEC_MODE} == 1 ]; then
+		exec_command="bash -c \"${cmd_user}\""
+	else
+		exec_command=${cmd_user}
+	fi
+	if [ ${EXEC_MODE} == 2 ]; then
+		out_user="$(echo -e "${exec_command}" | ${EXEC_PATH} 2>&1)"
+		return_value_user=$?
+	else
+		out_user="$(echo -e "${exec_command}\necho return_value=\$?" | ${EXEC_PATH} 2>&1)"
+		# catch minishell return value
+		return_value_user=$(echo "${out_user}" | sed -nE 's/.*return_value=([0-9]{1,3})/\1/p')
+
+		# check if diff dir ok
+		if [ ${EXEC_MODE} == 3 ]; then
+			diff_dir="$(diff -bur ${TMP_DIR_USER} ${TMP_DIR_BASH})"
+		fi
+	fi
+
+	# clean prompt output
+	clean_out_user_cmd "${EXEC_MODE}"
+	# check if return value match
+	same_return_value=0
+	if [ "${return_value_expected}" == "${return_value_user}" ]; then
+		same_return_value=1
+	fi
+
+	# report
+	## quick check for result, to see if print current cmd or not
+	### if return value are not the same
+	if [ "${same_return_value}" == 0 ]; then
+		echo_log_current_cmd 1 ${cmd_user}
+	### if EXEC_DISABLE_DIFF set to 0 and out differ
+	elif [ "${EXEC_DISABLE_DIFF}" == 0 ] && [ "${out_expected}" != "${out_user}" ]; then
+		echo_log_current_cmd 1 ${cmd_user}
+	### if EXEC_MODE set to 3 and two tmp folder differ
+	elif [ ${EXEC_MODE} == 3 ] && [ "${diff_dir}" != "" ]; then
+		echo_log_current_cmd 1 ${cmd_user}
+	### if all right
+	else
+		echo_log_current_cmd 0 ${cmd_user}
+	fi
+
+	## report
+	### report return value
+	report_return_value ${same_return_value}
+	### if EXEC_DISABLE_DIFF set to 0 do report out
+	if [ "${EXEC_DISABLE_DIFF}" == 0 ]; then
+		report_out
+	fi
+	### if EXEC_MODE set to 3 report diff dir
+	if [ ${EXEC_MODE} == 3 ]; then
+		report_diff_dir "${cmd_user}"
+		clean_test_dir
+	fi
+}
+
+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#==#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#

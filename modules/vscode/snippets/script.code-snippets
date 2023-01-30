@@ -1,0 +1,84 @@
+{
+	"Script Banner": {
+		"prefix": ["script_banner"],
+		"description": "Generate banner with details for current script",
+		"scope": "shellscript,python",
+		"body": [
+			"#!/${1:bin/interpreter_path}",
+			"##BEGIN#__________________________>#_|INFO|_#<________________________________##",
+			"##                                                           ______ _         ##",
+			"## DETAILS:                                                  | ___ (_)        ##",
+			"##- FILENAME\t\t${TM_FILENAME}                                | |_/ /___  __   ##",
+			"##- SCRIPT_ID\t\t0x0000                                   |  __/| \\ \\/ /   ##",
+			"##- AUTHOR\t\t\tPixailz                                  | |   | |>  <    ##",
+			"##- CREATED\t\t\t${CURRENT_YEAR}−${CURRENT_MONTH}−${CURRENT_DATE}T${CURRENT_HOUR}:${CURRENT_MINUTE}:${CURRENT_SECOND}+0100                 \\_|   |_/_/\\_\\   ##",
+			"##                                                                            ##",
+			"## DESCRIPTION:                                                               ##",
+			"### None                                                                      ##",
+			"##                                                                            ##",
+			"## VERSION:[ALPHA|BETA]_MAJOR.MINOR.PATCH                                     ##",
+			"##END#____________________________<#_|INFO|_#>________________________________##",
+			""
+		]
+	},
+
+	"Base Bash script": {
+		"prefix": ["base_bash"],
+		"description": "Basic script for bash",
+		"scope": "shellscript",
+		"body": [
+			"#!/bin/bash",
+			"##BEGIN#__________________________>#_|INFO|_#<________________________________##",
+			"##                                                           ______ _         ##",
+			"## DETAILS:                                                  | ___ (_)        ##",
+			"##- FILENAME\t\t${TM_FILENAME}                                | |_/ /___  __   ##",
+			"##- SCRIPT_ID\t\t0x0000                                   |  __/| \\ \\/ /   ##",
+			"##- AUTHOR\t\t\tPixailz                                  | |   | |>  <    ##",
+			"##- CREATED\t\t\t${CURRENT_YEAR}−${CURRENT_MONTH}−${CURRENT_DATE}T${CURRENT_HOUR}:${CURRENT_MINUTE}:${CURRENT_SECOND}+0100                 \\_|   |_/_/\\_\\   ##",
+			"##                                                                            ##",
+			"## DESCRIPTION:                                                               ##",
+			"### None                                                                      ##",
+			"##                                                                            ##",
+			"## VERSION:[ALPHA|BETA]_MAJOR.MINOR.PATCH                                     ##",
+			"##END#____________________________<#_|INFO|_#>________________________________##",
+			"",
+			"function\tmain()",
+			"{",
+			"",
+			"}",
+			"",
+			"main",
+		]
+	},
+
+	"Python3 Base script": {
+		"prefix": ["base_python"],
+		"description": "Python3 base script",
+		"scope": "python",
+		"body": [
+			"#!/usr/bin/env python3",
+			"##BEGIN#__________________________>#_|INFO|_#<________________________________##",
+			"##                                                           ______ _         ##",
+			"## DETAILS:                                                  | ___ (_)        ##",
+			"##- FILENAME\t\t${TM_FILENAME}                                | |_/ /___  __   ##",
+			"##- SCRIPT_ID\t\t0x0000                                   |  __/| \\ \\/ /   ##",
+			"##- AUTHOR\t\t\tPixailz                                  | |   | |>  <    ##",
+			"##- CREATED\t\t\t${CURRENT_YEAR}−${CURRENT_MONTH}−${CURRENT_DATE}T${CURRENT_HOUR}:${CURRENT_MINUTE}:${CURRENT_SECOND}+0100                 \\_|   |_/_/\\_\\   ##",
+			"##                                                                            ##",
+			"## DESCRIPTION:                                                               ##",
+			"### None                                                                      ##",
+			"##                                                                            ##",
+			"## VERSION:[ALPHA|BETA]_MAJOR.MINOR.PATCH                                     ##",
+			"##END#____________________________<#_|INFO|_#>________________________________##",
+			"",
+			"##BEGIN#______________________>#_|DEPENDENCIES|_#<___________________________##",
+			"",
+			"##END#________________________<#_|DEPENDENCIES|_#>___________________________##",
+			"",
+			"def main():",
+			"\tpass",
+			"",
+			"main()"
+		]
+	}
+}

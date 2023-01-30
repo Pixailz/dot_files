@@ -1,0 +1,21 @@
+#!/bin/bash
+
+function	install_vscode()
+{
+	for file in $(ls ${PATH_VS_SNIPPET_IN}); do
+		move_if_file_exist "${PATH_VS_SNIPPET_IN}/${file}" "${PATH_VS_SNIPPET_OUT}/${file}"
+	done
+}
+
+# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
+if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
+	if [ "${0}" -ef "install" ]; then
+		source ../../run
+	elif [ "${0}" -ef "vscode/install" ]; then
+		source ../run
+	else
+		source ./run
+	fi
+	install_vscode
+	post_install_vscode
+fi

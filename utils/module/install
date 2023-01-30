@@ -1,0 +1,53 @@
+#!/bin/bash
+
+: ' install_module MODULE
+DESC:                           Install module from file and source its function
+module                          module name
+
+install_file                    install file to source
+PREFIX_ENTRY_MODULE_INSTALL     take list of prefix to search for install
+                                function in module
+'
+function	install_module()
+{
+	local	module=${1}
+	local	install_file="${MODULE_DIR}/${module}/${MODULE_ENTRY_FILE}"
+
+	# source install file
+	if_file_exist_source ${install_file}
+
+	for prefix in ${PREFIX_ENTRY_MODULE_INSTALL[*]}; do
+		if_function_do ${prefix}${module}
+	done
+}
+
+: ' install_modules
+DESC:                           Install all module from DO_PART[*], if
+                                DO_PART[*] is empty, set
+'
+function	install_modules()
+{
+	if [ ${HAVE_MODULE} == 1 ]; then
+		for module in ${DO_MODULE[*]}; do
+			install_module ${module}
+		done
+	else
+		for part in ${DO_PART[*]}; do
+			install_modules_${part}
+		done
+	fi
+}
+
+function	install_modules_basic()
+{
+	install_module "perm"
+	install_module "pipe"
+	install_module "parsing"
+	install_module "redirection"
+}
+
+function	install_modules_built()
+{
+	install_module "builtin_cd"
+	install_module "builtin_exit"
+}
