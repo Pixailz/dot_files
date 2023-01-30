@@ -1,0 +1,93 @@
+{
+// MAKEFILE
+	"Makefile Banner": {
+		"prefix": ["makefile_banner"],
+		"description": "Generate banner with details for current Makefile",
+		"scope": "makefile",
+		"body": [
+			"##BEGIN#__________________________>#_|INFO|_#<________________________________##",
+			"##                                                           ______ _         ##",
+			"## DETAILS:                                                  | ___ (_)        ##",
+			"##- FILENAME\t\t${TM_FILENAME}                                 | |_/ /___  __   ##",
+			"##- PROJECT_NAME\tNone                                     |  __/| \\ \\/ /   ##",
+			"##- AUTHOR\t\t\tPixailz                                  | |   | |>  <    ##",
+			"##- CREATED\t\t\t${CURRENT_YEAR}−${CURRENT_MONTH}−${CURRENT_DATE}T${CURRENT_HOUR}:${CURRENT_MINUTE}:${CURRENT_SECOND}+0100                 \\_|   |_/_/\\_\\   ##",
+			"##                                                                            ##",
+			"## DESCRIPTION:                                                               ##",
+			"### None                                                                      ##",
+			"##                                                                            ##",
+			"## VERSION:[ALPHA|BETA]_MAJOR.MINOR.PATCH                                     ##",
+			"##END#____________________________<#_|INFO|_#>________________________________##",
+			""
+		]
+	},
+
+// C/CPP STYLE
+	"C/CPP Banner": {
+		"prefix": ["c_cpp_banner"],
+		"description": "generate C/CPP banner with details for current file",
+		"scope": "c,cpp",
+		"body": [
+			"/*#BEGIN#_________________________>#_|INFO|_#<_______________________________#*/",
+			"/*#                                                         ______ _         #*/",
+			"/*# DETAILS:                                                | ___ (_)        #*/",
+			"/*#- FILENAME\t\t${TM_FILENAME}                               | |_/ /___  __   #*/",
+			"/*#- PROJECT_NAME\tNone                                    |  __/| \\ \\/ /   #*/",
+			"/*#- AUTHOR\t\t\tPixailz                                 | |   | |>  <    #*/",
+			"/*#- CREATED\t\t${CURRENT_YEAR}−${CURRENT_MONTH}−${CURRENT_DATE}T${CURRENT_HOUR}:${CURRENT_MINUTE}:${CURRENT_SECOND}+0100                \\_|   |_/_/\\_\\   #*/",
+			"/*#                                                                          #*/",
+			"/*# DESCRIPTION:                                                             #*/",
+			"/*## None                                                                    #*/",
+			"/*#                                                                          #*/",
+			"/*# VERSION:[ALPHA|BETA]_MAJOR.MINOR.PATCH                                   #*/",
+			"/*#END#___________________________<#_|INFO|_#>_______________________________#*/",
+			""
+		]
+	},
+
+	"C/CPP Comment part": {
+		"prefix": ["c_cpp_comment_part"],
+		"description": "C/C++ Commented part",
+		"scope": "c,cpp",
+		"body": [
+			"/*#BEGIN#___________________________>#_|${1/(.*)/${1:/upcase}/}|_#<________________________________##*/",
+			"${0}",
+			"/*#END#_____________________________<#_|${1/(.*)/${1:/upcase}/}|_#>________________________________##*/",
+		]
+	},
+
+// SCRIPT STYLE
+	"Script Banner": {
+		"prefix": ["script_banner"],
+		"description": "Generate banner with details for current script",
+		"scope": "shellscript,python",
+		"body": [
+			"#!/${1:bin/interpreter_path}",
+			"##BEGIN#__________________________>#_|INFO|_#<________________________________##",
+			"##                                                           ______ _         ##",
+			"## DETAILS:                                                  | ___ (_)        ##",
+			"##- FILENAME\t\t${TM_FILENAME}                                   | |_/ /___  __   ##",
+			"##- SCRIPT_ID\t\t0x0000                                   |  __/| \\ \\/ /   ##",
+			"##- AUTHOR\t\t\tPixailz                                  | |   | |>  <    ##",
+			"##- CREATED\t\t\t${CURRENT_YEAR}−${CURRENT_MONTH}−${CURRENT_DATE}T${CURRENT_HOUR}:${CURRENT_MINUTE}:${CURRENT_SECOND}+0100                 \\_|   |_/_/\\_\\   ##",
+			"##                                                                            ##",
+			"## DESCRIPTION:                                                               ##",
+			"### None                                                                      ##",
+			"##                                                                            ##",
+			"## VERSION:[ALPHA|BETA]_MAJOR.MINOR.PATCH                                     ##",
+			"##END#____________________________<#_|INFO|_#>________________________________##",
+			""
+		]
+	},
+
+	"Script Comment part": {
+		"prefix": ["script_comment_part"],
+		"description": "Comment part for script",
+		"scope": "python,shellscript,makefile",
+		"body": [
+			"##BEGIN#____________________________>#_|${1:?}|_#<__________________________________##",
+			"",
+			"##END#______________________________<#_|${1:?}|_#>__________________________________##",
+		]
+	}
+}
