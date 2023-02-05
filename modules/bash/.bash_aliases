@@ -113,7 +113,7 @@ return  return debug in  in ${PWD}/exec.log. if DEBUG_OUT is set, ouput
 '
 function	debug_bash()
 {
-	local	cmd="${1}"
+	local	cmd="${@}"
 	local	options="-x"
 	if [ -z "${DEBUG_OUT}" ];then
 		local debug_file="exec.log"
