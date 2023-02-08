@@ -7,8 +7,9 @@ function	post_install_bash()
 
 function	install_bash()
 {
-	move_if_file_exist ${PATH_BASHRC_FILE_IN} ${PATH_BASHRC_FILE_OUT}
-	move_if_file_exist ${PATH_BASH_ALIASES_IN} ${PATH_BASH_ALIASES_OUT}
+	for file in "${PATH_BASH_FILE_IN[@]}"; do
+		move_if_file_exist "${DIR_MODULE}/bash/${file}" ${PATH_BASH_DIR_OUT}
+	done
 }
 
 # if not sourced, BASH_SOURCE keep current file when $0 keep launched file
