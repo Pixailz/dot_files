@@ -4,8 +4,8 @@
 
 # If not running interactively, don't do anything
 case $- in
-    *i*) ;;
-      *) return;;
+	*i*) ;;
+	*) return;;
 esac
 
 # don't put duplicate lines or lines starting with space in the history.
@@ -32,12 +32,12 @@ shopt -s checkwinsize
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
+	debian_chroot=$(cat /etc/debian_chroot)
 fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
+	xterm-color|*-256color) color_prompt=yes;;
 esac
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
@@ -46,30 +46,72 @@ esac
 force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
-    else
-	color_prompt=
-    fi
+	if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+		# We have color support; assume it's compliant with Ecma-48
+		# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+		# a case would tend to support setf rather than setaf.)
+		color_prompt=yes
+	else
+		color_prompt=
+	fi
 fi
 
+# Function to generate PS1 after CMDs
+PROMPT_COMMAND=prompt::PS1
+
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+	ESC="\[\e["
+	END="\]"
+	RST="${ESC}0m${END}"
+
+	PROMPT_BLACK="${ESC}30m${END}"
+	PROMPT_RED="${ESC}31m${END}"
+	PROMPT_GREEN="${ESC}32m${END}"
+	PROMPT_YELLOW="${ESC}33m${END}"
+	PROMPT_ORANGE="${ESC}38;5;208m${END}"
+	PROMPT_BLUE="${ESC}34m${END}"
+	PROMPT_PURPLE="${ESC}35m${END}"
+	PROMPT_CYAN="${ESC}36m${END}"
+	PROMPT_WHITE="${ESC}37m${END}"
+	PROMPT_BOLD="${ESC}01m${END}"
+
+	WORK_DIR_COLOR="${PROMPT_BOLD}${PROMPT_BLUE}"
+	USER_COLOR="${PROMPT_BOLD}${PROMPT_GREEN}"
+	COMMAND_COLOR=""
+	PS0="${RST}"
 fi
+
+function	prompt::PS1() {
+	local	EXIT=${?}
+	local	status_color
+
+	PS1=""
+
+	case ${EXIT} in
+		0)		status_color="${PROMPT_GREEN}" ;;
+		130)	status_color="${PROMPT_ORANGE}" ;;
+		*)		status_color="${PROMPT_RED}" ;;
+	esac
+	case ${#EXIT} in
+		1)  EXIT=" ${EXIT} " ;;
+		2)  EXIT=" ${EXIT}" ;;
+		*)  EXIT="${EXIT}" ;;
+	esac
+
+	FIRST_LINE="╔[${WORK_DIR_COLOR}\w${RST}]-(\t)\n"
+	SECOND_LINE="╚[${USER_COLOR}\u@\h${RST}]-(${status_color}${EXIT}${RST}) \$ "
+
+	PS1="${FIRST_LINE}${SECOND_LINE}${COMMAND_COLOR}"
+}
+
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
+	xterm*|rxvt*)
+		PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+	;;
+	*) ;;
 esac
 
 # colored GCC warnings and errors
@@ -92,12 +134,12 @@ fi
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
+	if [ -f /usr/share/bash-completion/bash_completion ]; then
+		. /usr/share/bash-completion/bash_completion
+	elif [ -f /etc/bash_completion ]; then
+		. /etc/bash_completion
+	fi
 fi
 
-# export CDPATH
-CDPATH=${HOME}
+# set tab on bash debug
+PS4="    "
