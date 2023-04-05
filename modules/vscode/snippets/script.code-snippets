@@ -19,12 +19,12 @@
 			"## VERSION:[ALPHA|BETA]_MAJOR.MINOR.PATCH                                     ##",
 			"##END#____________________________<#_|INFO|_#>________________________________##",
 			"",
-			"function\tmain()",
+			"function\tmain::entry()",
 			"{",
 			"",
 			"}",
 			"",
-			"main",
+			"main::entry",
 		]
 	},
 
