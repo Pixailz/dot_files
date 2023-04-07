@@ -143,3 +143,4 @@ fi
 
 # set tab on bash debug
 PS4="    "
+tabs 4
