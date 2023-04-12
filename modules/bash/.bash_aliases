@@ -123,3 +123,25 @@ function	debug_bash()
 
 	bash "${options}" ${cmd} 2>${debug_file}
 }
+
+TREE_OPT="--metafirst -I .git -apugh -D --timefmt '%x %X'"
+# --metafirst	: make metadata appear first, that keep the ascii tree clean :)
+# -I			: ignore dirs (like .git ones)
+# -a			: all files
+# -p			: print permission
+# -u			: print user owner
+# -g			: print group owner
+# -h			: size in human readable
+# -D			: display the last modified
+# --timefmt		: print date in format
+# %x			: current day padded with zero's
+# %X			: current time padded with zero's
+alias ttree="tree ${TREE_OPT}"
+http_tree='-H . -o ./index.html && sleep 1 && xdg-open ./index.html && read -s -n 1 && rm ./index.html'
+# -H			: format output as html
+# -o output in file instead of stdout
+
+alias httree="ttree ${http_tree}"
+alias htree="tree ${http_tree}"
+
+alias sb="source ~/.bashrc"
