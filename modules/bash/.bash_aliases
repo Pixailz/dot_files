@@ -124,8 +124,9 @@ function	debug_bash()
 	bash "${options}" ${cmd} 2>${debug_file}
 }
 
-TREE_OPT="--metafirst -I .git -apugh -D --timefmt '%x %X'"
+TREE_OPT="--metafirst --filesfirst -I .git -apugh -D --timefmt '%x %X'"
 # --metafirst	: make metadata appear first, that keep the ascii tree clean :)
+# --filesfirst	: make files appear first, more organised tree view
 # -I			: ignore dirs (like .git ones)
 # -a			: all files
 # -p			: print permission
