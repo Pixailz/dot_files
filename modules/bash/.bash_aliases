@@ -95,8 +95,8 @@ alias apt="apt ${APT_OPTIONS}"
 ## batcat
 if [ -f "/usr/bin/batcat" ]; then
 	export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
-	alias cat="batcat"
-	function batdiff()
+	alias bat="batcat"
+	function dbat()
 	{
 		git diff --name-only --relative --diff-filter=d | xargs batcat --diff
 	}
@@ -111,7 +111,7 @@ ${1}    cmd to debug
 return  return debug in  in ${PWD}/exec.log. if DEBUG_OUT is set, ouput
         debug in ${PWD}/DEBUG_OUT
 '
-function	debug_bash()
+function	dbash()
 {
 	local	cmd="${@}"
 	local	options="-x"
@@ -145,4 +145,4 @@ http_tree='-H . -o ./index.html && sleep 1 && xdg-open ./index.html && read -s -
 alias httree="ttree ${http_tree}"
 alias htree="tree ${http_tree}"
 
-alias sb="source ~/.bashrc"
+alias sbash="source ~/.bashrc"
