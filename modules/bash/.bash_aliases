@@ -145,4 +145,8 @@ http_tree='-H . -o ./index.html && sleep 1 && xdg-open ./index.html && read -s -
 alias httree="ttree ${http_tree}"
 alias htree="tree ${http_tree}"
 
-alias sbash="source ~/.bashrc"
+alias sbashrc="source ~/.bashrc"
+alias vbashrc="vim ~/.bashrc"
+alias vsbashrc="vbashrc && sbashrc"
+
+alias nc="nc -v"
