@@ -190,6 +190,7 @@
 			"${1/(.*)/${1:/capitalize}/}\t&${1/(.*)/${1:/capitalize}/}::operator=(const ${1/(.*)/${1:/capitalize}/} &src)",
 			"{",
 			"\tdebug(\"${1/(.*)/${1:/capitalize}/} operator '=' called\");",
+			"\t*this = src;",
 			"\treturn (*this);",
 			"}",
 			""
