@@ -109,6 +109,7 @@
 			"# define ${1/(.*)/${1:/upcase}/}_HPP",
 			"",
 			"#include <iostream>",
+			"#include <iostream>",
 			"/**",
 			" * <object>\t\tstd::cout",
 			" * <object>\t\tstd::endl",
