@@ -98,7 +98,7 @@ if [ "$color_prompt" = yes ]; then
 fi
 
 if [ "${SSH_CLIENT}" ]; then
-	SSH_PART="-(${PROMPT_RED}${LOGO_SSH}${SSH_CLIENT/ */}${RST})"
+	SSH_PART="[${PROMPT_RED}${LOGO_SSH}${SSH_CLIENT/ */}${RST}]"
 fi
 
 # set shebang because \$ don't work
@@ -155,12 +155,15 @@ function	prompt::PS1() {
 		*)	EXIT="${EXIT}" ;;
 	esac
 
-	EMOJI_PART="${OS_COLOR}${OS_EMOJI}${RST}"
+	P_EMOJI="${OS_COLOR}${OS_EMOJI}${RST}"
+	P_USER="${USER_COLOR}\u${RST}"
+	P_AT="${USER_COLOR}@${RST}"
+	P_HOST="${USER_COLOR}\h${RST}"
 
-	FIRST_LINE="╔[${WORK_DIR_COLOR}\w${RST}]${SSH_PART}-(\t)\n"
-	SECOND_LINE="╚[${USER_COLOR}\u@\h${RST}]-(${EMOJI_PART})-(${status_color}${EXIT}${RST})"
+	FIRST_LINE="╔[${P_EMOJI}][${WORK_DIR_COLOR}\w${RST}]${SSH_PART}\n"
+	SECOND_LINE="╚[${P_USER}${P_AT}${P_HOST}][${status_color}${EXIT}${RST}]"
 
-	PS1="${FIRST_LINE}${SECOND_LINE} ${SHEBANG}${COMMAND_COLOR} "
+	PS1="${FIRST_LINE}${SECOND_LINE}${SHEBANG}${COMMAND_COLOR} "
 }
 
 unset color_prompt force_color_prompt
