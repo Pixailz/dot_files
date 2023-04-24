@@ -1,0 +1,7 @@
+
+## unicode in nerd font
+LOGO_UBUNTU=$(printf "\uebc9")
+LOGO_DEBIAN=$(printf "\uebc5")
+LOGO_TERMUX=$(printf "\ue70e")
+LOGO_KALI=$(printf "\uf327")
+LOGO_ALPINE=$(printf "\uf300")

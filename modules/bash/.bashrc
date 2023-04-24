@@ -2,6 +2,20 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+# check on which os we are
+
+if [ $(type -t termux-setup-storage) ]; then
+	OS_ID="termux"
+else
+	if [ -f /etc/os-release ]; then
+		OS_ID=$(. /etc/os-release && echo ${ID})
+	else
+		OS_ID=Unknown
+	fi
+fi
+
+export OS_ID
+
 # If not running interactively, don't do anything
 case $- in
 	*i*) ;;
@@ -56,6 +70,9 @@ if [ -n "$force_color_prompt" ]; then
 	fi
 fi
 
+# source nerd_char
+[ -f ${HOME}/.nerdfont_char ] && source ${HOME}/.nerdfont_char
+
 # Function to generate PS1 after CMDs
 PROMPT_COMMAND=prompt::PS1
 
@@ -81,6 +98,43 @@ if [ "$color_prompt" = yes ]; then
 	PS0="${RST}"
 fi
 
+# set shebang because \$ don't work
+[ $(id -u) -eq 0 ] && SHEBANG="#" || SHEBANG="$"
+
+# set modified PROMPT_VARIABLE according to which os we are
+case ${OS_ID} in
+	termux)
+		OS_EMOJI="${LOGO_TERMUX:-@}"
+		OS_COLOR="${PROMPT_CYAN}"
+		USER_COLOR="${PROMPT_BOLD}${PROMPT_GREEN}"
+		;;
+	ubuntu)
+		OS_EMOJI="${LOGO_UBUNTU:-@}"
+		OS_COLOR="${PROMPT_YELLOW}"
+		USER_COLOR="${PROMPT_BOLD}${PROMPT_ORANGE}"
+		;;
+	debian)
+		OS_EMOJI="${LOGO_DEBIAN:-@}"
+		OS_COLOR="${PROMPT_RED}"
+		USER_COLOR="${PROMPT_BOLD}${PROMPT_PURPLE}"
+		;;
+	kali)
+		OS_EMOJI="${LOGO_KALI:-@}"
+		OS_COLOR="${PROMPT_GREEN}"
+		USER_COLOR="${PROMPT_BOLD}${PROMPT_RED}"
+		;;
+	alpine)
+		OS_EMOJI="${LOGO_ALPINE:-@}"
+		OS_COLOR="${PROMPT_CYAN}"
+		USER_COLOR="${PROMPT_BOLD}${PROMPT_BLUE}"
+		;;
+	None)
+		OS_EMOJI="@"
+		OS_COLOR=""
+		USER_COLOR=""
+		;;
+esac
+
 function	prompt::PS1() {
 	local	EXIT=${?}
 	local	status_color
@@ -93,15 +147,17 @@ function	prompt::PS1() {
 		*)		status_color="${PROMPT_RED}" ;;
 	esac
 	case ${#EXIT} in
-		1)  EXIT=" ${EXIT} " ;;
-		2)  EXIT=" ${EXIT}" ;;
-		*)  EXIT="${EXIT}" ;;
+		1)	EXIT=" ${EXIT} " ;;
+		2)	EXIT=" ${EXIT}" ;;
+		*)	EXIT="${EXIT}" ;;
 	esac
 
-	FIRST_LINE="╔[${WORK_DIR_COLOR}\w${RST}]-(\t)\n"
-	SECOND_LINE="╚[${USER_COLOR}\u@\h${RST}]-(${status_color}${EXIT}${RST}) \$ "
+	EMOJI_PART="${OS_COLOR}${OS_EMOJI}${RST}"
 
-	PS1="${FIRST_LINE}${SECOND_LINE}${COMMAND_COLOR}"
+	FIRST_LINE="╔[${WORK_DIR_COLOR}\w${RST}]-(\t)\n"
+	SECOND_LINE="╚[${USER_COLOR}\u@\h${RST}]-(${EMOJI_PART})-(${status_color}${EXIT}${RST})"
+
+	PS1="${FIRST_LINE}${SECOND_LINE} ${SHEBANG}${COMMAND_COLOR} "
 }
 
 unset color_prompt force_color_prompt

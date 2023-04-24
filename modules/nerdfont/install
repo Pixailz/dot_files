@@ -1,0 +1,33 @@
+#!/bin/bash
+
+function	install_nerdfont()
+{
+	local	have_nerd_font_installed
+
+	case ${OS_ID} in
+		termux) printf "not implemented yet";;
+		ubuntu|kali|debian)
+			if [ ! -f "${HOME}/.local/share/fonts/Fira Code Regular Nerd Font Complete Mono.ttf" ]; then
+				curl --location "${NERDFONT_LINK}" \
+					 --progress-bar \
+					 --output nerdfont.zip
+				unzip -o nerdfont.zip -d ${HOME}/.local/share/fonts/
+				rm -f nerdfont.zip
+			fi
+			;;
+	esac
+	move_if_file_exist ${DIR_MODULE}/nerdfont/.nerdfont_char ${HOME}/.nerdfont_char
+	p_info "you can select your font in the terminal settings"
+}
+
+# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
+if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
+	if [ "${0}" -ef "install" ]; then
+		source ../../run
+	elif [ "${0}" -ef "nerdfont/install" ]; then
+		source ../run
+	else
+		source ./run
+	fi
+	install_nerdfont
+fi
