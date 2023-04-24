@@ -3,7 +3,6 @@
 # for examples
 
 # check on which os we are
-
 if [ $(type -t termux-setup-storage) ]; then
 	OS_ID="termux"
 else
@@ -13,7 +12,6 @@ else
 		OS_ID=Unknown
 	fi
 fi
-
 
 export OS_ID
 
