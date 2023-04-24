@@ -100,7 +100,7 @@ if [ "$color_prompt" = yes ]; then
 fi
 
 if [ "${SSH_CLIENT}" ]; then
-	SSH_PART="-(${PROMPT_RED}${LOGO_SSH} ${SSH_CLIENT/ */}${RST})"
+	SSH_PART="-(${PROMPT_RED}${LOGO_SSH}${SSH_CLIENT/ */}${RST})"
 fi
 
 # set shebang because \$ don't work
