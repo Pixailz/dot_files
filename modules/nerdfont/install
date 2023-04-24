@@ -19,6 +19,9 @@ function	install_nerdfont()
 		unzip -o nerdfont.zip -d ${dir_font}
 		rm -f nerdfont.zip
 	fi
+
+	[ ${OS_ID} == "termux" ] && termux-reload-settings
+
 	move_if_file_exist ${DIR_MODULE}/nerdfont/.nerdfont_char ${HOME}/.nerdfont_char
 	p_info "you can select your font in the terminal settings"
 }

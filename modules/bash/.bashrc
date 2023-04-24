@@ -14,6 +14,7 @@ else
 	fi
 fi
 
+
 export OS_ID
 
 # If not running interactively, don't do anything
@@ -98,6 +99,10 @@ if [ "$color_prompt" = yes ]; then
 	PS0="${RST}"
 fi
 
+if [ ${SSH_CLIENT} ]; then
+	SSH_PART="-(${PROMPT_RED}${LOGO_SSH} ${SSH_CLIENT/ */}${RST})"
+fi
+
 # set shebang because \$ don't work
 [ $(id -u) -eq 0 ] && SHEBANG="#" || SHEBANG="$"
 
@@ -154,7 +159,7 @@ function	prompt::PS1() {
 
 	EMOJI_PART="${OS_COLOR}${OS_EMOJI}${RST}"
 
-	FIRST_LINE="╔[${WORK_DIR_COLOR}\w${RST}]-(\t)\n"
+	FIRST_LINE="╔[${WORK_DIR_COLOR}\w${RST}]${SSH_PART}-(\t)\n"
 	SECOND_LINE="╚[${USER_COLOR}\u@\h${RST}]-(${EMOJI_PART})-(${status_color}${EXIT}${RST})"
 
 	PS1="${FIRST_LINE}${SECOND_LINE} ${SHEBANG}${COMMAND_COLOR} "
