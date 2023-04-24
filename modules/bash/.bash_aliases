@@ -150,3 +150,5 @@ alias vbashrc="vim ~/.bashrc"
 alias vsbashrc="vbashrc && sbashrc"
 
 alias nc="nc -v"
+
+alias gdb="gdb --args"
