@@ -5,9 +5,13 @@ function	install_nerdfont()
 	local	dir_font
 
 	case ${OS_ID} in
-		termux) 			dir_font="~/.termux"					;;
+		termux) 			dir_font="${HOME}/.termux"					;;
 		ubuntu|kali|debian)	dir_font="${HOME}/.local/share/fonts"	;;
 	esac
+
+	[ -f "${dir_font}" ] && rm -f
+	[ ! -d "${dir_font}" ] && mkdir -p "${dir_font}"
+
 	if [ ! -f "${dir_font}/Fira Code Regular Nerd Font Complete Mono.ttf" ]; then
 		curl --location "${NERDFONT_LINK}" \
 				--progress-bar \
