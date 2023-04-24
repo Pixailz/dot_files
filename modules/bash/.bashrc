@@ -99,7 +99,7 @@ if [ "$color_prompt" = yes ]; then
 	PS0="${RST}"
 fi
 
-if [ ${SSH_CLIENT} ]; then
+if [ "${SSH_CLIENT}" ]; then
 	SSH_PART="-(${PROMPT_RED}${LOGO_SSH} ${SSH_CLIENT/ */}${RST})"
 fi
 
