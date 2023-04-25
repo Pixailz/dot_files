@@ -7,7 +7,31 @@ if [ $(type -t termux-setup-storage) ]; then
 	OS_ID="termux"
 else
 	if [ -f /etc/os-release ]; then
-		OS_ID=$(. /etc/os-release && echo ${ID})
+		OS_ID=$(. /etc/os-release && printf "${ID}")
+		# ubuntu
+		# debian
+		# alpine
+		# arch
+		# manjaro
+		# linuxmint
+		# elementary
+		# rocky
+		# opensuse-leap
+		# fedora
+		# centos
+		# rhel
+		# gentoo
+		# kali
+		# parrot
+		# amzn
+		# ol (oracle linux)
+		# photon
+		# clear-linux-os
+		if [ -z "${OS_ID}" ]; then
+			case "$(. /etc/os-release && echo "${NAME}")" in
+				"BlackArch")			OS_ID=blackarch	;;
+			esac
+		fi
 	else
 		OS_ID=Unknown
 	fi
@@ -172,16 +196,14 @@ function	prompt::PS1() {
 		*)	EXIT="${EXIT}" ;;
 	esac
 
-	# ┣ ┫
-
 	P_CWD="${WORK_DIR_COLOR}\w${RST}"
 	P_RET="${status_color}${EXIT}${RST}"
 	P_TIME="$(date +%T)"
 	TERM_WIDTH=$(tput cols)
 
-	FL_L="┏[ ${P_EMOJI} ][${P_CWD}]"
+	FL_L="[ ${P_EMOJI} ][${P_CWD}]"
 	FL_R="${P_SSH}[${P_TIME}]"
-	SL_L="┗[${P_RET}][${P_UAH}]"
+	SL_L="[${P_RET}][${P_UAH}]"
 
 	if [ ! -z "${FL_R}" ]; then
 		FL_R_LEN=$(printf "%b" "${FL_R}" | perl -pe 's|\\\[\x1b\[.*?\]||g' | wc -m)
