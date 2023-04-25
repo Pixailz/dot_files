@@ -176,7 +176,7 @@ function	prompt::PS1() {
 
 	P_CWD="${WORK_DIR_COLOR}\w${RST}"
 	P_RET="${status_color}${EXIT}${RST}"
-	P_TIME="$(date +%X)"
+	P_TIME="$(date +%T)"
 	TERM_WIDTH=$(tput cols)
 
 	FL_L="┏[ ${P_EMOJI} ][${P_CWD}]"
