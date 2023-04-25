@@ -106,7 +106,7 @@ if [ "$color_prompt" = yes ]; then
 fi
 
 if [ "${SSH_CLIENT}" ]; then
-	P_SSH="${P_BOLD}${P_RED}${LOGO_SSH}${SSH_CLIENT/ */}${RST}"
+	P_SSH="[${P_BOLD}${P_RED}${LOGO_SSH}${SSH_CLIENT/ */}${RST}]"
 fi
 
 # set shebang because \$ don't work
@@ -180,7 +180,7 @@ function	prompt::PS1() {
 	TERM_WIDTH=$(tput cols)
 
 	FL_L="┏[ ${P_EMOJI} ][${P_CWD}]"
-	FL_R="[${P_SSH}][${P_TIME}]"
+	FL_R="${P_SSH}[${P_TIME}]"
 	SL_L="┗[${P_RET}][${P_UAH}]"
 
 	if [ ! -z "${FL_R}" ]; then
