@@ -69,8 +69,14 @@ if [ -n "$force_color_prompt" ]; then
 	fi
 fi
 
+# if not monospaced font, pad the icon with a space
+HAVE_MONO_FONT=1
+[ "${HAVE_MONO_FONT:-0}" -eq 1 ] && UNI_PAD="" || UNI_PAD=" "
+
 # source nerd_char
-[ -f ${HOME}/.nerdfont_char ] && source ${HOME}/.nerdfont_char
+if [ -f ${HOME}/.nerdfont_char ]; then
+	source ${HOME}/.nerdfont_char
+fi
 
 # Function to generate PS1 after CMDs
 PROMPT_COMMAND=prompt::PS1
@@ -80,56 +86,61 @@ if [ "$color_prompt" = yes ]; then
 	END="\]"
 	RST="${ESC}0m${END}"
 
-	PROMPT_BLACK="${ESC}30m${END}"
-	PROMPT_RED="${ESC}31m${END}"
-	PROMPT_GREEN="${ESC}32m${END}"
-	PROMPT_YELLOW="${ESC}33m${END}"
-	PROMPT_ORANGE="${ESC}38;5;208m${END}"
-	PROMPT_BLUE="${ESC}34m${END}"
-	PROMPT_PURPLE="${ESC}35m${END}"
-	PROMPT_CYAN="${ESC}36m${END}"
-	PROMPT_WHITE="${ESC}37m${END}"
-	PROMPT_BOLD="${ESC}01m${END}"
+	P_RED="${ESC}38;5;160m${END}"
+	P_GREEN="${ESC}38;5;118m${END}"
+	P_YELLOW="${ESC}38;5;220m${END}"
+	P_ORANGE="${ESC}38;5;208m${END}"
+	P_BLUE="${ESC}38;5;26m${END}"
+	P_PURPLE="${ESC}38;5;93m${END}"
+	P_PINK="${ESC}38;5;207m${END}"
+	P_CYAN="${ESC}38;5;45m${END}"
+	P_WHITE="${ESC}38;5;15m${END}"
+	P_BLACK="${ESC}38;5;16m${END}"
+	P_BOLD="${ESC}1m${END}"
+	P_DFL_BLUE="${ESC}38;5;25m${END}"
 
-	WORK_DIR_COLOR="${PROMPT_BOLD}${PROMPT_BLUE}"
-	USER_COLOR="${PROMPT_BOLD}${PROMPT_ORANGE}"
+	WORK_DIR_COLOR="${P_BOLD}${P_DFL_BLUE}"
+	USER_COLOR="${P_BOLD}${P_ORANGE}"
 	COMMAND_COLOR=""
 	PS0="${RST}"
 fi
 
 if [ "${SSH_CLIENT}" ]; then
-	SSH_PART="[${PROMPT_RED}${LOGO_SSH}${SSH_CLIENT/ */}${RST}]"
+	P_SSH="${P_BOLD}${P_RED}${LOGO_SSH}${SSH_CLIENT/ */}${RST}"
 fi
 
 # set shebang because \$ don't work
 [ $(id -u) -eq 0 ] && SHEBANG="#" || SHEBANG="$"
 
+PROMPT_DIRTRIM=4
+
 # set modified PROMPT_VARIABLE according to which os we are
 case ${OS_ID} in
 	termux)
 		OS_EMOJI="${LOGO_TERMUX:-@}"
-		OS_COLOR="${PROMPT_CYAN}"
-		USER_COLOR="${PROMPT_BOLD}${PROMPT_GREEN}"
-		;;
+		OS_COLOR="${P_CYAN}"
+		USER_COLOR="${P_BOLD}${P_GREEN}"
+		PROMPT_DIRTRIM=2
+	;;
 	ubuntu)
 		OS_EMOJI="${LOGO_UBUNTU:-@}"
-		OS_COLOR="${PROMPT_YELLOW}"
-		USER_COLOR="${PROMPT_BOLD}${PROMPT_ORANGE}"
+		OS_COLOR="${P_YELLOW}"
+		USER_COLOR="${P_BOLD}${P_ORANGE}"
 		;;
 	debian)
 		OS_EMOJI="${LOGO_DEBIAN:-@}"
-		OS_COLOR="${PROMPT_RED}"
-		USER_COLOR="${PROMPT_BOLD}${PROMPT_PURPLE}"
+		OS_COLOR="${P_RED}"
+		USER_COLOR="${P_BOLD}${P_PURPLE}"
 		;;
 	kali)
 		OS_EMOJI="${LOGO_KALI:-@}"
-		OS_COLOR="${PROMPT_GREEN}"
-		USER_COLOR="${PROMPT_BOLD}${PROMPT_RED}"
+		OS_COLOR="${P_GREEN}"
+		USER_COLOR="${P_BOLD}${P_RED}"
 		;;
 	alpine)
 		OS_EMOJI="${LOGO_ALPINE:-@}"
-		OS_COLOR="${PROMPT_CYAN}"
-		USER_COLOR="${PROMPT_BOLD}${PROMPT_BLUE}"
+		OS_COLOR="${P_CYAN}"
+		USER_COLOR="${P_BOLD}${P_BLUE}"
 		;;
 	None)
 		OS_EMOJI="@"
@@ -138,6 +149,12 @@ case ${OS_ID} in
 		;;
 esac
 
+P_EMOJI="${OS_COLOR}${OS_EMOJI}${RST}"
+P_USER="${USER_COLOR}\u${RST}"
+P_AT="${USER_COLOR}@${RST}"
+P_HOST="${USER_COLOR}\h${RST}"
+P_UAH="${P_USER}${P_AT}${P_HOST}"
+
 function	prompt::PS1() {
 	local	EXIT=${?}
 	local	status_color
@@ -145,9 +162,9 @@ function	prompt::PS1() {
 	PS1=""
 
 	case ${EXIT} in
-		0)		status_color="${PROMPT_GREEN}" ;;
-		130)	status_color="${PROMPT_ORANGE}" ;;
-		*)		status_color="${PROMPT_RED}" ;;
+		0)		status_color="${P_GREEN}" ;;
+		130)	status_color="${P_ORANGE}" ;;
+		*)		status_color="${P_RED}" ;;
 	esac
 	case ${#EXIT} in
 		1)	EXIT=" ${EXIT} " ;;
@@ -155,15 +172,25 @@ function	prompt::PS1() {
 		*)	EXIT="${EXIT}" ;;
 	esac
 
-	P_EMOJI="${OS_COLOR}${OS_EMOJI}${RST}"
-	P_USER="${USER_COLOR}\u${RST}"
-	P_AT="${USER_COLOR}@${RST}"
-	P_HOST="${USER_COLOR}\h${RST}"
+	# ┣ ┫
 
-	FIRST_LINE="╔[${P_EMOJI}][${WORK_DIR_COLOR}\w${RST}]${SSH_PART}\n"
-	SECOND_LINE="╚[${P_USER}${P_AT}${P_HOST}][${status_color}${EXIT}${RST}]"
+	P_CWD="${WORK_DIR_COLOR}\w${RST}"
+	P_RET="${status_color}${EXIT}${RST}"
+	P_TIME="$(date +%X)"
+	TERM_WIDTH=$(tput cols)
 
-	PS1="${FIRST_LINE}${SECOND_LINE}${SHEBANG}${COMMAND_COLOR} "
+	FL_L="┏[ ${P_EMOJI} ][${P_CWD}]"
+	FL_R="[${P_SSH}][${P_TIME}]"
+	SL_L="┗[${P_RET}][${P_UAH}]"
+
+	if [ ! -z "${FL_R}" ]; then
+		FL_R_LEN=$(printf "%b" "${FL_R}" | perl -pe 's|\\\[\x1b\[.*?\]||g' | wc -m)
+		FL_R_POS=$(printf "\x1b[$((${TERM_WIDTH} - ${FL_R_LEN} + 1))G")
+	fi
+	FIRST_LINE="${FL_L}${FL_R_POS}${FL_R}\n"
+	SECOND_LINE="${SL_L}"
+
+	PS1="${FIRST_LINE}${SECOND_LINE} ${SHEBANG}${COMMAND_COLOR} "
 }
 
 unset color_prompt force_color_prompt

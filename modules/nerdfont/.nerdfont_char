@@ -1,9 +1,16 @@
-
 ## unicode in nerd font
-LOGO_UBUNTU=$(printf "\uebc9")
-LOGO_DEBIAN=$(printf "\uebc5")
-LOGO_TERMUX=$(printf "\ue70e")
-LOGO_KALI=$(printf "\uf327")
-LOGO_ALPINE=$(printf "\uf300")
-LOGO_SSH=$(printf "\uebaa")
-LOGO_APPLE=$(printf "\ue711")
+
+declare -gA NERD_CHAR
+NERD_CHAR=(
+	["LOGO_UBUNTU"]="\uebc9"
+	["LOGO_DEBIAN"]="\uebc5"
+	["LOGO_TERMUX"]="\ue70e"
+	["LOGO_KALI"]="\uf327"
+	["LOGO_ALPINE"]="\uf300"
+	["LOGO_SSH"]="\uebaa"
+	["LOGO_APPLE"]="\ue711"
+)
+
+for key in ${!NERD_CHAR[@]}; do
+	declare -g "${key}"="$(printf "%b${UNI_PAD}" "${NERD_CHAR[${key}]}")"
+done
