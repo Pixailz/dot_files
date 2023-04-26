@@ -227,7 +227,7 @@ function	prompt::get_git_status()
 		commit_ahead="${P_PURPLE}${GIT_COMMIT_AHEAD}${commit_ahead}${RST}"
 	else commit_ahead="" ; fi
 
-	if [ -z "${commit_ahead}" -a -z "${staged}" -a -z "${untracked}" -a -z "${unstaged}" ]; then
+	if [ -z "${commit_ahead}" -a "${staged}" == 0 -a "${untracked}" == 0 -a "${unstaged}" == 0 ]; then
 		P_GIT="[ ${branch_name} ${P_GREEN}${GIT_ALL_GOOD}${RST} ]"
 	else
 		P_GIT="[ ${branch_name} ${commit_ahead}${staged}${untracked}${unstaged} ]"
@@ -261,7 +261,6 @@ function	prompt::PS1() {
 	FL_L="[ ${P_EMOJI} ]${P_GIT}[${P_CWD}]"
 	FL_R="${P_SSH}[${P_TIME}]"
 	SL_L="[${P_RET}][${P_UAH}]"
-
 
 	if [ ! -z "${FL_R}" ]; then
 		FL_R_LEN=$(printf "%b" "${FL_R}" | perl -pe 's|\\\[\x1b\[.*?\]||g' | wc -m)
