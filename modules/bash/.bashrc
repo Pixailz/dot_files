@@ -183,6 +183,7 @@ GIT_UNTRACKED="!"
 GIT_UNSTAGED="?"
 GIT_STAGED="+"
 GIT_COMMIT_AHEAD="⇡"
+GIT_ALL_GOOD="✓"
 
 function	prompt::get_git_status()
 {
@@ -226,7 +227,11 @@ function	prompt::get_git_status()
 		commit_ahead="${P_PURPLE}${GIT_COMMIT_AHEAD}${commit_ahead}${RST}"
 	else commit_ahead="" ; fi
 
-	P_GIT="[ ${branch_name} ${commit_ahead}${staged}${untracked}${unstaged} ]"
+	if [ -z "${commit_ahead}" -a -z "${staged}" -a -z "${untracked}" -a -z "${unstaged}" ]; then
+		P_GIT="[ ${branch_name} ${P_GREEN}${GIT_ALL_GOOD}${RST} ]"
+	else
+		P_GIT="[ ${branch_name} ${commit_ahead}${staged}${untracked}${unstaged} ]"
+	fi
 }
 
 function	prompt::PS1() {
