@@ -182,7 +182,7 @@ P_UAH="${P_USER}${P_AT}${P_HOST}"
 GIT_UNTRACKED="!"
 GIT_UNSTAGED="?"
 GIT_STAGED="+"
-GIT_COMMIT_AHEAD="\u21e1"
+GIT_COMMIT_AHEAD="⇡"
 
 function	prompt::get_git_status()
 {
@@ -223,10 +223,10 @@ function	prompt::get_git_status()
 
 	commit_ahead=$(printf "%s" "${git_status}" | perl -ne "print if s|^##.*\[ahead (.*)]|\1|g")
 	if [ "${commit_ahead:-0}" -ne 0 ]; then
-		commit_ahead="${P_PURPLE}${GIT_COMMIT_AHEAD}${unstaged}${RST}"
+		commit_ahead="${P_PURPLE}${GIT_COMMIT_AHEAD}${commit_ahead}${RST}"
 	else commit_ahead="" ; fi
 
-	P_GIT="${branch_name} ${commit_ahead}${staged}${untracked}${unstaged}"
+	P_GIT="[${branch_name} ${commit_ahead}${staged}${untracked}${unstaged}]"
 }
 
 function	prompt::PS1() {
@@ -253,9 +253,11 @@ function	prompt::PS1() {
 
 	[ -d ./.git ] && prompt::get_git_status
 
-	FL_L="[ ${P_EMOJI} ][${P_CWD}][${P_GIT}]"
+	FL_L="[ ${P_EMOJI} ]${P_GIT}[${P_CWD}]"
 	FL_R="${P_SSH}[${P_TIME}]"
 	SL_L="[${P_RET}][${P_UAH}]"
+
+	unset P_GIT
 
 	if [ ! -z "${FL_R}" ]; then
 		FL_R_LEN=$(printf "%b" "${FL_R}" | perl -pe 's|\\\[\x1b\[.*?\]||g' | wc -m)
