@@ -211,7 +211,7 @@ function	prompt::get_git_status()
 		untracked="${P_ORANGE}${GIT_UNTRACKED}${untracked}${RST}"
 	else untracked="" ; fi
 
-	unstaged=$(printf "%s" "${git_status}" | grep "^??" | wc -l)
+	unstaged=$(printf "%s" "${git_status}" | grep -E "^( D| M| A)" | wc -l)
 	if [ "${unstaged}" -ne 0 ]; then
 		unstaged="${P_CYAN}${GIT_UNSTAGED}${unstaged}${RST}"
 	else unstaged="" ; fi
