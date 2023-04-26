@@ -226,7 +226,7 @@ function	prompt::get_git_status()
 		commit_ahead="${P_PURPLE}${GIT_COMMIT_AHEAD}${commit_ahead}${RST}"
 	else commit_ahead="" ; fi
 
-	P_GIT="[${branch_name} ${commit_ahead}${staged}${untracked}${unstaged}]"
+	P_GIT="[ ${branch_name} ${commit_ahead}${staged}${untracked}${unstaged} ]"
 }
 
 function	prompt::PS1() {
@@ -257,7 +257,6 @@ function	prompt::PS1() {
 	FL_R="${P_SSH}[${P_TIME}]"
 	SL_L="[${P_RET}][${P_UAH}]"
 
-	unset P_GIT
 
 	if [ ! -z "${FL_R}" ]; then
 		FL_R_LEN=$(printf "%b" "${FL_R}" | perl -pe 's|\\\[\x1b\[.*?\]||g' | wc -m)
@@ -267,6 +266,18 @@ function	prompt::PS1() {
 	SECOND_LINE="${SL_L}"
 
 	PS1="${FIRST_LINE}${SECOND_LINE} ${SHEBANG}${COMMAND_COLOR} "
+	unset P_GIT
+	unset P_CWD
+	unset P_RET
+	unset P_TIME
+	unset TERM_WIDTH
+	unset FL_L
+	unset FL_R
+	unset FL_R_LEN
+	unset FL_R_POS
+	unset SL_L
+	unset FIRST_LINE
+	unset SECOND_LINE
 }
 
 unset color_prompt force_color_prompt
