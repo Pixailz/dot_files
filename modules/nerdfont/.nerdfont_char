@@ -9,6 +9,7 @@ NERD_CHAR=(
 	["LOGO_ALPINE"]="\uf300"
 	["LOGO_SSH"]="\uebaa"
 	["LOGO_APPLE"]="\ue711"
+	["LOGO_GIT"]="\ue708"
 )
 
 for key in ${!NERD_CHAR[@]}; do

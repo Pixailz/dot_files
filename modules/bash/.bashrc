@@ -179,6 +179,56 @@ P_AT="${USER_COLOR}@${RST}"
 P_HOST="${USER_COLOR}\h${RST}"
 P_UAH="${P_USER}${P_AT}${P_HOST}"
 
+GIT_UNTRACKED="!"
+GIT_UNSTAGED="?"
+GIT_STAGED="+"
+GIT_COMMIT_AHEAD="\u21e1"
+
+function	prompt::get_git_status()
+{
+	: "
+	master  current branch
+	   ⇣42  local branch is 42 commits behind the remote
+	   ⇡42  local branch is 42 commits ahead of the remote
+	 merge  merge in progress
+	   ~42  42 merge conflicts
+	   +42  42 staged changes
+	   !42  42 unstaged changes
+	   ?42  42 untracked files
+	"
+	local	git_status=$(git status --porcelain --branch)
+	local	branch_name
+	local	untracked		# !
+	local	unstaged		# ?
+	local	staged			# +
+	local	commit_ahead	# ⇡
+
+	branch_name=$(printf "%s" "${git_status}" | perl -ne "print if s|## (.*?)\..*|\1|g")
+	branch_name="${P_GREEN}${LOGO_GIT} ${branch_name}${RST}"
+
+	untracked=$(git ls-files --others --exclude-standard | wc -l)
+	if [ "${untracked}" -ne 0 ]; then
+		untracked="${P_ORANGE}${GIT_UNTRACKED}${untracked}${RST}"
+	else untracked="" ; fi
+
+	unstaged=$(printf "%s" "${git_status}" | grep "^??" | wc -l)
+	if [ "${unstaged}" -ne 0 ]; then
+		unstaged="${P_CYAN}${GIT_UNSTAGED}${unstaged}${RST}"
+	else unstaged="" ; fi
+
+	staged=$(printf "%s" "${git_status}" | grep -E "^(D |M |A )" | wc -l)
+	if [ "${staged}" -ne 0 ]; then
+		staged="${P_GREEN}${GIT_STAGED}${staged}${RST}"
+	else staged="" ; fi
+
+	commit_ahead=$(printf "%s" "${git_status}" | perl -ne "print if s|^##.*\[ahead (.*)]|\1|g")
+	if [ "${commit_ahead:-0}" -ne 0 ]; then
+		commit_ahead="${P_PURPLE}${GIT_COMMIT_AHEAD}${unstaged}${RST}"
+	else commit_ahead="" ; fi
+
+	P_GIT="${branch_name} ${commit_ahead}${staged}${untracked}${unstaged}"
+}
+
 function	prompt::PS1() {
 	local	EXIT=${?}
 	local	status_color
@@ -201,7 +251,9 @@ function	prompt::PS1() {
 	P_TIME="$(date +%T)"
 	TERM_WIDTH=$(tput cols)
 
-	FL_L="[ ${P_EMOJI} ][${P_CWD}]"
+	[ -d ./.git ] && prompt::get_git_status
+
+	FL_L="[ ${P_EMOJI} ][${P_CWD}][${P_GIT}]"
 	FL_R="${P_SSH}[${P_TIME}]"
 	SL_L="[${P_RET}][${P_UAH}]"
 
