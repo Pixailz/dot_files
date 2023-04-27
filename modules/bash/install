@@ -2,7 +2,7 @@
 
 function	post_install_bash()
 {
-	p_warn "to make effect you have to ${orange}reopen all${reset} terminal"
+	p_warn "to make effect you have to source your ${red}~/.bashrc${reset}"
 }
 
 function	install_bash()
