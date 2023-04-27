@@ -62,6 +62,25 @@ function	dockc()
 	docker volume prune -f
 }
 
+## bash
+: ' debug_bash
+${1}    cmd to debug
+return  return debug in  in ${PWD}/exec.log. if DEBUG_OUT is set, ouput
+        debug in ${PWD}/DEBUG_OUT
+'
+function	dbash()
+{
+	local	cmd="${@}"
+	local	options="-x"
+	if [ -z "${DEBUG_OUT}" ];then
+		local debug_file="exec.log"
+	else
+		local debug_file=${DEBUG_OUT}
+	fi
+
+	bash "${options}" ${cmd} 2>${debug_file}
+}
+
 # Alias
 
 # Enable color support of ls and also add handy aliases
@@ -96,6 +115,7 @@ alias apt="apt ${APT_OPTIONS}"
 if [ -f "/usr/bin/batcat" ]; then
 	export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 	alias bat="batcat"
+
 	function dbat()
 	{
 		git diff --name-only --relative --diff-filter=d | xargs batcat --diff
@@ -104,25 +124,6 @@ fi
 
 ## John
 alias john="/usr/local/bin/john"
-
-## bash
-: ' debug_bash
-${1}    cmd to debug
-return  return debug in  in ${PWD}/exec.log. if DEBUG_OUT is set, ouput
-        debug in ${PWD}/DEBUG_OUT
-'
-function	dbash()
-{
-	local	cmd="${@}"
-	local	options="-x"
-	if [ -z "${DEBUG_OUT}" ];then
-		local debug_file="exec.log"
-	else
-		local debug_file=${DEBUG_OUT}
-	fi
-
-	bash "${options}" ${cmd} 2>${debug_file}
-}
 
 TREE_OPT="--metafirst --filesfirst -I .git -apugh -D --timefmt '%x %X'"
 # --metafirst	: make metadata appear first, that keep the ascii tree clean :)
