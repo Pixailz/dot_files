@@ -237,6 +237,7 @@ function	prompt::get_git_status()
 function	prompt::PS1() {
 	local	EXIT=${?}
 	local	status_color
+	local	is_a_git_dir
 
 	PS1=""
 
@@ -256,12 +257,12 @@ function	prompt::PS1() {
 	P_TIME="$(date +%T)"
 	TERM_WIDTH=$(tput cols)
 
-	[ -d ./.git ] && prompt::get_git_status
+	is_a_dit_dir=$(git rev-parse --is-inside-work-tree 2>/dev/null)
+	[ "${is_a_dit_dir}" == "true" ] && prompt::get_git_status
 
 	FL_L="[ ${P_EMOJI} ]${P_GIT}[${P_CWD}]"
 	FL_R="${P_SSH}[${P_TIME}]"
 	SL_L="[${P_RET}][${P_UAH}]"
-
 
 	if [ ! -z "${FL_R}" ]; then
 		FL_R_LEN=$(printf "%b" "${FL_R}" | perl -pe 's|\\\[\x1b\[.*?\]||g' | wc -m)
