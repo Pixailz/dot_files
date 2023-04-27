@@ -2,6 +2,10 @@
 
 function	post_install_batcat()
 {
+	if [ -z $(type -t batcat) ]; then
+		p_warn "batcat not installed, skipping"
+		return 1
+	fi
 	p_warn "rebuilding ${orange}batcat${reset} cache"
 	batcat cache --build
 	p_pass "batcat ${green}configured${reset}"
@@ -23,6 +27,10 @@ function	install_batcat_config()
 
 function	install_batcat()
 {
+	if [ -z $(type -t batcat) ]; then
+		p_warn "batcat not installed, skipping"
+		return 1
+	fi
 	install_batcat_config
 	install_batcat_themes
 }
