@@ -2,16 +2,16 @@
 
 declare -gA NERD_CHAR
 NERD_CHAR=(
-	["LOGO_UBUNTU"]="\uebc9"
-	["LOGO_DEBIAN"]="\uebc5"
-	["LOGO_TERMUX"]="\ue70e"
-	["LOGO_KALI"]="\uf327"
-	["LOGO_ALPINE"]="\uf300"
-	["LOGO_SSH"]="\uebaa"
-	["LOGO_APPLE"]="\ue711"
-	["LOGO_GIT"]="\ue708"
+	["LOGO_UBUNTU"]=""
+	["LOGO_DEBIAN"]=""
+	["LOGO_TERMUX"]=""
+	["LOGO_KALI"]=""
+	["LOGO_ALPINE"]=""
+	["LOGO_SSH"]=""
+	["LOGO_APPLE"]=""
+	["LOGO_GIT"]=""
 )
 
 for key in ${!NERD_CHAR[@]}; do
-	declare -g "${key}"="$(printf "%b${UNI_PAD}" "${NERD_CHAR[${key}]}")"
+	declare -g "${key}"="${NERD_CHAR[${key}]}${UNI_PAD}"
 done
