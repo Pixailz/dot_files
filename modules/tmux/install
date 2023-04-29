@@ -2,6 +2,7 @@
 
 function	install_tmux()
 {
+	[ -z $(type -t termux-setup-storage) ] && return
 	move_if_file_exist ${PATH_TMUXRC_FILE_IN} ${PATH_TMUXRC_FILE_OUT}
 }
 
