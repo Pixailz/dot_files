@@ -7,7 +7,7 @@ function	post_install_batcat()
 		return 1
 	fi
 	p_warn "rebuilding ${orange}batcat${reset} cache"
-	batcat cache --build
+	batcat cache --build 1>/dev/null
 	p_pass "batcat ${green}configured${reset}"
 }
 
