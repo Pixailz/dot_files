@@ -204,40 +204,29 @@ function	prompt::get_git_status()
 	local	unstaged		# ?
 	local	staged			# +
 	local	commit_ahead	# ⇡
-	local	commit_behind	# ⇣
-	local	commit_diff
 
-	branch_name=$(printf "%s" "${git_status}" | perl -ne "print if s|## (.*?)\..*|\1|g")
-	commit_diff=$(git rev-list --left-right --count origin/${branch_name}...${branch_name})
+	branch_name=$(perl -ne "print if s|## (.*?)\..*|\1|g" <<<"${git_status}")
 	branch_name="${P_GREEN}${LOGO_GIT} ${branch_name}${RST}"
 
 	untracked=$(git ls-files --others --exclude-standard | wc -l)
 	if [ "${untracked}" -ne 0 ]; then
 		untracked="${P_ORANGE}${GIT_UNTRACKED}${untracked}${RST}"
 	else untracked="" ; fi
-
-	unstaged=$(printf "%s" "${git_status}" | grep -E "^( D| M| A)" | wc -l)
+	unstaged=$(grep -E "^( D| M| A)" <<<"${git_status}" | wc -l)
 	if [ "${unstaged}" -ne 0 ]; then
 		unstaged="${P_CYAN}${GIT_UNSTAGED}${unstaged}${RST}"
 	else unstaged="" ; fi
-
-	staged=$(printf "%s" "${git_status}" | grep -E "^(D |M |A )" | wc -l)
+	staged=$(grep -E "^(D |M |A )" <<<"${git_status}" | wc -l)
 	if [ "${staged}" -ne 0 ]; then
 		staged="${P_GREEN}${GIT_STAGED}${staged}${RST}"
 	else staged="" ; fi
 
-	commit_ahead="${commit_diff/*$'\t'/}"
-	commit_behind="${commit_diff/$'\t'*/}"
-
-	if [ "${commit_ahead}" -ne 0 ]; then
+	commit_ahead=$(perl -ne "print if s|^##.*\[ahead (.*)]|\1|g" <<<"${git_status}")
+	if [ "${commit_ahead:-0}" -ne 0 ]; then
 		commit_ahead="${P_PURPLE}${GIT_COMMIT_AHEAD}${commit_ahead}${RST}"
 	else commit_ahead="" ; fi
 
-	if [ "${commit_behind}" -ne 0 ]; then
-		commit_behind="${P_RED}${GIT_COMMIT_BEHIND}${commit_behind}${RST}"
-	else commit_behind="" ; fi
-
-	if [ -z "${commit_ahead}" -a -z "${staged}" -a -z "${untracked}" -a -z "${unstaged}" -a -z "${commit_behind}" ]; then
+	if [ -z "${commit_ahead}" -a -z "${staged}" -a -z "${untracked}" -a -z "${unstaged}" ]; then
 		P_GIT="[ ${branch_name} ${P_GREEN}${GIT_ALL_GOOD}${RST} ]"
 	else
 		P_GIT="[ ${branch_name} ${commit_ahead}${staged}${untracked}${unstaged} ]"
