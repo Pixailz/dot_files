@@ -61,18 +61,21 @@ function	p_remove_colors()
 ## print information
 function	p_info()
 {
+	[ "${DONT_PRINT}" ] && return 0
 	printf "${P_INFO} $1${reset}\n"
 }
 
 ## print warn
 function	p_warn()
 {
+	[ "${DONT_PRINT}" ] && return 0
 	printf "${P_WARN} $1${reset}\n"
 }
 
 ## print question
 function	p_ques()
 {
+	[ "${DONT_PRINT}" ] && return 0
 	if [ "${2}" == '1' ]; then
 		printf "${P_QUES} $1${reset}\b"
 	else
@@ -81,7 +84,9 @@ function	p_ques()
 }
 
 ## print success or not
-function	p_pass() {
+function	p_pass()
+{
+	[ "${DONT_PRINT}" ] && return 0
 	if [ -z ${2} ] || [ ${2} == 0 ]; then
 		printf "${P_PASS} $1${reset}\n"
 	else
@@ -92,13 +97,15 @@ function	p_pass() {
 ## print error and quit
 function	p_erro()
 {
+	[ "${DONT_PRINT}" ] && exit 1
 	printf "${P_ERRO} $1${reset}\n"
-	exit
+	exit 1
 }
 
 ## print pause and wait
 function	p_pause()
 {
+	[ "${DONT_PRINT}" ] && return 0
 	p_info "Press [Enter] to continue.."
 	read readEnterkey
 }

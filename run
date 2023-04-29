@@ -44,6 +44,7 @@ function	usage()
 	printf "Usage : ${0} [-f|-n] [-p PART1... PARTN]\n"
 	printf "  -f, --force       to force install\n"
 	printf "  -n, --no-color    to disable colors\n"
+	printf "  -l, --no-log      to disable the log"
 	printf "  -h, --help        show this help\n"
 	#printf "  -u, --user        install for specified user, default to current"
 	#TODO

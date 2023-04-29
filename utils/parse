@@ -74,6 +74,9 @@ function	parse_arg()
 			-n|--no-color)
 				p_remove_colors
 				;;
+			-l|--no-log)
+				DONT_PRINT=1
+				;;
 			*)
 				p_warn "wrong options ${red}[${reset}${1}${red}]${reset}"
 				usage
