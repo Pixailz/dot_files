@@ -183,6 +183,7 @@ GIT_UNTRACKED="!"
 GIT_UNSTAGED="?"
 GIT_STAGED="+"
 GIT_COMMIT_AHEAD="⇡"
+GIT_COMMIT_BEHIND="⇣"
 GIT_ALL_GOOD="✓"
 
 function	prompt::get_git_status()
@@ -203,8 +204,11 @@ function	prompt::get_git_status()
 	local	unstaged		# ?
 	local	staged			# +
 	local	commit_ahead	# ⇡
+	local	commit_behind	# ⇣
+	local	commit_diff
 
 	branch_name=$(printf "%s" "${git_status}" | perl -ne "print if s|## (.*?)\..*|\1|g")
+	commit_diff=$(git rev-list --left-right --count origin/${branch_name}...${branch_name})
 	branch_name="${P_GREEN}${LOGO_GIT} ${branch_name}${RST}"
 
 	untracked=$(git ls-files --others --exclude-standard | wc -l)
@@ -222,12 +226,18 @@ function	prompt::get_git_status()
 		staged="${P_GREEN}${GIT_STAGED}${staged}${RST}"
 	else staged="" ; fi
 
-	commit_ahead=$(printf "%s" "${git_status}" | perl -ne "print if s|^##.*\[ahead (.*)]|\1|g")
-	if [ "${commit_ahead:-0}" -ne 0 ]; then
+	commit_ahead="${commit_diff/*$'\t'/}"
+	commit_behind="${commit_diff/$'\t'*/}"
+
+	if [ "${commit_ahead}" -ne 0 ]; then
 		commit_ahead="${P_PURPLE}${GIT_COMMIT_AHEAD}${commit_ahead}${RST}"
 	else commit_ahead="" ; fi
 
-	if [ -z "${commit_ahead}" -a -z "${staged}" -a -z "${untracked}" -a -z "${unstaged}" ]; then
+	if [ "${commit_behind}" -ne 0 ]; then
+		commit_behind="${P_RED}${GIT_COMMIT_BEHIND}${commit_behind}${RST}"
+	else commit_behind="" ; fi
+
+	if [ -z "${commit_ahead}" -a -z "${staged}" -a -z "${untracked}" -a -z "${unstaged}" -a -z "${commit_behind}" ]; then
 		P_GIT="[ ${branch_name} ${P_GREEN}${GIT_ALL_GOOD}${RST} ]"
 	else
 		P_GIT="[ ${branch_name} ${commit_ahead}${staged}${untracked}${unstaged} ]"
