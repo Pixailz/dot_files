@@ -2,8 +2,8 @@
 
 function	install_tmux()
 {
-	[ -z $(type -t termux-setup-storage) ] && return
-	move_if_file_exist ${PATH_TMUXRC_FILE_IN} ${PATH_TMUXRC_FILE_OUT}
+	[ "${OS_ID}" == "termux" -o -z "${OD_ID}" ] \
+	&& move_if_file_exist ${PATH_TMUXRC_FILE_IN} ${PATH_TMUXRC_FILE_OUT}
 }
 
 # if not sourced, BASH_SOURCE keep current file when $0 keep launched file
