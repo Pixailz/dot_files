@@ -81,6 +81,29 @@ function	dbash()
 	bash "${options}" ${cmd} 2>${debug_file}
 }
 
+# nmap
+function	snmap()
+{
+	local	target="${1:-}"
+	local	args=" ${target} -vv -oN ./nmap"
+	local	stamp=".$(date +%j.%y-%H.%M.%S-%+3N).${target}"
+	local	open_port
+	local	port_arg
+
+	if	[ -z "${target}" ]; then
+		printf "error: required target $\{1\} missing\n"
+		return 0
+	fi
+	[ ! -d "./nmap/" ] && mkdir "./nmap/"
+	[ ${UID} -eq 0 ] && args+=" -sS"
+	nmap ${args}/all_port${stamp} -p-
+	open_port=($(perl -ne "print if s|^([0-9]{1,5})/.*$|\1|g" "./nmap/all_port${stamp}"))
+	for port in ${open_port[@]}; do
+		port_arg+="${port},"
+	done
+	nmap ${args}/advanced_port${stamp} -p"${port_arg/%,}" -A -sV
+}
+
 # Alias
 
 # Enable color support of ls and also add handy aliases
@@ -153,3 +176,7 @@ alias vsbashrc="vbashrc && sbashrc"
 alias nc="nc -v"
 
 alias gdb="gdb --args"
+
+alias watch="watch --color"
+
+alias lssh="sudo tail -f -n+1 /var/log/auth.log | grep sshd"
