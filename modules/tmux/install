@@ -2,7 +2,7 @@
 
 function	install_tmux()
 {
-	[ "${OS_ID}" == "termux" -o -z "${OD_ID}" ] \
+	[ "${OS_ID}" == "termux" -o -z "${OS_ID}" ] \
 	&& move_if_file_exist ${PATH_TMUXRC_FILE_IN} ${PATH_TMUXRC_FILE_OUT}
 }
 
