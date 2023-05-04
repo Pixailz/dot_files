@@ -104,6 +104,14 @@ function	snmap()
 	nmap ${args}/advanced_port${stamp} -p"${port_arg/%,}" -A -sV
 }
 
+function	clmake()
+{
+	for makefile in $(find . -type f -name "Makefile"); do
+		printf "Dir: {${makefile}}\n"
+		make --no-print-directory -C ${makefile%/*} fclean
+	done
+}
+
 # Alias
 
 # Enable color support of ls and also add handy aliases
