@@ -107,7 +107,7 @@ function	snmap()
 function	clmake()
 {
 	for makefile in $(find . -type f -name "Makefile"); do
-		printf "Dir: {${makefile}}\n"
+		printf "{${makefile}}\n"
 		make --no-print-directory -C ${makefile%/*} fclean
 	done
 }
