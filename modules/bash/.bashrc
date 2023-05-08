@@ -126,7 +126,7 @@ if [ "$color_prompt" = yes ]; then
 	WORK_DIR_COLOR="${P_BOLD}${P_DFL_BLUE}"
 	USER_COLOR="${P_BOLD}${P_ORANGE}"
 	COMMAND_COLOR=""
-	PS0="${RST}"
+	PS0="$(tabs 4)${RST}"
 fi
 
 if [ "${SSH_CLIENT}" ]; then
@@ -271,6 +271,7 @@ function	prompt::PS1() {
 	SECOND_LINE="${SL_L}"
 
 	PS1="${FIRST_LINE}${SECOND_LINE} ${SHEBANG}${COMMAND_COLOR} "
+
 	unset P_GIT
 	unset P_CWD
 	unset P_RET
@@ -324,7 +325,6 @@ fi
 
 # set tab on bash debug
 PS4="    "
-tabs 4
 
 export LANGUAGE="en_US:en"
 export LC_ALL="en_US.UTF8"
