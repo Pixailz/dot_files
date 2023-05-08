@@ -1,0 +1,26 @@
+#!/bin/bash
+
+function	pre_install_package()
+{
+	printf ""
+}
+
+function	install_package()
+{
+	for item in ${PACKAGES[@]}; do
+		printf "package : %s\n" ${item}
+	done
+}
+
+# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
+if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
+	if [ "${0}" -ef "install" ]; then
+		source ../../run
+	elif [ "${0}" -ef "package/install" ]; then
+		source ../run
+	else
+		source ./run
+	fi
+	install_package
+	post_install_package
+fi
