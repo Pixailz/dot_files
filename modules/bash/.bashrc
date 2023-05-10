@@ -65,28 +65,26 @@ export OS_ID
 
 HAVE_MONO_FONT=1
 
-# TODO IMPLEMENT DISABLING COLOR ON PROMPT
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+	xterm-color|*-256color) color_prompt=yes;;
+esac
 
-# # set a fancy prompt (non-color, unless we know we "want" color)
-# case "$TERM" in
-# 	xterm-color|*-256color) color_prompt=yes;;
-# esac
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+force_color_prompt=yes
 
-# # uncomment for a colored prompt, if the terminal has the capability; turned
-# # off by default to not distract the user: the focus in a terminal window
-# # should be on the output of commands, not on the prompt
-# force_color_prompt=yes
-
-# if [ -n "$force_color_prompt" ]; then
-# 	if [ ! -z $(type -t tput) ] && tput setaf 1 >&/dev/null; then
-# 		# We have color support; assume it's compliant with Ecma-48
-# 		# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-# 		# a case would tend to support setf rather than setaf.)
-# 		color_prompt=yes
-# 	else
-# 		color_prompt=
-# 	fi
-# fi
+if [ -n "$force_color_prompt" ]; then
+	if [ ! -z $(type -t tput) ] && tput setaf 1 >&/dev/null; then
+		# We have color support; assume it's compliant with Ecma-48
+		# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+		# a case would tend to support setf rather than setaf.)
+		color_prompt=yes
+	else
+		color_prompt=
+	fi
+fi
 
 # colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
