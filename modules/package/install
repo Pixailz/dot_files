@@ -1,15 +1,67 @@
 #!/bin/bash
 
-function	pre_install_package()
+function	post_install_package()
 {
-	printf ""
+	[ -f ${HOME}/.local/bin ] && rm -f ${HOME}/.local/bin
+	[ ! -d ${HOME}/.local/bin ] && mkdir -p ${HOME}/.local/bin
+}
+
+function	install_pip3()
+{
+	local	pip_base="pip install --upgrade --break-system-packages"
+
+	${pip_base} pip setuptools
+	${pip_base} pwn
+}
+
+function	install_with_link()
+{
+	local		wget_base="curl --location --progress-bar"
+	declare -a	to_install=""
+
+	if [ ! -x $(type -P google-chrome) ]; then
+		p_info "Downloading google-chrome"
+		${wget_base} ${LINK_CHROME} --output chrome.deb
+		to_install+=("chrome.deb")
+	fi
+	if [ ! -x $(type -P code) ]; then
+		p_info "Downloading VSCode"
+		${wget_base} ${LINK_VSCODE} --output vscode.deb
+		to_install+=("vscode.deb")
+	fi
+	if [ ! -x $(type -P java) ]; then
+		p_info "Downloading Java"
+		${wget_base} ${LINK_JAVA} --output java.deb
+		to_install+=("java.deb")
+	fi
+	if [ ! -f "${HOME}/BurpSuiteCommunity/BurpSuiteCommunity" ]; then
+		p_info "Installing BurpSuite"
+		${wget_base} ${LINK_BURP} --output burpsuite.sh
+		./burpsuite.sh && rm -rf ./burpsuite.sh
+	fi
+	if [ ! -f "${HOME}/.gdbinit-gef.py" ]; then
+		p_info "Installing GEF"
+		${wget_base} ${LINK_GEF} --output ${HOME}/.gdbinit-gef.py
+		echo source ~/.gdbinit-gef.py >> ~/.gdbinit
+	fi
+	if [ -z "${to_install[@]}" ]; then
+		p_info "Nothing to install"
+	else
+		p_info "Installing : ${to_install[@]}"
+		sudo apt install -y ${to_install[@]}
+	fi
 }
 
 function	install_package()
 {
-	for item in ${PACKAGES[@]}; do
-		printf "package : %s\n" ${item}
-	done
+	case ${OS_ID} in
+		"ubuntu"|"debian"|"kali")
+			sudo apt update && sudo apt install -y ${PACKAGES[@]}
+			install_pip3
+			install_with_link
+		;;
+		*) p_warn "Not supported yet."
+	esac
 }
 
 # if not sourced, BASH_SOURCE keep current file when $0 keep launched file
@@ -22,5 +74,4 @@ if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
 		source ./run
 	fi
 	install_package
-	post_install_package
 fi
