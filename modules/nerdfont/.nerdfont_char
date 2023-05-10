@@ -2,6 +2,7 @@
 
 declare -gA NERD_CHAR
 NERD_CHAR=(
+	["LOGO_DOCKER"]="󰡨"
 	["LOGO_UBUNTU"]=""
 	["LOGO_DEBIAN"]=""
 	["LOGO_TERMUX"]=""
