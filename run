@@ -26,7 +26,10 @@ function	install_module()
 function	install_modules()
 {
 	if [ ${#DO_MODULE[*]} == 0 ]; then
-		DO_MODULE=${MODULE[*]}
+		DO_MODULE=(${MODULE[@]})
+		for module in ${INGORED_MODULE[@]}; do
+			DO_MODULE=(${DO_MODULE[@]//${module}})
+		done
 	fi
 	for module in ${DO_MODULE[*]}; do
 		install_module
