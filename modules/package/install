@@ -44,10 +44,15 @@ function	install_with_link()
 		${wget_base} ${LINK_GEF} --output ${HOME}/.gdbinit-gef.py
 		echo source ~/.gdbinit-gef.py >> ~/.gdbinit
 	fi
+	if [ ! -d /usr/share/wordlists ]; then
+		p_info "/usr/share/wordlist not found, donwloading SecList"
+		sudo git clone ${SECLISTS} /usr/share/wordlists
+	fi
 	if [ -z "${to_install[@]}" ]; then
 		p_info "Nothing to install"
 	else
 		p_info "Installing : ${to_install[@]}"
+		sudo apt update
 		sudo apt install -y ${to_install[@]}
 	fi
 }
