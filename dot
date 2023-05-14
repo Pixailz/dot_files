@@ -63,14 +63,6 @@ function	usage()
 
 function	git::check_update()
 {
-	local	current_version
-	local	last_version
-
-	current_version=$()
-}
-
-function	git::check_update()
-{
 	local	latest_branch
 	local	latest_branch_id
 	local	latest_branch_name
