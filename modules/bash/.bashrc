@@ -286,7 +286,7 @@ function	prompt::PS1() {
 
 	if [ ! -z "${FL_R}" ]; then
 		FL_R_LEN=$(printf "%b" "${FL_R}" | perl -pe 's|\\\[\x1b\[.*?\]||g' | wc -m)
-		FL_R_POS=$(printf "\x1b[$((${TERM_WIDTH} - ${FL_R_LEN}))G")
+		FL_R_POS=$(printf "\x1b[$((${TERM_WIDTH} - ${FL_R_LEN} + 1))G")
 	fi
 	FIRST_LINE="${FL_L}${FL_R_POS}${FL_R}\n"
 	SECOND_LINE="${SL_L}"
