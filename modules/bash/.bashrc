@@ -313,7 +313,7 @@ unset color_prompt force_color_prompt
 PS4="    "
 
 export LANGUAGE="en_US:en"
-export LC_ALL="en_US.UTF8"
+export LC_ALL="en_US.UTF-8"
 export LC_ADDRESS="fr_FR.UTF-8",
 export LC_NAME="fr_FR.UTF-8",
 export LC_MONETARY="fr_FR.UTF-8",
