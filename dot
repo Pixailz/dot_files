@@ -61,8 +61,11 @@ function	usage()
 	exit
 }
 
+PATH_CONFIG=$(realpath ${BASH_SOURCE[0]})
+DIR_BASE=${PATH_CONFIG%/*}
+
 # source .config
-source ./.config
+source ${DIR_BASE}/.config
 
 parse_arg ${*}
 

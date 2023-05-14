@@ -1,0 +1,13 @@
+#!/bin/bash
+
+INSTALL_DIR="${HOME}/.local/bin"
+
+[ -f "${INSTALL_DIR}" ] && rm -f "${INSTALL_DIR}"
+[ ! -d "${INSTALL_DIR}" ] && mkdir -p "${INSTALL_DIR}"
+
+[ -d "${INSTALL_DIR}/dot_files" ] && rm -rf "${INSTALL_DIR}/dot_files"
+
+cp -r "${PWD}" "${INSTALL_DIR}"
+
+[ -L "${INSTALL_DIR}/dot" ] && rm "${INSTALL_DIR}/dot"
+ln -s "${INSTALL_DIR}/dot_files/dot" "${INSTALL_DIR}/dot"

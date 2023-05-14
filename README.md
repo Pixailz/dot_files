@@ -1,8 +1,17 @@
 # bashrc
 my config for programming/hacking on bash
 
+## HOWTO
+
+1. launch ./install
+
+after this you can launch `dot` from anywhere
+
 ## TODO
 
+1. check for update system
+1. link lib_bash and remove utils, keeping only modules folder
+   - have to install lib_bash into ${HOME}/.local/lib for this
 
 ## os-release
 
