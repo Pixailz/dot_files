@@ -312,6 +312,9 @@ unset color_prompt force_color_prompt
 # set tab on bash debug
 PS4="    "
 
+# set cursor shape
+printf "\x1b[5 q"
+
 export LANGUAGE="en_US:en"
 export LC_ALL="en_US.UTF-8"
 export LC_ADDRESS="fr_FR.UTF-8",
