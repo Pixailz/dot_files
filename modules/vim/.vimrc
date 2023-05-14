@@ -12,9 +12,9 @@ set tabstop=4
 set smartindent autoindent
 
 "" Show all character
-set list
-set listchars=tab:>-
-set listchars+=space:_
+"  set list
+"  set listchars=tab:>-
+"  set listchars+=space:_
 
 "" Cursor
 " Reference chart of values:
