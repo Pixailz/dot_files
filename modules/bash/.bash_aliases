@@ -183,8 +183,6 @@ alias vsbashrc="vbashrc && sbashrc"
 
 alias nc="nc -v"
 
-alias gdb="gdb --args"
-
 alias watch="watch --color"
 
 alias lssh="sudo tail -f -n+1 /var/log/auth.log | grep sshd"

@@ -3,6 +3,7 @@
 function	install_gdb()
 {
 	move_if_file_exist ${PATH_GDBINIT_IN} ${PATH_GDBINIT_OUT}
+	[ -f "${HOME}/.gdbinit-gef.py" ] && echo source ~/.gdbinit-gef.py >> ${PATH_GDBINIT_OUT}
 }
 
 # if not sourced, BASH_SOURCE keep current file when $0 keep launched file
