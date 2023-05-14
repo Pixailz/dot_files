@@ -63,36 +63,20 @@ function	usage()
 
 function	git::check_update()
 {
-	local	latest_branch
-	local	latest_branch_id
-	local	latest_branch_name
 	local	current_branch
-	local	current_branch_id
-	local	current_branch_name
-	local	current_branch_short7
+	local	current_commit_id
+	local	latest_commit_id
 
-	cd ${HOME}/.local/bin/dot_files
-	latest_branch=$(git --no-pager branch -r --sort='committerdate' --format='%(objectname) %(refname:lstrip=-1)' | tail -1)
-	latest_branch_id=$(cut -d" " -f1 <<<${latest_branch})
-	latest_branch_name=$(cut -d" " -f2 <<<${latest_branch})
-	current_branch=$(git --no-pager branch --sort='committerdate' --format='%(objectname) %(refname:lstrip=-1)' | tail -1)
-	current_branch_id=$(cut -d" " -f1 <<<${latest_branch})
-	current_branch_id7=$(cut -c-7 <<<${current_branch_id})
-	current_branch_name=$(cut -d" " -f2 <<<${latest_branch})
-	if [ "${current_branch_id}" == "${latest_branch_id}" ]; then
-		p_info "Already up-to-date (${current_branch_id7})"
+	current_branch=$(git rev-parse --abbrev-ref HEAD)
+	current_commit_id=$(git rev-parse HEAD)
+	latest_commit_id=$(git rev-parse "origin/${current_branch}")
+
+	if [ "${current_commit_id}" != "${latest_commit_id}" ]; then
+		p_warn "Not up-to-date, updating"
+		git reset --hard "origin/${current_branch}" && git pull ; true
 	else
-		p_warn "Not up-to-date"
-		if [ "${current_branch_name}" != "${latest_branch_name}" ]; then
-			p_warn "The Latest commit is comming from an another branches"
-			p_info "switching to it"
-			git reset --hard "${latest_branch_name}"
-		else
-			p_info "Pulling repo"
-			git reset --hard HEAD && git pull
-		fi
+		p_info "Already up-to-date (${lcyan}${current_commit_id::7}${reset})"
 	fi
-	cd - 1>/dev/null
 }
 
 PATH_CONFIG=$(realpath ${BASH_SOURCE[0]})
