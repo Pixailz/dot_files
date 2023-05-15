@@ -153,7 +153,7 @@ function	parse::arg()
 	while [ "${1:-}" != "" ]; do
 		case "${1}" in
 			-f|--force)
-				export FORCE_INSTALL=1
+				export FORCE_MOVE=1
 				;;
 			-h|--help)
 				usage
