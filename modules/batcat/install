@@ -2,6 +2,10 @@
 
 function	post::install::batcat()
 {
+	if [ "${SKIP_BATCAT}" == "1" ]; then
+		unset SKIP_BATCAT
+		return
+	fi
 	print::warn "rebuilding ${O}batcat${RST} cache"
 	batcat cache --build 1>/dev/null
 	print::pass "batcat ${G}configured${RST}"
@@ -9,6 +13,11 @@ function	post::install::batcat()
 
 function	install::batcat::themes()
 {
+	if [ -z $(type -t batcat) ]; then
+		print::warn "batcat not installed, skipping"
+		export SKIP_BATCAT=1
+		return
+	fi
 	for theme in "${BATCAT_DIR_BASE_IN}"/*; do
 		if [[ ${theme} =~ .*\.tmTheme ]]; then
 			utils::move_file ${theme} "${BATCAT_DIR_BASE_OUT}/${theme##*/}"
@@ -36,10 +45,6 @@ if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
 		source ../run
 	else
 		source ./run
-	fi
-	if [ -z $(type -t batcat) ]; then
-		print::warn "batcat not installed, skipping"
-		return
 	fi
 	install::batcat
 	post::install::batcat
