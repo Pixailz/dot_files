@@ -183,6 +183,10 @@ function	parse::arg()
 
 ## source lib_bash
 DIR_LIB_BASH="${HOME}/.local/lib/lib_bash"
+if [ ! -d "${DIR_LIB_BASH}" ]; then
+	printf "lib bash is not installed installing it.\n"
+	git clone https://github.com/Pixailz/lib_bash
+fi
 source "${DIR_LIB_BASH}/.config"
 
 PATH_CONFIG=$(realpath ${BASH_SOURCE[0]})
