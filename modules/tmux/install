@@ -2,8 +2,7 @@
 
 function	install::tmux()
 {
-	[ "${OS_ID}" == "termux" -o -z "${OS_ID}" ] \
-	&& utils::move_file ${PATH_TMUXRC_FILE_IN} ${PATH_TMUXRC_FILE_OUT}
+	utils::move_file ${PATH_TMUXRC_FILE_IN} ${PATH_TMUXRC_FILE_OUT}
 }
 
 # if not sourced, BASH_SOURCE keep current file when $0 keep launched file
