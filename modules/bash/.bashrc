@@ -26,45 +26,6 @@ shopt -s checkwinsize
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-# check on which os we are
-if [ $(type -t termux-setup-storage) ]; then
-	OS_ID="termux"
-else
-	if [ -f /etc/os-release ]; then
-		OS_ID=$(. /etc/os-release && printf "${ID}")
-		# ubuntu
-		# debian
-		# alpine
-		# arch
-		# manjaro
-		# linuxmint
-		# elementary
-		# rocky
-		# opensuse-leap
-		# fedora
-		# centos
-		# rhel
-		# gentoo
-		# kali
-		# parrot
-		# amzn
-		# ol (oracle linux)
-		# photon
-		# clear-linux-os
-		if [ -z "${OS_ID}" ]; then
-			case "$(. /etc/os-release && echo "${NAME}")" in
-				"BlackArch")			OS_ID=blackarch	;;
-			esac
-		fi
-	else
-		OS_ID=Unknown
-	fi
-fi
-
-export OS_ID
-
-HAVE_MONO_FONT=0
-
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
 	xterm-color|*-256color) color_prompt=yes;;
@@ -110,6 +71,45 @@ if ! shopt -oq posix; then
 fi
 
 # CUSTOM
+
+# check on which os we are
+if [ $(type -t termux-setup-storage) ]; then
+	OS_ID="termux"
+else
+	if [ -f /etc/os-release ]; then
+		OS_ID=$(. /etc/os-release && printf "${ID}")
+		# ubuntu
+		# debian
+		# alpine
+		# arch
+		# manjaro
+		# linuxmint
+		# elementary
+		# rocky
+		# opensuse-leap
+		# fedora
+		# centos
+		# rhel
+		# gentoo
+		# kali
+		# parrot
+		# amzn
+		# ol (oracle linux)
+		# photon
+		# clear-linux-os
+		if [ -z "${OS_ID}" ]; then
+			case "$(. /etc/os-release && echo "${NAME}")" in
+				"BlackArch")			OS_ID=blackarch	;;
+			esac
+		fi
+	else
+		OS_ID=Unknown
+	fi
+fi
+
+export OS_ID
+
+HAVE_MONO_FONT="${HAVE_MONO_FONT:-0}"
 
 # if not monospaced font, pad the icon with a space
 [ "${HAVE_MONO_FONT:-0}" -eq 1 ] && UNI_PAD="" || UNI_PAD=" "
