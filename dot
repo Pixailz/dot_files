@@ -67,16 +67,22 @@ function	git::check_update()
 	local	current_commit_id
 	local	latest_commit_id
 
+	p_info "Check for update"
+	cd "${HOME}/.local/bin/dot_files"
 	current_branch=$(git rev-parse --abbrev-ref HEAD)
 	current_commit_id=$(git rev-parse HEAD)
-	latest_commit_id=$(git rev-parse "origin/${current_branch}")
-
+	latest_commit_id=$( \
+		curl -# -H \
+		"Accept: application/vnd.github.VERSION.sha" \
+		https://api.github.com/repos/Pixailz/dot_files/commits/${current_branch}
+	)
 	if [ "${current_commit_id}" != "${latest_commit_id}" ]; then
 		p_warn "Not up-to-date, updating"
 		git reset --hard "origin/${current_branch}" && git pull ; true
 	else
-		p_info "Already up-to-date (${lcyan}${current_commit_id::7}${reset})"
+		p_pass "Already up-to-date (${lcyan}${current_commit_id::7}${reset})\n"
 	fi
+	cd - 1>/dev/null
 }
 
 PATH_CONFIG=$(realpath ${BASH_SOURCE[0]})
