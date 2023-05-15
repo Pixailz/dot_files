@@ -1,10 +1,10 @@
 #!/bin/bash
 
-function	install_vscode()
+function	install::vscode()
 {
 	[ ! -d ${PATH_VS_SNIPPET_OUT} ] && mkdir -p ${PATH_VS_SNIPPET_OUT}
 	for file in $(ls ${PATH_VS_SNIPPET_IN}); do
-		move_if_file_exist "${PATH_VS_SNIPPET_IN}/${file}" "${PATH_VS_SNIPPET_OUT}/${file}"
+		utils::move_file "${PATH_VS_SNIPPET_IN}/${file}" "${PATH_VS_SNIPPET_OUT}/${file}"
 	done
 }
 
@@ -17,6 +17,6 @@ if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
 	else
 		source ./run
 	fi
-	install_vscode
-	post_install_vscode
+	install::vscode
+	post::install::vscode
 fi

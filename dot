@@ -1,64 +1,36 @@
 #!/bin/bash
 
-: ' install_module MODULE
-    install_file        install file to source
-    install_func        entry func of module
-    post_install_func   post install func of module
-'
-function	install_module()
+function	module::install()
 {
+	local	module="${1}"
 	local	install_file="${DIR_MODULE}/${module}/install"
-	local	install_func="${PREFIX_INSTALL_MODULE}${module}"
-	local	post_install_func="${PREFIX_POST_INSTALL_MODULE}${module}"
+	local	tmp_func
 
-	# source each module install file
-	source ${install_file}
-	${install_func}
-	if [ "$(type -t ${post_install_func})" == "function" ]; then
-		${post_install_func}
-	fi
+	# source module install file
+	source "${install_file}"
+	for prefix in ${PREFIX_INSTALL_MODULE[@]}; do
+		tmp_func="${prefix}::${module}"
+		if [ "$(type -t ${tmp_func})" == "function" ]; then
+			${tmp_func}
+		fi
+	done
 }
 
 : ' install function for all modules
     DO_MODULE : specific array to do
     if len DO_MODULE == 0 do all
 '
-function	install_modules()
+function	modules::install()
 {
-	if [ ${#DO_MODULE[*]} == 0 ]; then
+	if [ "${#DO_MODULE[@]}" == 0 ]; then
 		DO_MODULE=(${MODULE[@]})
 		for module in ${INGORED_MODULE[@]}; do
 			DO_MODULE=(${DO_MODULE[@]//${module}})
 		done
 	fi
 	for module in ${DO_MODULE[*]}; do
-		install_module
+		module::install "${module}"
 	done
-}
-
-function	main_entry()
-{
-	install_modules
-}
-
-# print help and quit
-function	usage()
-{
-	printf "Usage : ${0} [-f|-n] [-p PART1... PARTN]\n"
-	printf "  -f, --force       to force install\n"
-	printf "  -n, --no-color    to disable colors\n"
-	printf "  -l, --no-log      to disable the log"
-	printf "  -h, --help        show this help\n"
-	#printf "  -u, --user        install for specified user, default to current"
-	#TODO
-	printf "\n"
-	printf "  -p, --part        install part, available part:\n"
-	printf "                        - bash\n"
-	printf "                        - batcat\n"
-	printf "                        - gdb\n"
-	printf "                        - vim\n"
-	printf "                    should be at the end of command\n"
-	exit
 }
 
 function	git::check_update()
@@ -67,22 +39,151 @@ function	git::check_update()
 	local	current_commit_id
 	local	latest_commit_id
 
-	p_info "Check for update"
+	print::info "Checking for update"
 	cd "${INSTALL_DIR}/dot_files"
 	current_branch=$(git rev-parse --abbrev-ref HEAD)
 	current_commit_id=$(git rev-parse HEAD)
 	latest_commit_id=$(curl -# -H "Accept: application/vnd.github.VERSION.sha" \
 		https://api.github.com/repos/Pixailz/dot_files/commits/${current_branch})
 	if [ "${current_commit_id}" != "${latest_commit_id}" ]; then
-		p_warn "Not up-to-date, updating"
+		print::warn "Not up-to-date, updating"
 		git reset --hard "origin/${current_branch}" && git pull ; true
-		p_info "Relaunch the script to make the update effective"
+		print::info "Relaunch the script to make the update effective"
 		exit 1
 	else
-		p_pass "Already up-to-date (${lcyan}${current_commit_id::7}${reset})\n"
+		print::pass "Already up-to-date (${LC}${current_commit_id::7}${RST})\n"
 	fi
 	cd - 1>/dev/null
 }
+
+# print help and quit
+function	usage()
+{
+	# opt_usage
+	printf "%b: ${SCRIPT_NAME} " "${P_USAGE}"
+	printf "[-f|-n] [-p PART1... PARTN]\n"
+	# desc
+	printf "\tscripts to manage openvpn server docker\n"
+
+	printf "\n\t1. Base\n"
+	printf "\t\tflag available everywhere\n"
+	parse::print_usage "h" "help" "Display the help then exit."
+	parse::print_usage "" "version" "Display the version then exit."
+	parse::print_usage "" "no-color" "disable all color"
+	parse::print_usage "f" "force" "To force install"
+	parse::print_usage "p" "part" "install part, available part:"
+	for part in ${MODULE[@]}; do
+		parse::print_usage "" "" "    - ${part}"
+	done
+	parse::print_usage "" "" "should be at the end of command"
+	printf "\n"
+	parse::print_infos
+
+	#printf "  -u, --user        install for specified user, default to current"
+	#TODO
+}
+
+function	is::option()
+{
+	local	options_str=${1}
+
+	if [[ ${options_str} =~ --.* ]]; then
+		return 1
+	elif [[ ${options_str} =~ -.* ]]; then
+		return 2
+	else
+		return 0
+	fi
+}
+
+: ' parse::short
+    parse space separated and option separated
+'
+function	parse::short()
+{
+	local	to_shift=0
+
+	PARSED_ARG=()
+	shift
+	for item in ${*}; do
+		is::option ${item}
+		[ ${?} != 0 ] && break
+		PARSED_ARG[${#PARSED_ARG[@]}]=${item}
+	done
+	return ${#PARSED_ARG[@]}
+}
+
+function	parse::post_parsing()
+{
+	local	is_good
+
+	if [ "${HAVE_PART}" == "1" ] && [ "${#DO_MODULE[@]}" == 0 ]; then
+		print::warn "wrong usage. see --help"
+		usage
+	fi
+	for to_str in ${DO_MODULE[@]}; do
+		is_good=0
+		for from_str in "${MODULE[@]}"; do
+			if [ "${to_str}" == "${from_str}" ]; then
+				is_good=1
+				break
+			fi
+		done
+		if [ "${is_good}" != 1 ]; then
+			print::warn "wrong ${G}part name${RST} ${R}${to_str}${RST}"
+			usage
+		fi
+	done
+}
+
+# pars args, keep parsing even if launch modules
+## if -f, --force				set FORCE_INSTALL=1
+## if -n, --no-color			disable_color
+## if -h, --help				help
+
+## if -p, --part				set DO_MODULE=part1 ... partn
+
+## -p && -a						false
+## -f|-n && -p | --part | -all		true
+function	parse::arg()
+{
+	HAVE_PART=0
+	DO_MODULE=()
+
+	while [ "${1:-}" != "" ]; do
+		case "${1}" in
+			-f|--force)
+				export FORCE_INSTALL=1
+				;;
+			-h|--help)
+				usage
+				;;
+			-p|--part)
+				parse::short ${*}
+				shift $?
+				DO_MODULE=${PARSED_ARG[*]}
+				HAVE_PART=1
+				;;
+			-n|--no-color)
+				NO_ANSI=1
+				ansi::toggle_color
+				;;
+			-l|--no-log)
+				DONT_PRINT=1
+				;;
+			*)
+				print::warn "wrong options ${R}[${RST}${1}${R}]${RST}"
+				usage
+				;;
+		esac
+		shift
+	done
+	parse::post_parsing
+}
+
+## source lib_bash
+DIR_LIB_BASH="${HOME}/.local/lib/lib_bash"
+source "${DIR_LIB_BASH}/.config"
 
 PATH_CONFIG=$(realpath ${BASH_SOURCE[0]})
 DIR_BASE=${PATH_CONFIG%/*}
@@ -92,9 +193,7 @@ source ${DIR_BASE}/.config
 
 git::check_update
 
-parse_arg ${*}
+parse::arg ${*}
 
 # if not sourced, BASH_SOURCE keep current file when $0 keep launched file
-if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
-	main_entry
-fi
+[ "${BASH_SOURCE[0]}" -ef "${0}" ] && modules::install

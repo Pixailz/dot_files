@@ -1,38 +1,38 @@
 #!/bin/bash
 
-function	post_install_batcat()
+function	post::install::batcat()
 {
 	if [ -z $(type -t batcat) ]; then
-		p_warn "batcat not installed, skipping"
+		print::warn "batcat not installed, skipping"
 		return 1
 	fi
-	p_warn "rebuilding ${orange}batcat${reset} cache"
+	print::warn "rebuilding ${O}batcat${RST} cache"
 	batcat cache --build 1>/dev/null
-	p_pass "batcat ${green}configured${reset}"
+	print::pass "batcat ${G}configured${RST}"
 }
 
-function	install_batcat_themes()
+function	install::batcat::themes()
 {
 	for theme in "${BATCAT_DIR_BASE_IN}"/*; do
 		if [[ ${theme} =~ .*\.tmTheme ]]; then
-			move_if_file_exist ${theme} "${BATCAT_DIR_BASE_OUT}/${theme##*/}"
+			utils::move_file ${theme} "${BATCAT_DIR_BASE_OUT}/${theme##*/}"
 		fi
 	done
 }
 
-function	install_batcat_config()
+function	install::batcat::config()
 {
-	move_if_file_exist ${BATCAT_CONF_FILE_IN} ${BATCAT_CONF_FILE_OUT}
+	utils::move_file ${BATCAT_CONF_FILE_IN} ${BATCAT_CONF_FILE_OUT}
 }
 
-function	install_batcat()
+function	install::batcat()
 {
 	if [ -z $(type -t batcat) ]; then
-		p_warn "batcat not installed, skipping"
+		print::warn "batcat not installed, skipping"
 		return 1
 	fi
-	install_batcat_config
-	install_batcat_themes
+	install::batcat::config
+	install::batcat::themes
 }
 
 # if not sourced, BASH_SOURCE keep current file when $0 keep launched file
@@ -44,6 +44,6 @@ if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
 	else
 		source ./run
 	fi
-	install_batcat
-	post_install_batcat
+	install::batcat
+	post::install::batcat
 fi

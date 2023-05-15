@@ -1,12 +1,12 @@
 #!/bin/bash
 
-function	post_install_package()
+function	post::install::package()
 {
 	[ -f ${HOME}/.local/bin ] && rm -f ${HOME}/.local/bin
 	[ ! -d ${HOME}/.local/bin ] && mkdir -p ${HOME}/.local/bin
 }
 
-function	install_pip3()
+function	install::pip3()
 {
 	local	pip_base="pip install --upgrade --break-system-packages"
 
@@ -14,58 +14,58 @@ function	install_pip3()
 	${pip_base} pwn
 }
 
-function	install_with_link()
+function	install::with_link()
 {
 	local		wget_base="curl --location --progress-bar"
 	declare -a	to_install=""
 
 	if [ ! -x $(type -P google-chrome) ]; then
-		p_info "Downloading google-chrome"
+		print::info "Downloading google-chrome"
 		${wget_base} ${LINK_CHROME} --output chrome.deb
 		to_install+=("chrome.deb")
 	fi
 	if [ ! -x $(type -P code) ]; then
-		p_info "Downloading VSCode"
+		print::info "Downloading VSCode"
 		${wget_base} ${LINK_VSCODE} --output vscode.deb
 		to_install+=("vscode.deb")
 	fi
 	if [ ! -x $(type -P java) ]; then
-		p_info "Downloading Java"
+		print::info "Downloading Java"
 		${wget_base} ${LINK_JAVA} --output java.deb
 		to_install+=("java.deb")
 	fi
 	if [ ! -f "${HOME}/BurpSuiteCommunity/BurpSuiteCommunity" ]; then
-		p_info "Installing BurpSuite"
+		print::info "Installing BurpSuite"
 		${wget_base} ${LINK_BURP} --output burpsuite.sh
 		./burpsuite.sh && rm -rf ./burpsuite.sh
 	fi
 	if [ ! -f "${HOME}/.gdbinit-gef.py" ]; then
-		p_info "Installing GEF"
+		print::info "Installing GEF"
 		${wget_base} ${LINK_GEF} --output ${HOME}/.gdbinit-gef.py
 		echo source ~/.gdbinit-gef.py >> ~/.gdbinit
 	fi
 	if [ ! -d /usr/share/wordlists ]; then
-		p_info "/usr/share/wordlist not found, donwloading SecList"
+		print::info "/usr/share/wordlist not found, donwloading SecList"
 		sudo git clone ${SECLISTS} /usr/share/wordlists
 	fi
 	if [ -z "${to_install[@]}" ]; then
-		p_info "Nothing to install"
+		print::info "Nothing to install"
 	else
-		p_info "Installing : ${to_install[@]}"
+		print::info "Installing : ${to_install[@]}"
 		sudo apt update
 		sudo apt install -y ${to_install[@]}
 	fi
 }
 
-function	install_package()
+function	install::package()
 {
 	case ${OS_ID} in
 		"ubuntu"|"debian"|"kali")
 			sudo apt update && sudo apt install -y ${PACKAGES[@]}
-			install_pip3
-			install_with_link
+			install::pip3
+			install::with_link
 		;;
-		*) p_warn "Not supported yet."
+		*) print::warn "Not supported yet."
 	esac
 }
 
@@ -78,5 +78,5 @@ if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
 	else
 		source ./run
 	fi
-	install_package
+	install::package
 fi

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-function	install_gdb()
+function	install::gdb()
 {
-	move_if_file_exist ${PATH_GDBINIT_IN} ${PATH_GDBINIT_OUT}
+	utils::move_file ${PATH_GDBINIT_IN} ${PATH_GDBINIT_OUT}
 	[ -f "${HOME}/.gdbinit-gef.py" ] && echo source ~/.gdbinit-gef.py >> ${PATH_GDBINIT_OUT}
 }
 
@@ -15,5 +15,5 @@ if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
 	else
 		source ./run
 	fi
-	install_gdb
+	install::gdb
 fi

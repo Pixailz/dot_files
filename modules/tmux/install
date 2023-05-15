@@ -1,9 +1,9 @@
 #!/bin/bash
 
-function	install_tmux()
+function	install::tmux()
 {
 	[ "${OS_ID}" == "termux" -o -z "${OS_ID}" ] \
-	&& move_if_file_exist ${PATH_TMUXRC_FILE_IN} ${PATH_TMUXRC_FILE_OUT}
+	&& utils::move_file ${PATH_TMUXRC_FILE_IN} ${PATH_TMUXRC_FILE_OUT}
 }
 
 # if not sourced, BASH_SOURCE keep current file when $0 keep launched file
@@ -15,6 +15,6 @@ if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
 	else
 		source ./run
 	fi
-	install_tmux
-	post_install_tmux
+	install::tmux
+	post::install::tmux
 fi

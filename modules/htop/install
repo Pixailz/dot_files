@@ -1,8 +1,8 @@
 #!/bin/bash
 
-function	install_htop()
+function	install::htop()
 {
-	move_if_file_exist ${PATH_HTOPRC_FILE_IN} ${PATH_HTOPRC_FILE_OUT}
+	utils::move_file ${PATH_HTOPRC_FILE_IN} ${PATH_HTOPRC_FILE_OUT}
 }
 
 # if not sourced, BASH_SOURCE keep current file when $0 keep launched file
@@ -14,6 +14,6 @@ if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
 	else
 		source ./run
 	fi
-	install_htop
-	post_install_htop
+	install::htop
+	post::install::htop
 fi

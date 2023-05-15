@@ -1,8 +1,0 @@
-#!/bin/bash
-
-function	get_cwd()
-{
-	local	mode=${1}
-
-	printf ""
-}

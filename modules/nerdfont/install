@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function	install_nerdfont()
+function	install::nerdfont()
 {
 	local	dir_font
 
@@ -20,8 +20,8 @@ function	install_nerdfont()
 		rm -f nerdfont.zip
 		[ ${OS_ID} == "termux" ] && termux-reload-settings
 	fi
-	move_if_file_exist ${DIR_MODULE}/nerdfont/.nerdfont_char ${HOME}/.nerdfont_char
-	p_info "you can select your font in the terminal settings"
+	utils::move_file ${DIR_MODULE}/nerdfont/.nerdfont_char ${HOME}/.nerdfont_char
+	print::info "you can select your font in the terminal settings"
 }
 
 # if not sourced, BASH_SOURCE keep current file when $0 keep launched file
@@ -33,5 +33,5 @@ if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
 	else
 		source ./run
 	fi
-	install_nerdfont
+	install::nerdfont
 fi

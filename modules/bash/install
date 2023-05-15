@@ -1,14 +1,14 @@
 #!/bin/bash
 
-function	post_install_bash()
+function	post::install::bash()
 {
-	p_warn "to make effect you have to source your ${red}~/.bashrc${reset}"
+	print::warn "to make effect you have to source your ${R}~/.bashrc${RST}"
 }
 
-function	install_bash()
+function	install::bash()
 {
 	for file in "${PATH_BASH_FILE_IN[@]}"; do
-		move_if_file_exist "${DIR_MODULE}/bash/${file}" ${PATH_BASH_DIR_OUT}
+		utils::move_file "${DIR_MODULE}/bash/${file}" ${PATH_BASH_DIR_OUT}
 	done
 
 	# configure git
@@ -26,6 +26,6 @@ if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
 	else
 		source ./run
 	fi
-	install_bash
-	post_install_bash
+	install::bash
+	post::install::bash
 fi
