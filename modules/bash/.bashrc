@@ -329,3 +329,4 @@ export LC_NUMERIC="fr_FR.UTF-8",
 export LANG="en_US.UTF-8"
 
 export GIT_SSH_COMMAND="ssh -i ${HOME}/.ssh/git"
+export PATH="${HOME}/.local/bin:${PATH}"
