@@ -63,7 +63,7 @@ fi
 
 export OS_ID
 
-HAVE_MONO_FONT=1
+HAVE_MONO_FONT=0
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
