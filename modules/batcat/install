@@ -2,10 +2,6 @@
 
 function	post::install::batcat()
 {
-	if [ -z $(type -t batcat) ]; then
-		print::warn "batcat not installed, skipping"
-		return 1
-	fi
 	print::warn "rebuilding ${O}batcat${RST} cache"
 	batcat cache --build 1>/dev/null
 	print::pass "batcat ${G}configured${RST}"
@@ -27,10 +23,7 @@ function	install::batcat::config()
 
 function	install::batcat()
 {
-	if [ -z $(type -t batcat) ]; then
-		print::warn "batcat not installed, skipping"
-		return 1
-	fi
+
 	install::batcat::config
 	install::batcat::themes
 }
@@ -43,6 +36,10 @@ if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
 		source ../run
 	else
 		source ./run
+	fi
+	if [ -z $(type -t batcat) ]; then
+		print::warn "batcat not installed, skipping"
+		return
 	fi
 	install::batcat
 	post::install::batcat
