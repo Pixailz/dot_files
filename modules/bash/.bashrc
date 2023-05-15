@@ -109,7 +109,7 @@ fi
 
 export OS_ID
 
-HAVE_MONO_FONT="${HAVE_MONO_FONT:-0}"
+HAVE_MONO_FONT="${HAVE_MONO_FONT:-1}"
 
 # if not monospaced font, pad the icon with a space
 [ "${HAVE_MONO_FONT:-0}" -eq 1 ] && UNI_PAD="" || UNI_PAD=" "
