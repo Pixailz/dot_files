@@ -20,12 +20,12 @@ blink_red="${BEG_ESC}\033[05;31m${END_ESC}"
 restore="${BEG_ESC}\033[0m${END_ESC}"
 reset="${BEG_ESC}\e[0m${END_ESC}"
 
-P_INFO="${lcyan}[INFO]${reset}"
-P_WARN="${orange}[WARN]${reset}"
-P_QUES="${blue}[QUE?]${reset}"
-P_PASS="${green}[PASS]${reset}"
-P_FAIL="${red}[FAIL]${reset}"
-P_ERRO="${red}[ERRO]${reset}"
+P_INFO="[${lcyan}INFO${reset}]"
+P_WARN="[${orange}WARN${reset}]"
+P_QUES="[${blue}QUE?${reset}]"
+P_PASS="[${green}PASS${reset}]"
+P_FAIL="[${red}FAIL${reset}]"
+P_ERRO="[${red}ERRO${reset}]"
 
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#==#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 
