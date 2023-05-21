@@ -29,6 +29,8 @@ function	modules::install()
 		done
 	fi
 	for module in ${DO_MODULE[*]}; do
+		# log::main_title "${G}${module}${RST}" 1 "${O}"
+		log::main_title "${G}${module}${RST}" 1 "${O}" 1
 		module::install "${module}"
 	done
 }
