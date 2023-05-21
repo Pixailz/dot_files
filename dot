@@ -30,7 +30,7 @@ function	modules::install()
 	fi
 	for module in ${DO_MODULE[*]}; do
 		# log::main_title "${G}${module}${RST}" 1 "${O}"
-		log::main_title "${G}${module}${RST}" 1 "${O}" 1
+		log::main_title "${G}${module}${RST}" 1 "${O}"
 		module::install "${module}"
 	done
 }
@@ -176,7 +176,9 @@ DIR_BASE=${PATH_CONFIG%/*}
 # source .config
 source ${DIR_BASE}/.config
 
+log::main_title "${G}Checking update${RST}" 1 "${LC}" 1
 utils::update_repo "https://github.com/Pixailz/dot_files" "${INSTALL_DIR}"
+utils::update_repo "https://github.com/Pixailz/lib_bash" "${DIR_LIB_BASH%\/*}"
 
 parse::arg ${*}
 
