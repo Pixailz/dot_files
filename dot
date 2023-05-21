@@ -32,6 +32,7 @@ function	modules::install()
 		# log::main_title "${G}${module}${RST}" 1 "${O}"
 		log::main_title "${G}${module}${RST}" 1 "${O}"
 		module::install "${module}"
+		printf "\x0a"
 	done
 }
 
