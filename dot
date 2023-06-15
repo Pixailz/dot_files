@@ -36,6 +36,13 @@ function	modules::install()
 	done
 }
 
+function	dot::update()
+{
+	log::main_title "${G}Checking update${RST}" 1 "${LC}" 1
+	utils::update_repo "https://github.com/Pixailz/dot_files" "${INSTALL_DIR}"
+	utils::update_repo "https://github.com/Pixailz/lib_bash" "${DIR_LIB_BASH%\/*}"
+}
+
 # print help and quit
 function	usage()
 {
@@ -51,6 +58,7 @@ function	usage()
 	parse::print_usage "" "version" "Display the version then exit."
 	parse::print_usage "" "no-color" "disable all color"
 	parse::print_usage "f" "force" "To force install"
+	parse::print_usage "u" "update" "Update this script and lib_bash"
 	parse::print_usage "p" "part" "install part, available part:"
 	for part in ${MODULE[@]}; do
 		parse::print_usage "" "" "    - ${part}"
@@ -149,12 +157,17 @@ function	parse::arg()
 				NO_ANSI=1
 				ansi::toggle_color
 				;;
+			-u|--update)
+				dot::update
+				exit
+				;;
 			-l|--no-log)
 				DONT_PRINT=1
 				;;
 			*)
 				print::warn "wrong options ${R}[${RST}${1}${R}]${RST}"
 				usage
+				exit
 				;;
 		esac
 		shift
@@ -169,17 +182,13 @@ if [ ! -d "${DIR_LIB_BASH}" ]; then
 	printf "lib bash is not installed installing it.\n"
 	git clone https://github.com/Pixailz/lib_bash "${DIR_LIB_BASH}"
 fi
+
 source "${DIR_LIB_BASH}/.config"
 
+# source .config
 PATH_CONFIG=$(realpath ${BASH_SOURCE[0]})
 DIR_BASE=${PATH_CONFIG%/*}
-
-# source .config
 source ${DIR_BASE}/.config
-
-log::main_title "${G}Checking update${RST}" 1 "${LC}" 1
-utils::update_repo "https://github.com/Pixailz/dot_files" "${INSTALL_DIR}"
-utils::update_repo "https://github.com/Pixailz/lib_bash" "${DIR_LIB_BASH%\/*}"
 
 parse::arg ${*}
 
