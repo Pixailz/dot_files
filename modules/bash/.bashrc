@@ -277,8 +277,8 @@ function	prompt::PS1() {
 	P_TIME="$(date +%T)"
 	TERM_WIDTH=$(tput cols)
 
-	is_a_dit_dir=$(git rev-parse --is-inside-work-tree 2>/dev/null)
-	[ "${is_a_dit_dir}" == "true" ] && prompt::get_git_status
+	is_a_git_dir=$(git rev-parse --is-inside-work-tree 2>/dev/null)
+	[ "${is_a_git_dir}" == "true" ] && prompt::get_git_status
 
 	FL_L="[ ${P_EMOJI} ]${P_GIT}[${P_CWD}]"
 	FL_R="${P_SSH}[${P_TIME}]"
