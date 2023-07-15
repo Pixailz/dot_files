@@ -242,7 +242,7 @@ function	prompt::get_git_status()
 		staged="${P_GREEN}${GIT_STAGED}${staged}${RST}"
 	else staged="" ; fi
 
-	commit_ahead=$(perl -ne "print if s|^##.*\[ahead (.*)]|\1|g" <<<"${git_status}")
+	commit_ahead=$(perl -ne "print if s|^##.*\[ahead ([0-9]*)]|\1|g" <<<"${git_status}")
 	if [ "${commit_ahead:-0}" -ne 0 ]; then
 		commit_ahead="${P_PURPLE}${GIT_COMMIT_AHEAD}${commit_ahead}${RST}"
 	else commit_ahead="" ; fi
