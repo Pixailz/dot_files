@@ -1,0 +1,18 @@
+#!/bin/bash
+
+function	install::git()
+{
+	utils::move_file ${PATH_GITCONFIG_IN} ${PATH_GITCONFIG_OUT}
+}
+
+# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
+if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
+	if [ "${0}" -ef "install" ]; then
+		source ../../run
+	elif [ "${0}" -ef "git/install" ]; then
+		source ../run
+	else
+		source ./run
+	fi
+	install::git
+fi
