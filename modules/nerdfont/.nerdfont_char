@@ -8,6 +8,7 @@ NERD_CHAR=(
 	["LOGO_TERMUX"]=""
 	["LOGO_KALI"]=""
 	["LOGO_ALPINE"]=""
+	["LOGO_ARCH"]="󰣇"
 	["LOGO_SSH"]=""
 	["LOGO_APPLE"]=""
 	["LOGO_GIT"]=""

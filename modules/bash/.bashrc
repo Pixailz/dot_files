@@ -137,6 +137,7 @@ if [ "$color_prompt" = yes ]; then
 	P_CYAN="${ESC}38;5;45m${END}"
 	P_WHITE="${ESC}38;5;15m${END}"
 	P_BLACK="${ESC}38;5;16m${END}"
+	P_GRAY="${ESC}38;5;242m${END}"
 	P_BOLD="${ESC}1m${END}"
 	P_DFL_BLUE="${ESC}38;5;25m${END}"
 
@@ -182,6 +183,11 @@ case ${OS_ID} in
 		OS_EMOJI="${LOGO_ALPINE:-@}"
 		OS_COLOR="${P_CYAN}"
 		USER_COLOR="${P_BOLD}${P_BLUE}"
+		;;
+	arch)
+		OS_EMOJI="${LOGO_ARCH:-@}"
+		OS_COLOR="${P_GRAY}"
+		USER_COLOR="${P_BOLD}${P_RED}"
 		;;
 	None)
 		OS_EMOJI="@"
