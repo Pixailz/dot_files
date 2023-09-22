@@ -144,7 +144,7 @@ if [ "$color_prompt" = yes ]; then
 	WORK_DIR_COLOR="${P_BOLD}${P_DFL_BLUE}"
 	USER_COLOR="${P_BOLD}${P_ORANGE}"
 	COMMAND_COLOR=""
-	PS0="$(tabs 4)${RST}"
+	PS0="$(tabs 4 1>/dev/null)${RST}"
 fi
 
 if [ "${SSH_CLIENT}" ]; then
