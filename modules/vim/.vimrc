@@ -2,7 +2,7 @@
 
 "" Line number
 set number
-set relativenumber
+"set relativenumber
 
 "" Mouse
 set mouse=a
