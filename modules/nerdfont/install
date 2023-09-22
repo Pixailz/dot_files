@@ -6,7 +6,7 @@ function	install::nerdfont()
 
 	case ${OS_ID} in
 		termux) 			dir_font="${HOME}/.termux"					;;
-		ubuntu|kali|debian)	dir_font="${HOME}/.local/share/fonts"	;;
+		ubuntu|kali|debian|arch)	dir_font="${HOME}/.local/share/fonts"	;;
 	esac
 
 	[ -f "${dir_font}" ] && rm -f

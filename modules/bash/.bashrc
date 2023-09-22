@@ -187,7 +187,8 @@ case ${OS_ID} in
 	arch)
 		OS_EMOJI="${LOGO_ARCH:-@}"
 		OS_COLOR="${P_GRAY}"
-		USER_COLOR="${P_BOLD}${P_RED}"
+		USER_COLOR="${P_BOLD}${P_CYAN}"
+		WORK_DIR_COLOR="${P_BOLD}${P_ORANGE}"
 		;;
 	None)
 		OS_EMOJI="@"
