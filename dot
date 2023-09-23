@@ -120,6 +120,7 @@ function	parse::post_parsing()
 		if [ "${is_good}" != 1 ]; then
 			print::warn "wrong ${G}part name${RST} ${R}${to_str}${RST}"
 			usage
+			exit 1
 		fi
 	done
 }
