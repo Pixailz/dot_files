@@ -337,3 +337,5 @@ export LANG="en_US.UTF-8"
 
 export GIT_SSH_COMMAND="ssh -i ${HOME}/.ssh/git"
 export PATH="${HOME}/.local/bin:${PATH}"
+
+trap 'echo -ne "\x1b]2;[$?] $(history 1 | sed "s/^[ ]*[0-9]*[ ]*//g")\x07"' DEBUG
