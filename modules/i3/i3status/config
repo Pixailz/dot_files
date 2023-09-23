@@ -1,0 +1,68 @@
+general {
+	output_format = "dzen2"
+	colors = true
+	interval = 5
+}
+
+order += "disk /"
+order += "run_watch DHCP"
+order += "path_exists VPN"
+order += "wireless wlan0"
+order += "ethernet eth0"
+order += "battery 0"
+order += "cpu_temperature 0"
+order += "memory"
+order += "tztime local"
+
+disk "/" {
+	format = "%free"
+}
+
+run_watch DHCP {
+	pidfile = "/var/run/dhclient*.pid"
+}
+
+path_exists VPN {
+	path = "/proc/sys/net/ipv4/conf/tun0"
+}
+
+wireless wlan0 {
+	format_up = "W: (%quality at %essid, %bitrate) %ip"
+	format_down = "W: ❌"
+}
+
+ethernet eth0 {
+	format_up = "E: %ip (%speed)"
+	format_down = "E: ❌"
+}
+
+battery 0 {
+	format = "%status %percentage %remaining %emptytime"
+	format_down = "No battery"
+	status_chr = "⚡ CHR"
+	status_bat = "🔋 BAT"
+	status_unk = "? UNK"
+	status_full = "👌 FULL"
+	path = "/sys/class/power_supply/BAT%d/uevent"
+	low_threshold = 10
+}
+
+cpu_temperature 0 {
+	format = "T: %degrees °C"
+	path = "/sys/devices/platform/coretemp.0/temp1_input"
+}
+
+memory {
+	format = "%used"
+	threshold_degraded = "10%"
+	format_degraded = "MEMORY: %free"
+}
+
+tztime local {
+	format = "%d-%m-%Y %H:%M:%S"
+	hide_if_equals_localtime = true
+}
+
+read_file uptime {
+	path = "/proc/uptime"
+}
