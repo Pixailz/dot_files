@@ -2,25 +2,25 @@
 
 function	install::i3::package()
 {
-	local to_install=""
+	declare -la to_install
 
 	if [ ! "$(type -P i3)" ]; then
-		to_install+="i3-wm "
+		to_install+=("i3-wm")
 	fi
 
 	for package in ${I3_PACKAGE_PAC[@]}; do
-		if [ ! "$(type -P i3)" ]; then
-			to_install+="${package} "
+		if [ ! "$(type -P ${package})" ]; then
+			to_install+=("${package}")
 		fi
 	done
-	sudo pacman -Syu --noconfirm "${to_install}"
-	to_install=""
+	sudo pacman -Syu --noconfirm ${to_install[@]}
+	to_install=()
 	for package in ${I3_PACKAGE_YAY[@]}; do
-		if [ ! "$(type -P i3)" ]; then
-			to_install+="${package} "
-			yay -S --noconfirm ${package}
+		if [ ! "$(type -P ${package})" ]; then
+			to_install+=("${package}")
 		fi
 	done
+	yay -S --noconfirm ${to_install[@]}
 }
 
 function	install::i3()
