@@ -1,3 +1,5 @@
+# i3 config file (v4)
+
 include ./autostart
 include ./keybind
 include ./style
