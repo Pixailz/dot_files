@@ -1,5 +1,8 @@
 " Config
 
+"" Color
+syntax on
+
 "" Line number
 set number
 "set relativenumber
