@@ -2,7 +2,7 @@
 
 function	install::vbox::arch()
 {
-	sudo pacman -Syu virtualbox-guest-utils
+	sudo pacman -Syu --noconfirm virtualbox-guest-utils
 	sudo modprobe -a vboxguest vboxsf vboxvideo
 }
 
