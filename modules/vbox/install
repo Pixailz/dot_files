@@ -3,6 +3,7 @@
 function	install::vbox::arch()
 {
 	sudo pacman -Syu --noconfirm virtualbox-guest-utils
+	sudo systemctl enable --now vboxservice
 	sudo modprobe -a vboxguest vboxsf vboxvideo
 }
 
