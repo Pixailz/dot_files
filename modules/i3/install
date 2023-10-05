@@ -4,8 +4,6 @@ function	install::i3::package()
 {
 	declare -la to_install
 
-	sudo pacman -Syu --noconfirm
-	yay -Syu --noconfirm
 	if [ ! "$(type -P i3)" ]; then
 		to_install+=("i3-wm")
 	fi
@@ -15,14 +13,14 @@ function	install::i3::package()
 			to_install+=("${package}")
 		fi
 	done
-	sudo pacman -S --noconfirm ${to_install[@]}
+	sudo pacman -Suy --noconfirm ${to_install[@]}
 	to_install=()
 	for package in ${I3_PACKAGE_YAY[@]}; do
 		if [ ! "$(type -P ${package})" ]; then
 			to_install+=("${package}")
 		fi
 	done
-	yay -S --noconfirm ${to_install[@]}
+	yay -Suy --noconfirm ${to_install[@]}
 }
 
 function	install::i3::config()
