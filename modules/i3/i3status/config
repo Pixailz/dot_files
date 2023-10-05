@@ -59,8 +59,8 @@ memory {
 }
 
 volume master {
-	format = "♪: %volume"
-	format_muted = "♪: muted"
+	format = "🔊: %volume"
+	format_muted = "🔇"
 }
 
 read_file uptime {
