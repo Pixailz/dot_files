@@ -1,7 +1,14 @@
 # i3 config file (v4)
 
-include ./autostart
+# Define names for default workspaces for which we configure key bindings later on.
+# We use variables to avoid repeating the names in multiple places.
+set $ws1 "1:👨‍💻"
+set $ws2 "2:🌐"
+set $ws3 "3:⌨️"
+set $ws4 "4:❓"
+
 include ./keybind
+include ./autostart
 include ./style
 
 # Start i3bar to display a workspace bar (plus the system information i3status
