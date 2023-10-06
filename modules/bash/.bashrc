@@ -2,6 +2,11 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+# load lib_bash, making all my function available to other script and even
+LIBBASH_CONFIG="${HOME}/.local/lib/lib_bash"
+
+[ -f "${LIBBASH_CONFIG}" ] && . "${LIBBASH_CONFIG}"
+
 # If not running interactively, don't do anything
 case $- in
 	*i*) ;;
