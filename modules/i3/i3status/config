@@ -1,7 +1,6 @@
 general {
 	colors = true
 	interval = 5
-	separator = "#"
 }
 
 order += "path_exists VPN"
@@ -22,40 +21,40 @@ path_exists VPN {
 }
 
 wireless _first_ {
-	format_up = "W: (%quality at %essid, %bitrate) %ip"
-	format_down = "W ❌"
+	format_up = "🛜 %ip%quality"
+	format_down = "🛜 ❌"
 }
 
 ethernet _first_ {
-	format_up = "E: %ip (%speed)"
-	format_down = "E ❌"
+	format_up = "🔌 %ip%speed"
+	format_down = "🔌 ❌"
 }
 
 battery 0 {
-	format = "%status %percentage %remaining %emptytime"
+	format = "%status %percentage %remaining "
 	format_down = "No battery"
-	status_chr = "⚡ CHR"
-	status_bat = "🔋 BAT"
-	status_unk = "? UNK"
-	status_full = "👌 FULL"
+	status_chr = "⚡"
+	status_bat = "🔋"
+	status_unk = "?"
+	status_full = "👌"
 	path = "/sys/class/power_supply/BAT%d/uevent"
 	low_threshold = 10
 }
 
 disk "/" {
-	format = "DISK: %avail/%total"
+	format = "💾(/): %percentage_avail"
 	low_threshold = 5
-	format_below_threshold = "W: %percentage_avail"
+	format_below_threshold = "⚠️💾(/): %percentage_avail"
 }
 
 cpu_usage {
-	format = "CPU: %usage"
+	format = "🧠 %usage"
 }
 
 memory {
-	format = "MEM: %used/%total"
+	format = "R %free"
 	threshold_degraded = "10%"
-	format_degraded = "MEMORY: %free"
+	format_degraded = "⚠️R %free"
 }
 
 volume master {
