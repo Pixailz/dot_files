@@ -3,7 +3,7 @@
 # for examples
 
 # load lib_bash, making all my function available to other script and even
-LIBBASH_CONFIG="${HOME}/.local/lib/lib_bash"
+LIBBASH_CONFIG="${HOME}/.local/lib/lib_bash/.config"
 
 [ -f "${LIBBASH_CONFIG}" ] && . "${LIBBASH_CONFIG}"
 
