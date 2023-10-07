@@ -3,6 +3,9 @@
 function	install::git()
 {
 	utils::move_file ${PATH_GITCONFIG_IN} ${PATH_GITCONFIG_OUT}
+	# if [ ! -f "${HOME}/.ssh/git" ]; then
+	# 	ssh-keygen
+	# fi
 }
 
 # if not sourced, BASH_SOURCE keep current file when $0 keep launched file
