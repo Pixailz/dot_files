@@ -103,7 +103,7 @@ function	install::deb()
 
 function	configure::pacman()
 {
-	local	target="${1:-etc/pacman.conf}"
+	local	target="${1:-/etc/pacman.conf}"
 
 	# activate parallel downloads
 	sed -i 's/#ParallelDownloads.*/ParallelDownloads = 3/g' "${target}"
