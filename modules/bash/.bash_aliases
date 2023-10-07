@@ -112,6 +112,19 @@ function	clmake()
 	done
 }
 
+function	netar::listen()
+{ nc -lvp ${1?} | tar xvf -; }
+
+function	netar::send()
+{
+	local	target_ip="${1?}"
+	local	target_port="${2?}"
+	local	folder="${3?}"
+
+	[ ! -d "${folder}" ] && return 1
+	tar cvf - "${folder}" | nc "${target_ip}" "${target_port}";
+}
+
 # Alias
 
 # Enable color support of ls and also add handy aliases
