@@ -29,8 +29,8 @@ function	modules::install()
 		done
 	fi
 	for module in ${DO_MODULE[*]}; do
-		# log::main_title "${G}${module}${RST}" 1 "${O}"
-		log::main_title "${G}${module}${RST}" 1 "${O}"
+		# log::main_title "${GRE}${module}${RST}" 1 "${ORA}"
+		log::main_title "${GRE}${module}${RST}" 1 "${ORA}"
 		module::install "${module}"
 		printf "\x0a"
 	done
@@ -38,7 +38,7 @@ function	modules::install()
 
 function	dot::update()
 {
-	log::main_title "${G}Checking update${RST}" 1 "${LC}" 1
+	log::main_title "${GRE}Checking update${RST}" 1 "${LCYA}" 1
 	utils::update_repo "https://github.com/Pixailz/dot_files" "${INSTALL_DIR}"
 	utils::update_repo "https://github.com/Pixailz/lib_bash" "${DIR_LIB_BASH%\/*}"
 }
@@ -118,7 +118,7 @@ function	parse::post_parsing()
 			fi
 		done
 		if [ "${is_good}" != 1 ]; then
-			print::warn "wrong ${G}part name${RST} ${R}${to_str}${RST}"
+			print::warn "wrong ${GRE}part name${RST} ${RED}${to_str}${RST}"
 			usage
 			exit 1
 		fi
@@ -166,7 +166,7 @@ function	parse::arg()
 				DONT_PRINT=1
 				;;
 			*)
-				print::warn "wrong options ${R}[${RST}${1}${R}]${RST}"
+				print::warn "wrong options ${RED}[${RST}${1}${RED}]${RST}"
 				usage
 				exit
 				;;
@@ -176,15 +176,16 @@ function	parse::arg()
 	parse::post_parsing
 }
 
-## source lib_bash
+# install lib_bash
 DIR_LIB_BASH="${HOME}/.local/lib/lib_bash"
-[ ! -d "${HOME}/.local/lib" ] && mkdir -p "${HOME}/.local/lib"
-if [ ! -d "${DIR_LIB_BASH}" ]; then
-	printf "lib bash is not installed installing it.\n"
-	git clone https://github.com/Pixailz/lib_bash "${DIR_LIB_BASH}"
-fi
+[ ! -d "${DIR_LIB_BASH}" ] && \
+	bash -c "$(curl -sL https://bit.ly/lib_bash)"
 
+# source .config
 source "${DIR_LIB_BASH}/.config"
+
+# test if work, in this case update lib_bash
+# cli::update
 
 # source .config
 PATH_CONFIG=$(realpath ${BASH_SOURCE[0]})

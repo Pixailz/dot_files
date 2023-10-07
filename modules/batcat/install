@@ -6,9 +6,9 @@ function	post::install::batcat()
 		unset SKIP_BATCAT
 		return
 	fi
-	print::warn "rebuilding ${O}batcat${RST} cache"
+	print::warn "rebuilding ${ORA}batcat${RST} cache"
 	batcat cache --build 1>/dev/null
-	print::pass "batcat ${G}configured${RST}"
+	print::pass "batcat ${GRE}configured${RST}"
 }
 
 function	install::batcat::themes()

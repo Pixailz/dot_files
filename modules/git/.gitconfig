@@ -1,5 +1,13 @@
 [core]
-	pager = less
+	pager = delta
+	editor = vim
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	light = false
 
 [merge]
 	conflicstule = diff3

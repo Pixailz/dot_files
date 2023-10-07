@@ -2,16 +2,18 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-# load lib_bash, making all my function available to other script and even
-LIBBASH_CONFIG="${HOME}/.local/lib/lib_bash/.config"
-
-[ -f "${LIBBASH_CONFIG}" ] && . "${LIBBASH_CONFIG}"
-
 # If not running interactively, don't do anything
 case $- in
 	*i*) ;;
 	*) return;;
 esac
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+[ -f ~/.bash_aliases ] && . ~/.bash_aliases
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
@@ -20,13 +22,31 @@ HISTCONTROL=ignoreboth
 # append to the history file, don't overwrite it
 shopt -s histappend
 
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+	if [ -f /usr/share/bash-completion/bash_completion ]; then
+		. /usr/share/bash-completion/bash_completion
+	elif [ -f /etc/bash_completion ]; then
+		. /etc/bash_completion
+	fi
+fi
+
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 HISTSIZE=1000
 HISTFILESIZE=2000
 
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-shopt -s checkwinsize
+HAVE_MONO_FONT="${HAVE_MONO_FONT:-1}"
+
+# load lib_bash, making all my function available to other script and even
+LIBBASH_CONFIG="${HOME}/.local/lib/lib_bash/.config"
+
+[ -f "${LIBBASH_CONFIG}" ] && . "${LIBBASH_CONFIG}"
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -55,101 +75,36 @@ fi
 # colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
-if [ -f ~/.bash_aliases ]; then
-	. ~/.bash_aliases
-fi
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-	if [ -f /usr/share/bash-completion/bash_completion ]; then
-		. /usr/share/bash-completion/bash_completion
-	elif [ -f /etc/bash_completion ]; then
-		. /etc/bash_completion
-	fi
-fi
-
 # CUSTOM
-
-# check on which os we are
-if [ $(type -t termux-setup-storage) ]; then
-	OS_ID="termux"
-else
-	if [ -f /etc/os-release ]; then
-		OS_ID=$(. /etc/os-release && printf "${ID}")
-		# ubuntu
-		# debian
-		# alpine
-		# arch
-		# manjaro
-		# linuxmint
-		# elementary
-		# rocky
-		# opensuse-leap
-		# fedora
-		# centos
-		# rhel
-		# gentoo
-		# kali
-		# parrot
-		# amzn
-		# ol (oracle linux)
-		# photon
-		# clear-linux-os
-		if [ -z "${OS_ID}" ]; then
-			case "$(. /etc/os-release && echo "${NAME}")" in
-				"BlackArch")			OS_ID=blackarch	;;
-			esac
-		fi
-	else
-		OS_ID=Unknown
-	fi
-fi
-
-export OS_ID
-
-HAVE_MONO_FONT="${HAVE_MONO_FONT:-1}"
-
-# if not monospaced font, pad the icon with a space
-[ "${HAVE_MONO_FONT:-0}" -eq 1 ] && UNI_PAD="" || UNI_PAD=" "
-
-# source nerd_char
-if [ -f ${HOME}/.nerdfont_char ]; then
-	source ${HOME}/.nerdfont_char
-fi
 
 # Function to generate PS1 after CMDs
 PROMPT_COMMAND=prompt::PS1
 
-if [ "$color_prompt" = yes ]; then
-	ESC="\[\e["
-	END="\]"
-	RST="${ESC}0m${END}"
+tabs 4
 
-	P_RED="${ESC}38;5;160m${END}"
-	P_GREEN="${ESC}38;5;118m${END}"
-	P_YELLOW="${ESC}38;5;220m${END}"
-	P_ORANGE="${ESC}38;5;208m${END}"
-	P_BLUE="${ESC}38;5;26m${END}"
-	P_PURPLE="${ESC}38;5;93m${END}"
-	P_PINK="${ESC}38;5;207m${END}"
-	P_CYAN="${ESC}38;5;45m${END}"
-	P_WHITE="${ESC}38;5;15m${END}"
-	P_BLACK="${ESC}38;5;16m${END}"
-	P_GRAY="${ESC}38;5;242m${END}"
-	P_BOLD="${ESC}1m${END}"
-	P_DFL_BLUE="${ESC}38;5;25m${END}"
+if [ "${color_prompt}" = yes ]; then
+	P_ESC="\[\e"
+	P_END="\]"
+	RST="${P_ESC}[0m${P_END}"
+
+	P_RED="${P_ESC}${ANSI["RED"]}${P_END}"
+	P_GREEN="${P_ESC}${ANSI["GRE"]}${P_END}"
+	P_YELLOW="${P_ESC}${ANSI["YEL"]}${P_END}"
+	P_ORANGE="${P_ESC}${ANSI["ORA"]}${P_END}"
+	P_BLUE="${P_ESC}${ANSI["BLU"]}${P_END}"
+	P_PURPLE="${P_ESC}${ANSI["PUR"]}${P_END}"
+	P_PINK="${P_ESC}${ANSI["PIN"]}${P_END}"
+	P_CYAN="${P_ESC}${ANSI["CYA"]}${P_END}"
+	P_WHITE="${P_ESC}${ANSI["WHI"]}${P_END}"
+	P_BLACK="${P_ESC}${ANSI["BLA"]}${P_END}"
+	P_GRAY="${P_ESC}${ANSI["GRA"]}${P_END}"
+	P_BOLD="${P_ESC}${ANSI["BOL"]}${P_END}"
+	P_DFL_BLUE="${P_ESC}[38;5;25m${P_END}"
 
 	WORK_DIR_COLOR="${P_BOLD}${P_DFL_BLUE}"
 	USER_COLOR="${P_BOLD}${P_ORANGE}"
 	COMMAND_COLOR=""
-	PS0="$(tabs 4 1>/dev/null)${RST}"
+	PS0="${RST}"
 fi
 
 if [ "${SSH_CLIENT}" ]; then
@@ -343,4 +298,4 @@ export LANG="en_US.UTF-8"
 export GIT_SSH_COMMAND="ssh -i ${HOME}/.ssh/git"
 export PATH="${HOME}/.local/bin:${PATH}"
 
-trap 'echo -ne "\x1b]2;[$?] $(history 1 | sed "s/^[ ]*[0-9]*[ ]*//g")\x07"' DEBUG
+trap 'echo -ne "\x1b]2;[$?] $(history 1 | sed "s/^[ ]*[0-9]*[ ]*//g")\007"' DEBUG

@@ -1,0 +1,112 @@
+#!/bin/bash
+
+function	dry::run()
+{ [ "${DRY_RUN:-}" == "1" ] && echo "${*}" || ${*} ; return ${?}; }
+
+function	install::uni::pip3()
+{
+	local	pip_base="pip install --upgrade --break-system-packages"
+
+	dry::run ${pip_base[*]} pip setuptools
+	dry::run ${pip_base[*]} pwn
+}
+
+function	install::uni::with_link()
+{
+	if [ ! -f "${HOME}/BurpSuiteCommunity/BurpSuiteCommunity" ]; then
+		print::info "Installing BurpSuite"
+		dry::run ${CURL_BASE} ${UNI_LINK["burpsuite"]} --output burpsuite.sh
+		dry::run ./burpsuite.sh && dry::run rm -rf ./burpsuite.sh
+	fi
+	# if [ ! -f "${HOME}/.gdbinit-gef.py" ]; then
+	# 	print::info "Installing GEF"
+	# 	${CURL_BASE} ${UNI_LINK["gef"]} --output ${HOME}/.gdbinit-gef.py
+	# 	echo source ~/.gdbinit-gef.py >> ~/.gdbinit
+	# fi
+}
+
+function	install::deb::with_link()
+{
+	declare -a	to_install=""
+
+	if [ ! -x $(type -P google-chrome) ]; then
+		print::info "Downloading google-chrome"
+		${CURL_BASE} ${DEB_LINK_CHROME} --output chrome.deb
+		to_install+=("chrome.deb")
+	fi
+	if [ ! -x $(type -P code) ]; then
+		print::info "Downloading VSCode"
+		${CURL_BASE} ${DEB_LINK_VSCODE} --output vscode.deb
+		to_install+=("vscode.deb")
+	fi
+	if [ ! -x $(type -P java) ]; then
+		print::info "Downloading Java"
+		${CURL_BASE} ${DEB_LINK_JAVA} --output java.deb
+		to_install+=("java.deb")
+	fi
+	if [ ! -d /usr/share/wordlists ]; then
+		print::info "/usr/share/wordlist not found, donwloading SecList"
+		sudo git clone ${SECLISTS} /usr/share/wordlists
+	fi
+	if [ ! -d /usr/share/wordlists ]; then
+		print::info "/usr/share/wordlist not found, donwloading SecList"
+		sudo git clone ${SECLISTS} /usr/share/wordlists
+	fi
+	if [ -z "${to_install[@]}" ]; then
+		print::info "Nothing to install"
+	else
+		print::info "Installing : ${to_install[@]}"
+		sudo apt update
+		sudo apt install -y ${to_install[@]}
+	fi
+}
+
+function	install::uni()
+{
+	install::uni::pip3
+	install::uni::with_link
+}
+
+function	install::deb()
+{
+	sudo apt update && sudo apt install -y ${DEB_PACK[@]}
+	install::deb::with_link
+}
+
+function	install::arch()
+{
+	sudo pacman -Syu ${ARCH_PAC_PACK[@]}
+	install::arch::with_link
+}
+
+# BINDED FUNCTION
+
+function	post::install::pack()
+{
+	[ -f "${HOME}/.local/bin" ] && dry::run rm -f "${HOME}/.local/bin"
+	[ ! -d "${HOME}/.local/bin" ] && dry::run mkdir -p "${HOME}/.local/bin"
+}
+
+function	install::pack()
+{
+	install::uni
+	# CURL_BASE="curl --location --progress-bar"
+	# case ${OS_ID} in
+	# 	"ubuntu"|"debian"|"kali") install::deb ;;
+	# 	"arch") install::arch ;;
+	# 	*) print::warn "Not supported yet."
+	# esac
+	# unset CURL_BASE
+}
+
+# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
+if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
+	if [ "${0}" -ef "install" ]; then
+		source ../../run
+	elif [ "${0}" -ef "pack/install" ]; then
+		source ../run
+	else
+		source ./run
+	fi
+	install::pack
+fi

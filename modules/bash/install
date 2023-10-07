@@ -2,7 +2,7 @@
 
 function	post::install::bash()
 {
-	print::warn "to make effect you have to source your ${R}~/.bashrc${RST}"
+	print::warn "to make effect you have to source your ${RED}~/.bashrc${RST}"
 }
 
 function	install::bash()
