@@ -25,9 +25,9 @@ function	install::i3::package()
 
 function	install::i3::config()
 {
-	utils::move_file "${DIR_MODULE}/i3/i3/*" ${HOME}/.config/i3
-	utils::move_file "${DIR_MODULE}/i3/termite/config" ${HOME}/.config/termite/config
-	utils::move_file "${DIR_MODULE}/i3/i3status/config" ${HOME}/.config/i3status/config
+	utils::move_dir "${DIR_MODULE}/i3/i3" "${HOME}/.config/i3"
+	utils::move_file "${DIR_MODULE}/i3/termite/config" "${HOME}/.config/termite/config"
+	utils::move_file "${DIR_MODULE}/i3/i3status/config" "${HOME}/.config/i3status/config"
 	[ ! -f "${HOME}/.xinitrc" ] && echo "exec i3" > "${HOME}/.xinitrc"
 }
 
