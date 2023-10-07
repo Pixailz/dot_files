@@ -4,15 +4,16 @@ function	module::install()
 {
 	local	module="${1}"
 	local	install_file="${DIR_MODULE}/${module}/install"
+	local	config_file="${DIR_MODULE}/${module}/.config"
 	local	tmp_func
 
 	# source module install file
 	source "${install_file}"
+	# source module config file
+	[ -f "${config_file}" ] && source "${config_file}" || true
 	for prefix in ${PREFIX_INSTALL_MODULE[@]}; do
 		tmp_func="${prefix}::${module}"
-		if [ "$(type -t ${tmp_func})" == "function" ]; then
-			${tmp_func}
-		fi
+		[ "$(type -t ${tmp_func})" == "function" ] && ${tmp_func}
 	done
 }
 
@@ -29,10 +30,9 @@ function	modules::install()
 		done
 	fi
 	for module in ${DO_MODULE[*]}; do
-		# log::main_title "${GRE}${module}${RST}" 1 "${ORA}"
 		log::main_title "${GRE}${module}${RST}" 1 "${ORA}"
 		module::install "${module}"
-		printf "\x0a"
+		echo
 	done
 }
 

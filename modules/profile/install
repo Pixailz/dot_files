@@ -27,11 +27,11 @@ function	install::nerdfont()
 # if not sourced, BASH_SOURCE keep current file when $0 keep launched file
 if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
 	if [ "${0}" -ef "install" ]; then
-		source ../../run
+		source ../../dot
 	elif [ "${0}" -ef "nerdfont/install" ]; then
-		source ../run
+		source ../dot
 	else
-		source ./run
+		source ./dot
 	fi
 	install::nerdfont
 fi

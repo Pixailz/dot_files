@@ -1,64 +1,74 @@
 #!/bin/bash
 
-function	dry::run()
-{ [ "${DRY_RUN:-}" == "1" ] && echo "${*}" || ${*} ; return ${?}; }
+function curl::wrap()
+{
+	dry::run curl --location --progress-bar "${1}" --output "${2}"
+}
 
 function	install::uni::pip3()
 {
-	local	pip_base="pip install --upgrade --break-system-packages"
+	dry::run pip install --upgrade --break-system-packages pip setuptools
+	dry::run pip install --upgrade --break-system-packages pwn
+}
 
-	dry::run ${pip_base[*]} pip setuptools
-	dry::run ${pip_base[*]} pwn
+function	install::unit::script()
+{
+	local	link="${1?}"
+
+	curl::wrap "${link}" ./tmp.sh
+	dry::run chmod +x ./tmp.sh
+	dry::run ./tmp.sh
+	dry::run rm -rf ./tmp.sh
 }
 
 function	install::uni::with_link()
 {
 	if [ ! -f "${HOME}/BurpSuiteCommunity/BurpSuiteCommunity" ]; then
 		print::info "Installing BurpSuite"
-		dry::run ${CURL_BASE} ${UNI_LINK["burpsuite"]} --output burpsuite.sh
-		dry::run ./burpsuite.sh && dry::run rm -rf ./burpsuite.sh
+		install::unit::script "${UNI_LINK["burpsuite"]}"
 	fi
-	# if [ ! -f "${HOME}/.gdbinit-gef.py" ]; then
-	# 	print::info "Installing GEF"
-	# 	${CURL_BASE} ${UNI_LINK["gef"]} --output ${HOME}/.gdbinit-gef.py
-	# 	echo source ~/.gdbinit-gef.py >> ~/.gdbinit
-	# fi
+	if [ ! -f "${HOME}/.gdbinit-gef.py" ]; then
+		print::info "Installing GEF"
+		curl::wrap "${UNI_LINK["gef"]}" "${HOME}/.gdbinit-gef.py"
+		dry::run echo source ~/.gdbinit-gef.py >> ~/.gdbinit
+	fi
+	if [ ! -d /usr/share/wordlists ]; then
+		print::info "/usr/share/wordlists not found, donwloading SecList"
+		sudo git clone "${SECLISTS}" /usr/share/wordlists
+	fi
+}
+
+function	install::deb::add_deb()
+{
+	local	target="${1?}"
+
+	if [ ! -x "$(type -P ${target})" ]; then
+		print::info "Downloading ${target}"
+		curl::wrap "${DEB_LINK[${target}]}" "${target}.deb"
+		to_install+=("${target}.deb")
+	fi
 }
 
 function	install::deb::with_link()
 {
-	declare -a	to_install=""
+	unset to_install
+	declare -ga	to_install=()
 
-	if [ ! -x $(type -P google-chrome) ]; then
-		print::info "Downloading google-chrome"
-		${CURL_BASE} ${DEB_LINK_CHROME} --output chrome.deb
-		to_install+=("chrome.deb")
-	fi
-	if [ ! -x $(type -P code) ]; then
-		print::info "Downloading VSCode"
-		${CURL_BASE} ${DEB_LINK_VSCODE} --output vscode.deb
-		to_install+=("vscode.deb")
-	fi
-	if [ ! -x $(type -P java) ]; then
-		print::info "Downloading Java"
-		${CURL_BASE} ${DEB_LINK_JAVA} --output java.deb
-		to_install+=("java.deb")
-	fi
-	if [ ! -d /usr/share/wordlists ]; then
-		print::info "/usr/share/wordlist not found, donwloading SecList"
-		sudo git clone ${SECLISTS} /usr/share/wordlists
-	fi
-	if [ ! -d /usr/share/wordlists ]; then
-		print::info "/usr/share/wordlist not found, donwloading SecList"
-		sudo git clone ${SECLISTS} /usr/share/wordlists
-	fi
-	if [ -z "${to_install[@]}" ]; then
+	install::deb::add_deb google-chrome
+	install::deb::add_deb code
+	install::deb::add_deb java
+	install::deb::add_deb delta
+
+	if [ "${#to_install[@]}" == "0" ]; then
 		print::info "Nothing to install"
 	else
-		print::info "Installing : ${to_install[@]}"
-		sudo apt update
-		sudo apt install -y ${to_install[@]}
+		print::info "Installing (apt:link)"
+		printf -- "- %s\n" ${to_install[@]}
+		dry::run sudo apt update
+		dry::run sudo apt install -y ${to_install[@]}
 	fi
+
+	unset to_install
 }
 
 function	install::uni()
@@ -67,20 +77,59 @@ function	install::uni()
 	install::uni::with_link
 }
 
+function	clean::package()
+{
+	declare	-a packages=(${@?})
+	unset PARSED_PACK
+	declare	-ag PARSED_PACK=()
+
+	for package in ${packages[@]}; do
+		[ ! -x "$(type -P ${package})" ] && PARSED_PACK+=(${package})
+	done
+}
+
 function	install::deb()
 {
-	sudo apt update && sudo apt install -y ${DEB_PACK[@]}
+	clean::package ${DEB_PACK[@]}
+	if [ "${#PARSED_PACK[@]}" == "0" ]; then
+		print::info "Nothing to install"
+	else
+		print::info "Installing (apt:name)"
+		printf -- "- %s\n" ${PARSED_PACK[@]}
+		dry::run sudo apt update && dry::run sudo apt install -y ${PARSED_PACK[@]}
+	fi
 	install::deb::with_link
 }
 
 function	install::arch()
 {
-	sudo pacman -Syu ${ARCH_PAC_PACK[@]}
-	install::arch::with_link
+	clean::package ${ARCH_PAC_PACK[@]}
+	if [ "${#PARSED_PACK[@]}" == "0" ]; then
+		print::info "Nothing to install"
+	else
+		print::info "Installing (pac)"
+		printf -- "- %s\n" ${PARSED_PACK[@]}
+		dry::run sudo pacman -Syu ${PARSED_PACK[@]}
+	fi
+	if [ ! -x "$(type -P yay)" ]; then
+		dry::run git clone https://aur.archlinux.org/yay /tmp/yay
+		dry::run cd /tmp/yay
+		dry::run makepkg -si --noconfirm
+		dry::run cd -
+		dry::run rm -rf /tmp/yay
+	fi
+	clean::package ${ARCH_YAY_PACK[@]}
+	if [ "${#PARSED_PACK[@]}" == "0" ]; then
+		print::info "Nothing to install"
+	else
+		print::info "Installing (yay)"
+		printf -- "- %s\n" ${PARSED_PACK[@]}
+		dry::run yay -Syu ${PARSED_PACK[@]}
+	fi
 }
 
-# BINDED FUNCTION
 
+# BINDED FUNCTION
 function	post::install::pack()
 {
 	[ -f "${HOME}/.local/bin" ] && dry::run rm -f "${HOME}/.local/bin"
@@ -90,23 +139,21 @@ function	post::install::pack()
 function	install::pack()
 {
 	install::uni
-	# CURL_BASE="curl --location --progress-bar"
-	# case ${OS_ID} in
-	# 	"ubuntu"|"debian"|"kali") install::deb ;;
-	# 	"arch") install::arch ;;
-	# 	*) print::warn "Not supported yet."
-	# esac
-	# unset CURL_BASE
+	case ${OS_ID} in
+		"ubuntu"|"debian"|"kali") install::deb ;;
+		"arch") install::arch ;;
+		*) print::warn "Not supported yet."
+	esac
 }
 
 # if not sourced, BASH_SOURCE keep current file when $0 keep launched file
 if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
 	if [ "${0}" -ef "install" ]; then
-		source ../../run
+		source ../../dot
 	elif [ "${0}" -ef "pack/install" ]; then
-		source ../run
+		source ../dot
 	else
-		source ./run
+		source ./dot
 	fi
 	install::pack
 fi

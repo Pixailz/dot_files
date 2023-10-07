@@ -41,7 +41,7 @@ fi
 HISTSIZE=1000
 HISTFILESIZE=2000
 
-HAVE_MONO_FONT="${HAVE_MONO_FONT:-1}"
+HAVE_MONO_FONT=1
 
 # load lib_bash, making all my function available to other script and even
 LIBBASH_CONFIG="${HOME}/.local/lib/lib_bash/.config"
