@@ -23,4 +23,4 @@ exec --no-startup-id /usr/bin/termite
 exec --no-startup-id /usr/bin/google-chrome-stable
 exec --no-startup-id /usr/bin/code
 
-exec_always feh "${HOME}/Pictures/wallpaper" --bg-scale
+exec_always feh --bg-fill "${HOME}/Pictures/wallpaper"
