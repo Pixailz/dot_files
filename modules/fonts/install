@@ -9,7 +9,7 @@ function	install::font()
 	dir_font="${DIR_FONT}/${font_name}"
 	if [ ! -d "${dir_font}" ]; then
 		log::info "installing ${ORE}${font_name}${RST}" 1
-		curl::warp "${font_link}" tmp.zip
+		curl::wrap "${font_link}" tmp.zip
 		unzip -o tmp.zip -d "${dir_font}"
 		rm -f tmp.zip
 		log::pass "installed ${GRE}${dir_font}${RST}"
@@ -26,6 +26,27 @@ function	pre::install::fonts()
 		termux) 			DIR_FONT="${HOME}/.termux"					;;
 		ubuntu|kali|debian|arch)	DIR_FONT="${HOME}/.local/share/fonts"	;;
 	esac
+	if [ "$(is::installed unzip)" == 0 ]; then
+		NO_UNZIP=1
+		log::warn "unzip isn't installed, installing it"
+		case ${OD_ID} in
+			"ubuntu"|"debian"|"kali")
+				sudo apt install -Y unzip
+			;;
+			"arch")
+				sudo pacman -Syu --noconfirm unzip
+			;;
+		esac
+		if [ ${?} == 0 ]; then
+			NO_UNZIP=0;
+		fi
+	fi
+
+	if [ "${NO_UNZIP}" == 0 ]; then
+		log::pass "unzip installed"
+	else
+		log::pass "unzip is not installed"
+	fi
 	export DIR_FONT
 }
 

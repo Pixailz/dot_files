@@ -18,7 +18,7 @@ function	pre::install::bat()
 
 function	install::bat()
 {
-	if [ "$(is::installed "batcat")" == 1 ]; then
+	if [ "$(is::installed batcat)" == 0 ]; then
 		log::fail "batcat not installed, skipping" 1
 		export SKIP_BATCAT=1
 		return
