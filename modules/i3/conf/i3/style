@@ -1,4 +1,4 @@
-font pango: FiraCode NF 9
+font pango: $font-style
 
 hide_edge_borders smart
 
