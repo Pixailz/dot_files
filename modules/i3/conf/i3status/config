@@ -21,7 +21,7 @@ path_exists VPN {
 }
 
 wireless _first_ {
-	format_up = "🛜 %ip%quality"
+	format_up = "🛜 %ip %quality"
 	format_down = "🛜 ❌"
 }
 
