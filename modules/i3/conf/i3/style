@@ -1,8 +1,11 @@
 font pango: $font-style
 
+default_border pixel 1px
+default_floating_border pixel 1px
 hide_edge_borders smart
 
-gaps inner 3px
+gaps inner 10px
+# gaps outer 2px
 
 smart_gaps on
 
@@ -28,20 +31,22 @@ client.urgent			$green_6	$dark_red	$white	$dark_red	$dark_red
 client.placeholder		$black		#0c0c0c		$white	$black		#0c0c0c
 client.background		$white
 
-bar {
-	# mode hide
-	# hidden_state hide
-	# modifier Mod1+Mod4
-	position top
-	separator_symbol "|"
-	status_command i3status
-	colors {
-		background			$grey
+# bar {
+# 	# mode hide
+# 	# hidden_state hide
+# 	# modifier Mod1+Mod4
+# 	position top
+# 	separator_symbol "|"
+# 	status_command i3status
+# 	colors {
+# 		background			$grey
 
-		focused_workspace	$green_7	$green_2	$white
-		active_workspace	$grey		$green_3	$white
-		inactive_workspace	$grey		#222222		#888888
-		urgent_workspace	$green_6	$dark_red	$white
-		binding_mode		$green_6	$dark_red	$white
-	}
-}
+# 		focused_workspace	$green_7	$green_2	$white
+# 		active_workspace	$grey		$green_3	$white
+# 		inactive_workspace	$grey		#222222		#888888
+# 		urgent_workspace	$green_6	$dark_red	$white
+# 		binding_mode		$green_6	$dark_red	$white
+# 	}
+# }
+
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh

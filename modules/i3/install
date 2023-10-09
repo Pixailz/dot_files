@@ -26,7 +26,7 @@ function	install::i3::package()
 function	install::i3::config()
 {
 	utils::move_dir "${MOD_FILE_DIR}/i3" "${TARGET_DIR}" y
-	utils::move_file "${MOD_FILE_DIR}/polybar/config.ini" "${DOT_CONFIG_DIR}/polybar/config.ini"
+	utils::move_dir "${MOD_FILE_DIR}/polybar" "${DOT_CONFIG_DIR}/polybar" y
 	utils::move_file "${MOD_FILE_DIR}/termite/config" "${DOT_CONFIG_DIR}/termite/config"
 	utils::move_file "${MOD_FILE_DIR}/i3status/config" "${DOT_CONFIG_DIR}/i3status/config"
 }
