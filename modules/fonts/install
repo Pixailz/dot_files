@@ -10,6 +10,7 @@ function	install::font()
 	if [ ! -d "${dir_font}" ]; then
 		log::info "installing ${ORE}${font_name}${RST}" 1
 		curl::wrap "${font_link}" tmp.zip
+		utils::mkdir "${dir_font}"
 		unzip -o tmp.zip -d "${dir_font}"
 		rm -f tmp.zip
 		log::pass "installed ${GRE}${dir_font}${RST}"
@@ -61,7 +62,14 @@ function	install::fonts()
 function	post::install::fonts()
 {
 	[ -f tmp.zip ] && rm -f tmp.zip
-	[ ${OS_ID} == "termux" ] && termux-reload-settings
+	case ${OS_ID} in
+		"termux")
+			termux-reload-settings
+		;;
+		*)
+			fc-cache -vr
+		;;
+	esac
 	unset DIR_FONT
 }
 
