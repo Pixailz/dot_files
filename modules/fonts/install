@@ -43,10 +43,10 @@ function	pre::install::fonts()
 		fi
 	fi
 
-	if [ "${NO_UNZIP}" == 0 ]; then
-		log::pass "unzip installed"
+	if [ "${NO_UNZIP}" == 1 ]; then
+		log::fail "unzip is not installed"
 	else
-		log::pass "unzip is not installed"
+		log::pass "unzip installed"
 	fi
 	export DIR_FONT
 }
