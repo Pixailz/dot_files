@@ -5,6 +5,12 @@ function	install::vbox::arch()
 	sudo pacman -Syu --noconfirm virtualbox-guest-utils
 	sudo systemctl enable --now vboxservice
 	sudo modprobe -a vboxguest vboxsf vboxvideo
+
+	if [ "${USER}" == "root" ]; then
+		log::fail "script should not be run as user. aborting" 1
+	else
+		sudo usermod -aG vboxsf "${USER}"
+	fi
 }
 
 ## BINDED FUNCTION
@@ -13,7 +19,7 @@ function	install::vbox()
 {
 	case "${OS_ID}" in
 		"arch") install::vbox::arch ;;
-		*) print::warn "${OS_ID} not implemented yet" ;;
+		*) log::warn "${OS_ID} not implemented yet" 1 ;;
 	esac
 }
 

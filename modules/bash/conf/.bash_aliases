@@ -2,25 +2,6 @@
 
 # utils functions
 
-## APT ALL
-function	aptall()
-{
-	sudo apt update
-	sudo apt upgrade -y
-	sudo apt autoremove --purge -y
-	sudo do-release-upgrade
-	if [ -f /var/run/reboot-required ]; then
-		printf "Reboot required, rebooting in...\n"
-		printf "3...\r"
-		sleep 1
-		printf "2.. \r"
-		sleep 1
-		printf "1.  \n"
-		sleep 1
-		sudo shutdown --reboot now
-	fi
-}
-
 ## pentest utils
 
 function	printFeedHelp()
@@ -151,12 +132,8 @@ alias ll="ls -oA"
 alias la="ls -la"
 alias l="ls"
 
-## Apt
-export APT_OPTIONS="-y"
-alias apt="apt ${APT_OPTIONS}"
-
 ## batcat
-if [ -f "/usr/bin/batcat" ]; then
+if [ "$(is::installed batcat)" == 1 ]; then
 	export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 	alias bat="batcat"
 

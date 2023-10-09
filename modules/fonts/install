@@ -32,7 +32,7 @@ function	pre::install::fonts()
 		NO_UNZIP=1
 		log::warn "unzip isn't installed, installing it"
 		case ${OD_ID} in
-			"ubuntu"|"debian"|"kali")
+			ubuntu|kali|debian)
 				sudo apt install -Y unzip
 			;;
 			"arch")

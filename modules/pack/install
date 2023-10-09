@@ -60,8 +60,8 @@ function	install::deb::with_link()
 	else
 		log::info "Installing (apt:link)" 1
 		printf -- "- %s\n" ${to_install[@]}
-		dry::run sudo apt update
-		dry::run sudo apt install -y ${to_install[@]}
+		pkg::update
+		pkg::install ${to_install[@]}
 	fi
 
 	unset to_install
@@ -92,7 +92,8 @@ function	install::deb()
 	else
 		log::info "Installing (apt:name)" 1
 		printf -- "- %s\n" ${PARSED_PACK[@]}
-		dry::run sudo apt update && dry::run sudo apt install -y ${PARSED_PACK[@]}
+		pkg::update
+		pkg::install ${PARSED_PACK[@]}
 	fi
 	install::deb::with_link
 }
@@ -118,7 +119,8 @@ function	install::arch()
 	else
 		log::info "Installing (pac)" 1
 		printf -- "- %s\n" ${PARSED_PACK[@]}
-		dry::run sudo pacman -Syu --noconfirm ${PARSED_PACK[@]}
+		pkg::update
+		pkg::install ${PARSED_PACK[@]}
 	fi
 	if [ "$(is::installed yay)" == 0 ]; then
 		dry::run git clone https://aur.archlinux.org/yay /tmp/yay
@@ -142,7 +144,7 @@ function	install::arch()
 function	install::pack()
 {
 	case ${OS_ID} in
-		"ubuntu"|"debian"|"kali")
+		ubuntu|kali|debian)
 			install::uni
 			install::deb
 			;;
