@@ -146,7 +146,7 @@ function	install::pack()
 		"arch") install::arch ;;
 		*) print::warn "Not supported yet."
 	esac
-	# install::uni
+	install::uni
 }
 
 # Start
