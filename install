@@ -20,3 +20,5 @@ function	setup::install()
 
 setup::prepare
 setup::install
+
+"${DOT_INSTALL_DIR}/dot" -f
