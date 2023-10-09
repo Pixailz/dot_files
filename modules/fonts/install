@@ -14,6 +14,7 @@ function	install::font()
 		unzip -o tmp.zip -d "${dir_font}"
 		rm -f tmp.zip
 		log::pass "installed ${GRE}${dir_font}${RST}"
+		FONT_CHANGED=1
 	else
 		log::info "${font_name} already installed" 1
 	fi
@@ -43,16 +44,18 @@ function	pre::install::fonts()
 		fi
 	fi
 
-	if [ "${NO_UNZIP}" == 1 ]; then
+	if [ "${NO_UNZIP}" == "1" ]; then
 		log::fail "unzip is not installed"
 	else
 		log::pass "unzip installed"
 	fi
 	export DIR_FONT
+	export FONT_CHANGED=0
 }
 
 function	install::fonts()
 {
+	[ "${NO_UNZIP}" == "1" ] && return
 	for font_name in ${!FONTS_LINK[@]}; do
 		install::font "${font_name}" "${FONTS_LINK[${font_name}]}"
 	done
@@ -62,15 +65,18 @@ function	install::fonts()
 function	post::install::fonts()
 {
 	[ -f tmp.zip ] && rm -f tmp.zip
-	case ${OS_ID} in
-		"termux")
-			termux-reload-settings
-		;;
-		*)
-			fc-cache -vr
-		;;
-	esac
+	if [ "${FONT_CHANGED}" == "1" ]; then
+		case ${OS_ID} in
+			"termux")
+				termux-reload-settings
+			;;
+			*)
+				fc-cache -vr
+			;;
+		esac
+	fi
 	unset DIR_FONT
+	unset NO_UNZIP
 }
 
 # Start
