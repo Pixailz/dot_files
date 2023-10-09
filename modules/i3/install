@@ -26,10 +26,20 @@ function	install::i3::package()
 function	install::i3::config()
 {
 	utils::move_dir "${MOD_FILE_DIR}/i3" "${TARGET_DIR}" y
-	utils::move_file {${MOD_FILE_DIR},${DOT_CONFIG_DIR}}"/polybar/config.ini"
-	utils::move_file {${MOD_FILE_DIR},${DOT_CONFIG_DIR}}"/termite/config"
-	utils::move_file {${MOD_FILE_DIR},${DOT_CONFIG_DIR}}"/i3status/config"
-	[ ! -f "${HOME}/.xinitrc" ] && echo "exec i3" > "${HOME}/.xinitrc"
+	utils::move_file "${MOD_FILE_DIR}/polybar/config.ini" "${DOT_CONFIG_DIR}/polybar/config.ini"
+	utils::move_file "${MOD_FILE_DIR}/termite/config" "${DOT_CONFIG_DIR}/termite/config"
+	utils::move_file "${MOD_FILE_DIR}/i3status/config" "${DOT_CONFIG_DIR}/i3status/config"
+}
+
+function	install::i3::enable_dm()
+{
+	systemctl status ly
+	if [ "${?}" == "4" ]; then
+		sudo systemctl enable --now ly
+		sudo cp -f "${MOD_FILE_DIR}/ly/ly.service" "/usr/lib/systemd/system/ly.service"
+		sudo cp -f "${MOD_FILE_DIR}/ly/config.ini" "/etc/ly/config.ini"
+		sudo systemctl daemon-reload
+	fi
 }
 
 ## BINDED FUNCTION
@@ -42,7 +52,8 @@ function	pre::install::i3()
 function	install::i3()
 {
 	# install::i3::package
-	install::i3::config
+	install::i3::enable_dm
+	# install::i3::config
 }
 
 # Start
