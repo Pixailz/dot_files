@@ -1,0 +1,61 @@
+#!/bin/bash
+
+function	install::batcat::themes()
+{
+	for theme in "${BATCAT_DIR_BASE_IN}"/*; do
+		if [[ "${theme}" =~ .*\.tmTheme ]]; then
+			utils::move_file "${theme}" "${BATCAT_DIR_BASE_OUT}/${theme##*/}"
+		fi
+	done
+}
+
+## BINDED FUNCTION
+
+function	pre::install::bat()
+{
+	utils::mkdir "${TARGET_DIR}"
+}
+
+function	install::bat()
+{
+	if [ "$(is::installed "batcat")" == 1 ]; then
+		log::fail "batcat not installed, skipping" 1
+		export SKIP_BATCAT=1
+		return
+	fi
+	utils::move_file "${MOD_FILE_DIR}/config" "${TARGET_DIR}/config"
+	install::batcat::themes
+}
+
+function	post::install::bat()
+{
+	if [ "${SKIP_BATCAT:-}" == "1" ]; then
+		unset SKIP_BATCAT
+		return
+	fi
+	log::info "rebuilding ${ORA}batcat${RST} cache" 1
+	batcat cache --build 1>/dev/null
+	log::pass "batcat ${GRE}configured${RST}" 1
+}
+
+# Start
+function	module::start()
+{
+	local	base="${BASH_SOURCE[0]?}"
+
+	# remove filename
+	base="${base/install/}"
+	# if base dir is relative, suffix PWD to base
+	if [[ ${base} =~ ^\./.*$ ]]; then
+		base="${PWD}/${base}"
+	fi
+	# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
+	if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
+		source "${base}../../dot"
+		source "${base}${MOD_CONFIG_FILE}"
+		## BINDED FUNCTION
+		module::install "${MOD_NAME}"
+	fi
+}
+
+module::start

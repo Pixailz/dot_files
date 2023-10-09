@@ -1,31 +1,40 @@
 #!/bin/bash
 
-function	post::install::bash()
+## BINDED FUNCTION
+
+function	pre::install::bash()
 {
-	print::warn "to make effect you have to source your ${RED}~/.bashrc${RST}"
+	utils::mkdir "${TARGET_DIR}"
 }
 
 function	install::bash()
 {
-	for file in "${PATH_BASH_FILE_IN[@]}"; do
-		utils::move_file "${DIR_MODULE}/bash/${file}" ${PATH_BASH_DIR_OUT}
-	done
-
-	# configure git
-	git config --global user.name "Pixailz"
-	git config --global user.email "pixailz1@gmail.com"
-	git config --global core.editor "vim"
+	utils::move_dir "${MOD_FILE_DIR}" "${TARGET_DIR}" y
 }
 
-# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
-if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
-	if [ "${0}" -ef "install" ]; then
-		source ../../dot
-	elif [ "${0}" -ef "bash/install" ]; then
-		source ../dot
-	else
-		source ./dot
+function	post::install::bash()
+{
+	log::warn "to make effect you have to source your ${RED}~/.bashrc${RST}" 1
+}
+
+# Start
+function	module::start()
+{
+	local	base="${BASH_SOURCE[0]?}"
+
+	# remove filename
+	base="${base/install/}"
+	# if base dir is relative, suffix PWD to base
+	if [[ ${base} =~ ^\./.*$ ]]; then
+		base="${PWD}/${base}"
 	fi
-	install::bash
-	post::install::bash
-fi
+	# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
+	if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
+		source "${base}../../dot"
+
+		## BINDED FUNCTION
+		module::install "${MOD_NAME}"
+	fi
+}
+
+module::start

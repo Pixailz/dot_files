@@ -1,37 +1,40 @@
 #!/bin/bash
 
-function	install::nerdfont()
+## BINDED FUNCTION
+
+function	pre::install::profile()
 {
-	local	dir_font
-
-	case ${OS_ID} in
-		termux) 			dir_font="${HOME}/.termux"					;;
-		ubuntu|kali|debian|arch)	dir_font="${HOME}/.local/share/fonts"	;;
-	esac
-
-	[ -f "${dir_font}" ] && rm -f
-	[ ! -d "${dir_font}" ] && mkdir -p "${dir_font}"
-
-	if [ ! -f "${dir_font}/Fira Code Regular Nerd Font Complete Mono.ttf" ]; then
-		curl --location "${NERDFONT_LINK}" \
-				--progress-bar \
-				--output nerdfont.zip
-		unzip -o nerdfont.zip -d ${dir_font}
-		rm -f nerdfont.zip
-		[ ${OS_ID} == "termux" ] && termux-reload-settings
-	fi
-	utils::move_file ${DIR_MODULE}/nerdfont/.nerdfont_char ${HOME}/.nerdfont_char
-	print::info "you can select your font in the terminal settings"
+	utils::mkdir "${TARGET_DIR}"
 }
 
-# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
-if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
-	if [ "${0}" -ef "install" ]; then
-		source ../../dot
-	elif [ "${0}" -ef "nerdfont/install" ]; then
-		source ../dot
-	else
-		source ./dot
+function	install::profile()
+{
+	utils::move_dir "${MOD_FILE_DIR}" "${TARGET_DIR}" y
+}
+
+function	post::install::profile()
+{
+	log::warn "to make effect you have to ${RED}relog${RST} the current user" 1
+}
+
+# Start
+function	module::start()
+{
+	local	base="${BASH_SOURCE[0]?}"
+
+	# remove filename
+	base="${base/install/}"
+	# if base dir is relative, suffix PWD to base
+	if [[ ${base} =~ ^\./.*$ ]]; then
+		base="${PWD}/${base}"
 	fi
-	install::nerdfont
-fi
+	# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
+	if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
+		source "${base}../../dot"
+
+		## BINDED FUNCTION
+		module::install "${MOD_NAME}"
+	fi
+}
+
+module::start

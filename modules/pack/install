@@ -1,9 +1,5 @@
 #!/bin/bash
 
-function curl::wrap()
-{
-	dry::run curl --location --progress-bar "${1}" --output "${2}"
-}
 
 function	install::uni::pip3()
 {
@@ -42,7 +38,7 @@ function	install::deb::add_deb()
 {
 	local	target="${1?}"
 
-	if [ ! -x "$(type -P ${target})" ]; then
+	if [ "$(is::installed ${target})" == 1 ]; then
 		print::info "Downloading ${target}"
 		curl::wrap "${DEB_LINK[${target}]}" "${target}.deb"
 		to_install+=("${target}.deb")
@@ -84,7 +80,7 @@ function	clean::package()
 	declare	-ag PARSED_PACK=()
 
 	for package in ${packages[@]}; do
-		[ ! -x "$(type -P ${package})" ] && PARSED_PACK+=(${package})
+		[ "$(is::installed ${package})" == 1 ] && PARSED_PACK+=(${package})
 	done
 }
 
@@ -124,7 +120,7 @@ function	install::arch()
 		printf -- "- %s\n" ${PARSED_PACK[@]}
 		dry::run sudo pacman -Syu --noconfirm ${PARSED_PACK[@]}
 	fi
-	if [ ! -x "$(type -P yay)" ]; then
+	if [ "$(is::installed yay)" == 1 ]; then
 		dry::run git clone https://aur.archlinux.org/yay /tmp/yay
 		dry::run cd /tmp/yay
 		dry::run makepkg -si --noconfirm
@@ -141,13 +137,7 @@ function	install::arch()
 	fi
 }
 
-
-# BINDED FUNCTION
-function	post::install::pack()
-{
-	[ -f "${HOME}/.local/bin" ] && dry::run rm -f "${HOME}/.local/bin"
-	[ ! -d "${HOME}/.local/bin" ] && dry::run mkdir -p "${HOME}/.local/bin"
-}
+## BINDED FUNCTION
 
 function	install::pack()
 {
@@ -159,14 +149,24 @@ function	install::pack()
 	esac
 }
 
-# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
-if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
-	if [ "${0}" -ef "install" ]; then
-		source ../../dot
-	elif [ "${0}" -ef "pack/install" ]; then
-		source ../dot
-	else
-		source ./dot
+# Start
+function	module::start()
+{
+	local	base="${BASH_SOURCE[0]?}"
+
+	# remove filename
+	base="${base/install/}"
+	# if base dir is relative, suffix PWD to base
+	if [[ ${base} =~ ^\./.*$ ]]; then
+		base="${PWD}/${base}"
 	fi
-	install::pack
-fi
+	# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
+	if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
+		source "${base}../../dot"
+		source "${base}${MOD_CONFIG_FILE}"
+		## BINDED FUNCTION
+		module::install "${MOD_NAME}"
+	fi
+}
+
+module::start

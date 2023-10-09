@@ -201,3 +201,4 @@ alias watch="watch --color"
 alias lssh="sudo tail -f -n+1 /var/log/auth.log | grep sshd"
 
 alias ntmux="tmux new -s"
+alias gdb="-x ${HOME}/.config/gdb/.gdbinit"

@@ -1,19 +1,46 @@
 #!/bin/bash
 
-function	install::tmux()
+## BINDED FUNCTION
+
+function	pre::install::tmux()
 {
-	utils::move_file ${PATH_TMUXRC_FILE_IN} ${PATH_TMUXRC_FILE_OUT}
+	SKIP_TERMUX=0
+	utils::mkdir "${TARGET_DIR}"
 }
 
-# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
-if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
-	if [ "${0}" -ef "install" ]; then
-		source ../../dot
-	elif [ "${0}" -ef "tmux/install" ]; then
-		source ../dot
-	else
-		source ./dot
+function	install::tmux()
+{
+	if [ "${OS_ID}" != "termux" ]; then
+		log::fail "wrong os, aborting"
+		SKIP_TERMUX=1
+		return
 	fi
-	install::tmux
-	post::install::tmux
-fi
+	utils::move_dir "${MOD_FILE_DIR}" "${TARGET_DIR}" y
+}
+
+function	post::install::tmux()
+{
+	unset SKIP_TERMUX
+}
+
+# Start
+function	module::start()
+{
+	local	base="${BASH_SOURCE[0]?}"
+
+	# remove filename
+	base="${base/install/}"
+	# if base dir is relative, suffix PWD to base
+	if [[ ${base} =~ ^\./.*$ ]]; then
+		base="${PWD}/${base}"
+	fi
+	# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
+	if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
+		source "${base}../../dot"
+
+		## BINDED FUNCTION
+		module::install "${MOD_NAME}"
+	fi
+}
+
+module::start

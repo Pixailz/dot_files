@@ -25,10 +25,17 @@ function	install::i3::package()
 
 function	install::i3::config()
 {
-	utils::move_dir "${DIR_MODULE}/i3/i3" "${HOME}/.config"
-	utils::move_file "${DIR_MODULE}/i3/termite/config" "${HOME}/.config/termite/config"
-	utils::move_file "${DIR_MODULE}/i3/i3status/config" "${HOME}/.config/i3status/config"
+	utils::move_dir "${MOD_FILE_DIR}/i3" "${TARGET_DIR}"
+	utils::move_file "${MOD_FILE_DIR}/termite/config" "${DOT_CONFIG_DIR}/termite/config"
+	utils::move_file "${MOD_FILE_DIR}/i3status/config" "${DOT_CONFIG_DIR}/i3status/config"
 	[ ! -f "${HOME}/.xinitrc" ] && echo "exec i3" > "${HOME}/.xinitrc"
+}
+
+## BINDED FUNCTION
+
+function	pre::install::i3()
+{
+	utils::mkdir "${TARGET_DIR}"
 }
 
 function	install::i3()
@@ -37,14 +44,24 @@ function	install::i3()
 	install::i3::config
 }
 
-# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
-if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
-	if [ "${0}" -ef "install" ]; then
-		source ../../dot
-	elif [ "${0}" -ef "i3/install" ]; then
-		source ../dot
-	else
-		source ./dot
+# Start
+function	module::start()
+{
+	local	base="${BASH_SOURCE[0]?}"
+
+	# remove filename
+	base="${base/install/}"
+	# if base dir is relative, suffix PWD to base
+	if [[ ${base} =~ ^\./.*$ ]]; then
+		base="${PWD}/${base}"
 	fi
-	install::i3
-fi
+	# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
+	if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
+		source "${base}../../dot"
+		source "${base}${MOD_CONFIG_FILE}"
+		## BINDED FUNCTION
+		module::install "${MOD_NAME}"
+	fi
+}
+
+module::start

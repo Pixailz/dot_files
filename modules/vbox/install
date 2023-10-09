@@ -7,6 +7,8 @@ function	install::vbox::arch()
 	sudo modprobe -a vboxguest vboxsf vboxvideo
 }
 
+## BINDED FUNCTION
+
 function	install::vbox()
 {
 	case "${OS_ID}" in
@@ -15,14 +17,24 @@ function	install::vbox()
 	esac
 }
 
-# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
-if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
-	if [ "${0}" -ef "install" ]; then
-		source ../../run
-	elif [ "${0}" -ef "vbox/install" ]; then
-		source ../run
-	else
-		source ./run
+# Start
+function	module::start()
+{
+	local	base="${BASH_SOURCE[0]?}"
+
+	# remove filename
+	base="${base/install/}"
+	# if base dir is relative, suffix PWD to base
+	if [[ ${base} =~ ^\./.*$ ]]; then
+		base="${PWD}/${base}"
 	fi
-	install::vbox
-fi
+	# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
+	if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
+		source "${base}../../dot"
+
+		## BINDED FUNCTION
+		module::install "${MOD_NAME}"
+	fi
+}
+
+module::start

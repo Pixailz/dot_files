@@ -3,14 +3,19 @@
 function	module::install()
 {
 	local	module="${1}"
-	local	install_file="${DIR_MODULE}/${module}/install"
-	local	config_file="${DIR_MODULE}/${module}/.config"
+	local	install_file="${MODS_DIR_BASE}/${module}/install"
+	local	config_file="${MODS_DIR_BASE}/${module}/${MOD_CONFIG_FILE}"
 	local	tmp_func
 
-	# source module install file
-	source "${install_file}"
 	# source module config file
 	[ -f "${config_file}" ] && source "${config_file}" || true
+
+
+	# source module install file
+	if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
+		source "${install_file}"
+	fi
+
 	for prefix in ${PREFIX_INSTALL_MODULE[@]}; do
 		tmp_func="${prefix}::${module}"
 		[ "$(type -t ${tmp_func})" == "function" ] && ${tmp_func}
@@ -30,16 +35,18 @@ function	modules::install()
 		done
 	fi
 	for module in ${DO_MODULE[*]}; do
-		log::main_title "${GRE}${module}${RST}" 1 "${ORA}"
+		log::info "installing ${ORE}${module}${RST}"
+		((LOG_LEVEL++))
 		module::install "${module}"
-		echo
+		((LOG_LEVEL--))
+		log::pass "installed ${ORE}${module}${RST}"
 	done
 }
 
 function	dot::update()
 {
 	log::main_title "${GRE}Checking update${RST}" 1 "${LCYA}" 1
-	utils::update_repo "https://github.com/Pixailz/dot_files" "${INSTALL_DIR}"
+	utils::update_repo "https://github.com/Pixailz/dot_files" "${DOT_INSTALL_DIR}"
 	utils::update_repo "https://github.com/Pixailz/lib_bash" "${DIR_LIB_BASH%\/*}"
 }
 
@@ -139,6 +146,9 @@ function	parse::arg()
 	HAVE_PART=0
 	DO_MODULE=()
 
+	# is launched by module
+	[ "${0}" == "${1}" ] && shift 1
+
 	while [ "${1:-}" != "" ]; do
 		case "${1}" in
 			-f|--force)
@@ -167,7 +177,7 @@ function	parse::arg()
 				;;
 			*)
 				print::warn "wrong options ${RED}[${RST}${1}${RED}]${RST}"
-				usage
+				# usage
 				exit
 				;;
 		esac
@@ -190,9 +200,13 @@ source "${DIR_LIB_BASH}/.config"
 # source .config
 PATH_CONFIG=$(realpath ${BASH_SOURCE[0]})
 DIR_BASE=${PATH_CONFIG%/*}
-source ${DIR_BASE}/.config
+source "${DIR_BASE}/.config"
 
 parse::arg ${*}
 
+log::main_title "${GRE}DOT FILES${RST}" 1 "${RED}" 1
+
 # if not sourced, BASH_SOURCE keep current file when $0 keep launched file
 [ "${BASH_SOURCE[0]}" -ef "${0}" ] && modules::install
+
+LOG_PAD_STR="${LOG_PAD_STR_BAK}"
