@@ -29,6 +29,7 @@ function	install::i3::config()
 	utils::move_dir "${MOD_FILE_DIR}/polybar" "${DOT_CONFIG_DIR}/polybar" y
 	utils::move_file "${MOD_FILE_DIR}/termite/config" "${DOT_CONFIG_DIR}/termite/config"
 	utils::move_file "${MOD_FILE_DIR}/i3status/config" "${DOT_CONFIG_DIR}/i3status/config"
+	utils::move_file "${MOD_FILE_DIR}/picom/picom.conf" "${DOT_CONFIG_DIR}/picom/picom.conf"
 }
 
 function	install::i3::enable_dm()
@@ -51,8 +52,8 @@ function	pre::install::i3()
 
 function	install::i3()
 {
-	install::i3::package
-	install::i3::enable_dm
+	# install::i3::package
+	# install::i3::enable_dm
 	install::i3::config
 }
 

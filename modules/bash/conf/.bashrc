@@ -13,6 +13,13 @@ esac
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
+HAVE_MONO_FONT=1
+
+# load lib_bash, making all my function available to other script and even
+LIBBASH_CONFIG="${HOME}/.local/lib/lib_bash/.config"
+
+[ -f "${LIBBASH_CONFIG}" ] && . "${LIBBASH_CONFIG}"
+
 [ -f ~/.bash_aliases ] && . ~/.bash_aliases
 
 # don't put duplicate lines or lines starting with space in the history.
@@ -40,13 +47,6 @@ fi
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 HISTSIZE=1000
 HISTFILESIZE=2000
-
-HAVE_MONO_FONT=1
-
-# load lib_bash, making all my function available to other script and even
-LIBBASH_CONFIG="${HOME}/.local/lib/lib_bash/.config"
-
-[ -f "${LIBBASH_CONFIG}" ] && . "${LIBBASH_CONFIG}"
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"

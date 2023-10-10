@@ -2,23 +2,16 @@
 
 ## BINDED FUNCTION
 
-function	pre::install::gtk3()
+function	pre::install::wallpaper()
 {
 	utils::mkdir "${TARGET_DIR}"
 }
 
-function	install::gtk3()
+function	install::wallpaper()
 {
-	local	is_installed
-
 	utils::move_dir "${MOD_FILE_DIR}" "${TARGET_DIR}" y
-	pacman -Qi fluent-gtk-theme-git >/dev/null && is_installed=1 || is_installed=0
-	if [ "${is_installed}" == "0" ]; then
-		yay -Syu fluent-gtk-theme-git
-	fi
-	pacman -Qi fluent-gtk-icon-git >/dev/null && is_installed=1 || is_installed=0
-	if [ "${is_installed}" == "0" ]; then
-		yay -Syu fluent-gtk-icon-git
+	if [ ! -L "${HOME}/Pictures/selected_wallpaper" ]; then
+		ln -s "${MOD_FILE_DIR}/${SELECTED_WALLPAPER}" "${HOME}/Pictures/selected_wallpaper"
 	fi
 }
 

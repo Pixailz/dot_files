@@ -23,4 +23,5 @@ exec --no-startup-id /usr/bin/termite
 exec --no-startup-id /usr/bin/google-chrome-stable
 exec --no-startup-id /usr/bin/code
 
-exec_always feh --bg-fill "${HOME}/Pictures/wallpaper"
+exec picom --backend glx -b
+exec_always feh --bg-fill "${HOME}/Pictures/selected_wallpaper"
