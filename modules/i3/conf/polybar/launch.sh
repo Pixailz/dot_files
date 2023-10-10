@@ -6,20 +6,30 @@ while pgrep -u ${UID} -x polybar >/dev/null; do
 	sleep 1
 done
 
-SELECTED_BAR=(
-    # "top_left"
-    # "top_right"
-    "root"
-)
-
 echo "---" | tee -a /tmp/${SELECTED_BAR[@]}
 
-for bar in ${SELECTED_BAR[@]}; do
-    polybar "${bar}" 2>&1 | tee -a "/tmp/${bar}.log" & disown
-done
+launch_poly_bar()
+{
+	local	bar_name="${1?}"
+	local	monitor_index=${2:-1}
+	local	bar_monitor
 
-# if [ $(xrandr -q | grep 'HDMI connected') ]; then
-# 	polybar top_external &
-# fi
+	bar_monitor="$(xrandr --query | grep "${monitor_index} connected" | cut -d' ' -f1)"
+	BAR_MONITOR=${bar_monitor} \
+		polybar "${bar_name}" 2>&1 | \
+			tee -a "/tmp/${bar_name}.log" & \
+				disown
+}
+
+case ${NB_MONITOR:-1} in
+	1)
+		launch_poly_bar "primary_top_full"
+	;;
+	2)
+		launch_poly_bar "primary_top_right"
+		launch_poly_bar "secondary_top_left" 2
+	;;
+	*) notify-send "[POLYBAR]: found ${NB_MONITOR}, but no layout associated";
+esac
 
 echo "Bars launched..."
