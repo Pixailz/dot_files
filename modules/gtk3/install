@@ -16,9 +16,9 @@ function	install::gtk3()
 	if [ "${is_installed}" == "0" ]; then
 		yay -Syu fluent-gtk-theme-git
 	fi
-	pacman -Qi fluent-gtk-icon-git >/dev/null && is_installed=1 || is_installed=0
+	pacman -Qi fluent-icon-theme-git >/dev/null && is_installed=1 || is_installed=0
 	if [ "${is_installed}" == "0" ]; then
-		yay -Syu fluent-gtk-icon-git
+		yay -Syu fluent-icon-theme-git
 	fi
 }
 

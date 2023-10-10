@@ -34,7 +34,7 @@ function	install::i3::config()
 
 function	install::i3::enable_dm()
 {
-	systemctl status ly
+	systemctl --no-pager status ly
 	if [ "${?}" == "4" ]; then
 		sudo systemctl enable --now ly
 		sudo cp -f "${MOD_FILE_DIR}/ly/ly.service" "/usr/lib/systemd/system/ly.service"
@@ -52,8 +52,8 @@ function	pre::install::i3()
 
 function	install::i3()
 {
-	# install::i3::package
-	# install::i3::enable_dm
+	install::i3::package
+	install::i3::enable_dm
 	install::i3::config
 }
 
