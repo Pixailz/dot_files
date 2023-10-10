@@ -4,8 +4,11 @@ default_border pixel 1px
 default_floating_border pixel 1px
 hide_edge_borders smart
 
-gaps inner 10px
-# gaps outer 2px
+# POLYBAR
+# gaps top 30px
+
+gaps inner 2px
+gaps outer 1px
 
 smart_gaps on
 

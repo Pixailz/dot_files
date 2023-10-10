@@ -5,7 +5,7 @@
 set $ws1 "1 "
 set $ws2 "2 "
 set $ws3 "3 󰨞"
-set $ws4 "3 "
+set $ws4 "4 "
 set $font-style FiraCode NF 9
 
 include ./keybind
@@ -16,4 +16,5 @@ include ./style
 # finds out, if available)
 
 focus_follows_mouse no
+#focus_on_window_activation focus
 popup_during_fullscreen leave_fullscreen

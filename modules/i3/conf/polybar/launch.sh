@@ -1,28 +1,25 @@
 #!/usr/bin/env bash
 
-# Terminate already running bar instances
-# If all your bars have ipc enabled, you can use
-polybar-msg cmd quit
-# Otherwise you can use the nuclear option:
-# killall -q polybar
+killall -q polybar
 
-# Launch bar1 and bar2
-echo "---" | tee -a /tmp/polybar1.log #/tmp/polybar2.log
-polybar bar1 2>&1 | tee -a /tmp/polybar1.log & disown
-# polybar bar2 2>&1 | tee -a /tmp/polybar2.log & disown
+while pgrep -u ${UID} -x polybar >/dev/null; do
+	sleep 1
+done
+
+SELECTED_BAR=(
+    # "top_left"
+    # "top_right"
+    "root"
+)
+
+echo "---" | tee -a /tmp/${SELECTED_BAR[@]}
+
+for bar in ${SELECTED_BAR[@]}; do
+    polybar "${bar}" 2>&1 | tee -a "/tmp/${bar}.log" & disown
+done
+
+# if [ $(xrandr -q | grep 'HDMI connected') ]; then
+# 	polybar top_external &
+# fi
 
 echo "Bars launched..."
-
-# #!/bin/sh
-
-# killall -q polybar
-
-# while pgrep -u ${UID} -x polybar >/dev/null; do
-# 	sleep 1
-# done
-
-# polybar top &
-
-# # if [ $(xrandr -q | grep 'HDMI connected') ]; then
-# # 	polybar top_external &
-# # fi

@@ -15,13 +15,14 @@ exec --no-startup-id nm-applet
 
 # CUSTOM
 
-assign [class="Termite"] $ws1
+# assign [class="Termite"] $ws1
 assign [class="Google-chrome"] $ws2
 assign [class="Code"] $ws3
 
 exec --no-startup-id /usr/bin/termite
+exec --no-startup-id /sbin/nemo
 exec --no-startup-id /usr/bin/google-chrome-stable
 exec --no-startup-id /usr/bin/code
 
-exec picom --backend glx -b
+exec_always picom --backend glx -b
 exec_always feh --bg-fill "${HOME}/Pictures/selected_wallpaper"
