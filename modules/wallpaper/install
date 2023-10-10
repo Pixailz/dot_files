@@ -10,9 +10,10 @@ function	pre::install::wallpaper()
 function	install::wallpaper()
 {
 	utils::move_dir "${MOD_FILE_DIR}" "${TARGET_DIR}" y
-	if [ ! -L "${HOME}/Pictures/selected_wallpaper" ]; then
-		ln -s "${MOD_FILE_DIR}/${SELECTED_WALLPAPER}" "${HOME}/Pictures/selected_wallpaper"
+	if [ -L "${HOME}/Pictures/selected_wallpaper" ]; then
+		rm "${HOME}/Pictures/selected_wallpaper"
 	fi
+	ln -s "${MOD_FILE_DIR}/${SELECTED_WALLPAPER}" "${HOME}/Pictures/selected_wallpaper"
 }
 
 # Start

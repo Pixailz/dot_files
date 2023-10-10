@@ -36,9 +36,9 @@ function	install::i3::enable_dm()
 {
 	systemctl --no-pager status ly
 	if [ "${?}" == "4" ]; then
-		sudo systemctl enable --now ly
 		sudo cp -f "${MOD_FILE_DIR}/ly/ly.service" "/usr/lib/systemd/system/ly.service"
 		sudo cp -f "${MOD_FILE_DIR}/ly/config.ini" "/etc/ly/config.ini"
+		sudo systemctl enable --now ly
 		sudo systemctl daemon-reload
 	fi
 }
