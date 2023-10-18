@@ -21,3 +21,10 @@
 [user]
 	name = Pixailz
 	email = Pixailz1@gmail.com
+	signingkey = ~/.ssh/git
+
+[gpg]
+	format = ssh
+
+[commit]
+	gpgsign = true
