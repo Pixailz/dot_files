@@ -20,7 +20,7 @@ assign [class="Google-chrome"] $ws2
 assign [class="Code"] $ws3
 
 exec --no-startup-id /usr/bin/termite
-exec --no-startup-id /sbin/nemo
+# exec --no-startup-id /sbin/nemo
 exec --no-startup-id /usr/bin/google-chrome-stable
 exec --no-startup-id /usr/bin/code
 
