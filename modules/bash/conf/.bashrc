@@ -298,4 +298,6 @@ export LANG="en_US.UTF-8"
 export GIT_SSH_COMMAND="ssh -i ${HOME}/.ssh/git"
 export PATH="${HOME}/.local/bin:${PATH}"
 
+export PIP_BREAK_SYSTEM_PACKAGES=1
+
 trap 'echo -ne "\x1b]2;[$?] $(history 1 | sed "s/^[ ]*[0-9]*[ ]*//g")\007"' DEBUG
