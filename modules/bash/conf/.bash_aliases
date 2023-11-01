@@ -173,7 +173,7 @@ alias vsbashrc="vbashrc && sbashrc"
 
 alias nc="nc -v"
 
-alias watch="watch --color"
+alias wa="watch --interval 1 --differences --color"
 
 alias lssh="sudo tail -f -n+1 /var/log/auth.log | grep sshd"
 
