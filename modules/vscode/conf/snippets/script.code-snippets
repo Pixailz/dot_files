@@ -53,5 +53,16 @@
 			"",
 			"main()"
 		]
-	}
+	},
+
+	"Python3 Base class": {
+		"prefix": ["base_class_python"],
+		"description": "Python3 base class",
+		"scope": "python",
+		"body": [
+			"class\t${1:not_a_class_name}():",
+			"\tdef\t__init__(self):",
+			"\t\tpass",
+		]
+	},
 }
