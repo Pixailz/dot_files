@@ -172,7 +172,7 @@ fi
 if [ -z "${IS_WSL_INSTANCE}" ]; then
 	P_WSL=""
 else
-	P_WSL="[${P_GREEN}${LOGO_WSL}${RST}]"
+	P_WSL="[${P_GREEN}${LOGO_WINDOWS}${RST}]"
 fi
 
 GIT_UNTRACKED="!"
