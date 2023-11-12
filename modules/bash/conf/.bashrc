@@ -165,7 +165,15 @@ P_UAH="${P_USER}${P_AT}${P_HOST}"
 
 if [ -f /.dockerenv ]; then
 	P_DOCKER="[${P_CYAN}${LOGO_DOCKER}${RST}]"
-else P_DOCKER=""; fi
+else
+	P_DOCKER=""
+fi
+
+if [ -z "${IS_WSL_INSTANCE}" ]; then
+	P_WSL=""
+else
+	P_WSL="[${P_GREEN}${LOGO_WSL}${RST}]"
+fi
 
 GIT_UNTRACKED="!"
 GIT_UNSTAGED="?"
@@ -249,7 +257,7 @@ function	prompt::PS1() {
 
 	FL_L="[ ${P_EMOJI} ]${P_GIT}[${P_CWD}]"
 	FL_R="${P_SSH}[${P_TIME}]"
-	SL_L="[${P_RET}][${P_UAH}]${P_DOCKER}"
+	SL_L="[${P_RET}][${P_UAH}]${P_DOCKER}${P_WSL}"
 
 	if [ ! -z "${FL_R}" ]; then
 		FL_R_LEN=$(printf "%b" "${FL_R}" | perl -pe 's|\\\[\x1b\[.*?\]||g' | wc -m)
