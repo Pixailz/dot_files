@@ -257,7 +257,7 @@ function	prompt::PS1() {
 
 	FL_L="[ ${P_EMOJI} ]${P_GIT}[${P_CWD}]"
 	FL_R="${P_SSH}[${P_TIME}]"
-	SL_L="[${P_RET}][${P_UAH}]${P_DOCKER}${P_WSL}"
+	SL_L="[${P_RET}]${P_DOCKER}${P_WSL}[${P_UAH}]"
 
 	if [ ! -z "${FL_R}" ]; then
 		FL_R_LEN=$(printf "%b" "${FL_R}" | perl -pe 's|\\\[\x1b\[.*?\]||g' | wc -m)
