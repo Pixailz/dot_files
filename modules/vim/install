@@ -2,9 +2,19 @@
 
 ## BINDED FUNCTION
 
+function	install::vim::plugin()
+{
+	local	plugin_dir="${TARGET_DIR}/pack/vendor/start"
+
+	utils::mkdir "${plugin_dir}"
+	# utils::update_repo "https://github.com/preservim/nerdtree" "${plugin_dir}"
+}
+
 function	install::vim()
 {
 	utils::move_dir "${MOD_FILE_DIR}" "${TARGET_DIR}" y
+
+	install::vim::plugin
 }
 
 # Start

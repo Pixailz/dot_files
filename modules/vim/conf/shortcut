@@ -1,0 +1,11 @@
+" New Tab
+call MapKey('<C-t>', ':tabnew<CR>')
+
+" Save
+call MapKey('<C-s>', ':call Save()<CR>')
+
+" Save and quit
+call MapKey('<C-q>', ':call CloseTab()')
+
+" " open term
+" call MapKey('<C-`>', ':call ToggleTerm')
