@@ -1,7 +1,3 @@
-" Color
-" colorscheme molokai
-syntax on
-
 "" Line number
 set number
 
@@ -13,9 +9,9 @@ set tabstop=4
 set smartindent autoindent
 
 "" Show all character
-"  set list
-"  set listchars=tab:>-
-"  set listchars+=space:_
+set list
+set listchars=tab:>-
+set listchars+=space:_
 
 "" Cursor
 " Reference chart of values:
@@ -29,13 +25,5 @@ set smartindent autoindent
 let &t_SI = "\e[5 q"
 let &t_EI = "\e[1 q"
 
-"" Icons
-
-""" NERDTree
-" let g:NERDTreeDirArrowExpandable=""
-" let g:NERDTreeDirArrowCollapsible=""
-" let g:NERDTreeDirArrowExpandable=""
-" let g:NERDTreeDirArrowCollapsible=""
-
-let g:NERDTreeDirArrowExpandable=""
-let g:NERDTreeDirArrowCollapsible=""
+syntax on
+colorscheme onedark

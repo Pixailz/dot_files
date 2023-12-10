@@ -4,17 +4,31 @@
 
 function	install::vim::plugin()
 {
-	local	plugin_dir="${TARGET_DIR}/pack/vendor/start"
+	local	repo_link="${1?}"
 
-	utils::mkdir "${plugin_dir}"
-	# utils::update_repo "https://github.com/preservim/nerdtree" "${plugin_dir}"
+	utils::update_repo "${repo_link}" "${PLUGIN_DIR}"
+}
+
+function	install::vim::plugins()
+{
+	utils::mkdir "${PLUGIN_DIR}"
+
+	log::info "[${ORE}vim${RST}] Checking for plugins"
+	utils::update_repo "https://github.com/joshdick/onedark.vim" "${PLUGIN_DIR}"
+	utils::update_repo "https://github.com/tribela/vim-transparent" "${PLUGIN_DIR}"
+	utils::update_repo "https://github.com/preservim/nerdtree" "${PLUGIN_DIR}"
+	utils::update_repo "https://github.com/vim-airline/vim-airline" "${PLUGIN_DIR}"
+	utils::update_repo "https://github.com/ryanoasis/vim-devicons" "${PLUGIN_DIR}"
+	utils::update_repo "https://github.com/tiagofumo/vim-nerdtree-syntax-highlight" "${PLUGIN_DIR}"
+	utils::update_repo "https://github.com/airblade/vim-gitgutter" "${PLUGIN_DIR}"
 }
 
 function	install::vim()
 {
+	rm -rf "${TARGET_DIR}/colors"
 	utils::move_dir "${MOD_FILE_DIR}" "${TARGET_DIR}" y
 
-	install::vim::plugin
+	install::vim::plugins
 }
 
 # Start

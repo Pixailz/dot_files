@@ -157,6 +157,8 @@ case ${OS_ID} in
 		;;
 esac
 
+export OS_EMOJI
+
 P_EMOJI="${OS_COLOR}${OS_EMOJI}${RST}"
 P_USER="${USER_COLOR}\u${RST}"
 P_AT="${USER_COLOR}@${RST}"

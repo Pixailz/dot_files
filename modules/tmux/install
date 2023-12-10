@@ -4,18 +4,15 @@
 
 function	pre::install::tmux()
 {
-	SKIP_TERMUX=0
 	utils::mkdir "${TARGET_DIR}"
 }
 
 function	install::tmux()
 {
-	if [ "${OS_ID}" != "termux" ]; then
-		log::fail "wrong os, aborting"
-		SKIP_TERMUX=1
-		return
-	fi
 	utils::move_dir "${MOD_FILE_DIR}" "${TARGET_DIR}" y
+
+	utils::mkdir "${PLUGIN_DIR}"
+	utils::update_repo "https://github.com/tmux-plugins/tpm" "${PLUGIN_DIR}"
 }
 
 function	post::install::tmux()

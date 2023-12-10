@@ -1,5 +1,10 @@
 
-source ./style
-source ./utils
-source ./shortcut
-source ./autostart
+let	g:BASE_VIM = substitute($MYVIMRC, "/vimrc", "", "g")
+let	g:BASE_VIM_PLUGIN = BASE_VIM."/plugged"
+set t_Co=256
+
+exec "source ".BASE_VIM."/plugins.vim"
+exec "source ".BASE_VIM."/style.vim"
+exec "source ".BASE_VIM."/utils.vim"
+exec "source ".BASE_VIM."/shortcut.vim"
+exec "source ".BASE_VIM."/autostart.vim"

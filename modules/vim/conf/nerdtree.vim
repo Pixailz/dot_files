@@ -1,6 +1,3 @@
-" Display number of line in file
-" let g:NERDTreeFileLines = 1
-
 " Start NERDTree and put the cursor back in the other window.
 autocmd VimEnter * NERDTree | wincmd p
 
@@ -16,3 +13,15 @@ autocmd BufEnter *
 \ && exists('b:NERDTree') && b:NERDTree.isTabTree()
 \ | quit
 \ | endif
+
+" Display number of line in file
+" let g:NERDTreeFileLines = 1
+
+" let g:NERDTreeDirArrowExpandable=""
+" let g:NERDTreeDirArrowCollapsible=""
+" let g:NERDTreeDirArrowExpandable=""
+" let g:NERDTreeDirArrowCollapsible=""
+" let g:NERDTreeDirArrowExpandable=""
+" let g:NERDTreeDirArrowCollapsible=""
+let g:NERDTreeDirArrowExpandable=""
+let g:NERDTreeDirArrowCollapsible=""
