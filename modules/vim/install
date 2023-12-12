@@ -2,25 +2,52 @@
 
 ## BINDED FUNCTION
 
-function	install::vim::plugin()
+function	install::vim::plug()
 {
-	local	repo_link="${1?}"
+	local	repo_link="https://github.com/${1?}"
 
-	utils::update_repo "${repo_link}" "${PLUGIN_DIR}"
+	utils::update_repo "${repo_link}" "${PLUG_DIR}"
+}
+
+function	install::vim::coc()
+{
+	local	repo_link="https://github.com/${1?}"
+
+	utils::update_repo "${repo_link}" "${COC_DIR}"
 }
 
 function	install::vim::plugins()
 {
-	utils::mkdir "${PLUGIN_DIR}"
+	log::info "[${ORE}vim${RST}] Installing plugins"
 
-	log::info "[${ORE}vim${RST}] Checking for plugins"
-	utils::update_repo "https://github.com/joshdick/onedark.vim" "${PLUGIN_DIR}"
-	utils::update_repo "https://github.com/tribela/vim-transparent" "${PLUGIN_DIR}"
-	utils::update_repo "https://github.com/preservim/nerdtree" "${PLUGIN_DIR}"
-	utils::update_repo "https://github.com/vim-airline/vim-airline" "${PLUGIN_DIR}"
-	utils::update_repo "https://github.com/ryanoasis/vim-devicons" "${PLUGIN_DIR}"
-	utils::update_repo "https://github.com/tiagofumo/vim-nerdtree-syntax-highlight" "${PLUGIN_DIR}"
-	utils::update_repo "https://github.com/airblade/vim-gitgutter" "${PLUGIN_DIR}"
+	utils::mkdir "${PLUG_DIR}"
+	install::vim::plug "joshdick/onedark.vim"
+	install::vim::plug "tribela/vim-transparent"
+	install::vim::plug "preservim/nerdtree"
+	install::vim::plug "vim-airline/vim-airline"
+	install::vim::plug "ryanoasis/vim-devicons"
+	install::vim::plug "tiagofumo/vim-nerdtree-syntax-highlight"
+	install::vim::plug "airblade/vim-gitgutter"
+	install::vim::plug "mhinz/vim-signify"
+	install::vim::plug "ctrlpvim/ctrlp.vim"
+	install::vim::plug "neoclide/coc.nvim"
+
+	# utils::mkdir "${COC_DIR}"
+	# install::vim::coc "neoclide/coc-git"
+	# install::vim::coc "neoclide/coc-highlight"
+	# install::vim::coc "neoclide/coc-json"
+	# install::vim::coc "neoclide/coc-python"
+	# install::vim::coc "neoclide/coc-tsserver"
+	# install::vim::coc "neoclide/coc-yaml"
+	# install::vim::coc "josa42/coc-docker"
+	# install::vim::coc "josa42/coc-go"
+	# install::vim::coc "josa42/coc-lua"
+	# install::vim::coc "fannheyward/coc-markdownlint"
+	# install::vim::coc "fannheyward/coc-sql"
+	# install::vim::coc "fannheyward/coc-xml"
+	# install::vim::coc "yaegassy/coc-ansible"
+	# install::vim::coc "weirongxu/coc-markdown-preview-enhanced"
+	# install::vim::coc "iamcco/coc-vimlsp"
 }
 
 function	install::vim()
