@@ -6,6 +6,7 @@ set mouse=a
 
 "" Tabulation
 set tabstop=4
+set shiftwidth=4
 set smartindent autoindent
 
 "" Show all character
