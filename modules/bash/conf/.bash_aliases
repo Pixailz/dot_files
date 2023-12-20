@@ -178,4 +178,4 @@ alias wa="watch --interval 1 --differences --color"
 alias lssh="sudo tail -f -n+1 /var/log/auth.log | grep sshd"
 
 alias ntmux="tmux new -s"
-alias gdb="gdb -x ${HOME}/.config/gdb/.gdbinit"
+alias gdb="gdb -x ${HOME}/.config/gdb/.gdbinit --args"
