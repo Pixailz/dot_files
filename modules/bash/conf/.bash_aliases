@@ -179,3 +179,18 @@ alias lssh="sudo tail -f -n+1 /var/log/auth.log | grep sshd"
 
 alias ntmux="tmux new -s"
 alias gdb="gdb -x ${HOME}/.config/gdb/.gdbinit --args"
+
+export SCRCPY_PUSH_TARGET="/storage/emulated/0/Documents"
+
+if [ -z "${IS_WSL_INSTANCE}" ]; then
+	alias sscrcpy="scrcpy \
+		--hid-keyboard\
+		--push-target=${SCRCPY_PUSH_TARGET} \
+		--stay-awake \
+		--turn-screen-off \
+		--fullscreen \
+		"
+else
+	# TODO
+	# alias sscrcpy="scrcpy "
+fi
