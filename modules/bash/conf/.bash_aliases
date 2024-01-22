@@ -191,6 +191,7 @@ if [ -z "${IS_WSL_INSTANCE}" ]; then
 		--fullscreen \
 		"
 else
+	:
 	# TODO
 	# alias sscrcpy="scrcpy "
 fi
