@@ -106,6 +106,35 @@ function	netar::send()
 	tar cvf - "${folder}" | nc "${target_ip}" "${target_port}";
 }
 
+function	ffmpeg::to_gif()
+{
+	local	input_file="${1?}"
+	local	output_file="${2:-output.gif}"
+	local	height="${3:-320}"
+	local	duration="${4:-10}"
+	local	skip_time="${5:-0}"
+
+	ffmpeg -i "${input_file}" \
+		-ss "${skip_time}" \
+		-t "${duration}" \
+		-vf "fps=10,scale=${height}:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" \
+		-loop 0 \
+		-y "${output_file}"
+}
+
+function	ffmpeg::to_mp4()
+{
+	local	input_file="${1?}"
+	local	output_file="${2:-output.mp4}"
+
+	ffmpeg -i "${input_file}" \
+		-c:v libx265 \
+		-x265-params lossless=1 \
+		-c:a libfdk_aac \
+		-b:a 128k \
+		-y "${output_file}"
+}
+
 # Alias
 
 # Enable color support of ls and also add handy aliases
