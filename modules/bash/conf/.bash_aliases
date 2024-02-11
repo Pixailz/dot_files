@@ -162,15 +162,17 @@ alias la="ls -la"
 alias l="ls"
 
 ## batcat
-if [ "$(is::installed batcat)" == 1 ]; then
-	export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
-	alias bat="batcat"
+function dbat()
+{
+	git diff --name-only --relative --diff-filter=d | xargs batcat --diff
+}
 
-	function dbat()
-	{
-		git diff --name-only --relative --diff-filter=d | xargs batcat --diff
-	}
-fi
+function	mann()
+{
+	local	man="man"
+	[ -x $(type -P batman) ] && man="batman"
+	${man} ${@}
+}
 
 ## John
 alias john="/usr/local/bin/john"
