@@ -27,4 +27,4 @@ let &t_SI = "\e[5 q"
 let &t_EI = "\e[1 q"
 
 syntax on
-colorscheme onedark
+colorscheme desert

@@ -6,9 +6,6 @@ endif
 call plug#begin()
 	exec "source ".BASE_VIM."/airline.vim"
 
-	Plug 'joshdick/onedark.vim'
-	Plug 'tribela/vim-transparent'
-
 	Plug 'preservim/nerdtree'
 	Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 

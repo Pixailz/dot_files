@@ -21,8 +21,6 @@ function	install::vim::plugins()
 	log::info "[${ORE}vim${RST}] Installing plugins"
 
 	utils::mkdir "${PLUG_DIR}"
-	install::vim::plug "joshdick/onedark.vim"
-	install::vim::plug "tribela/vim-transparent"
 	install::vim::plug "preservim/nerdtree"
 	install::vim::plug "vim-airline/vim-airline"
 	install::vim::plug "ryanoasis/vim-devicons"
