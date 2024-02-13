@@ -2,17 +2,15 @@
 
 ## BINDED FUNCTION
 
-function	pre::install::gdb()
-{
-	utils::mkdir "${TARGET_DIR}"
-}
+# function	pre::install::mimetype()
+# {
+# 	utils::mkdir "${TARGET_DIR}"
+# }
 
-function	install::gdb()
+function	install::mimetype()
 {
-	[ ! -f "${TARGET_DIR}/gdbinit-gef.py" ] && \
-		curl -# -o "${TARGET_DIR}/gdbinit-gef.py" -L https://gef.blah.cat/py
-	utils::move_file "${MOD_FILE_DIR}/gdbinit-base" "${TARGET_DIR}"
-	utils::move_file "${MOD_FILE_DIR}/gdbinit-gef" "${TARGET_DIR}"
+	xdg-mime default "${FILE_EXPLORER}.desktop" application/x-directory
+	xdg-mime default "${FILE_EXPLORER}.desktop" inode/directory
 }
 
 # Start
@@ -29,7 +27,7 @@ function	module::start()
 	# if not sourced, BASH_SOURCE keep current file when $0 keep launched file
 	if [ "${BASH_SOURCE[0]}" -ef "${0}" ]; then
 		source "${base}../../dot"
-		source "${base}${MOD_CONFIG_FILE}"
+
 		## BINDED FUNCTION
 		module::install "${MOD_NAME}"
 	fi

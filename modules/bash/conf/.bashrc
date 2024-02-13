@@ -305,7 +305,7 @@ export LC_TIME="fr_FR.UTF-8",
 export LC_NUMERIC="fr_FR.UTF-8",
 export LANG="en_US.UTF-8"
 
-export GIT_SSH_COMMAND="ssh -i ${HOME}/.ssh/git"
+# export GIT_SSH_COMMAND="ssh -i ${HOME}/.ssh/git"
 export PATH="${HOME}/.local/bin:${PATH}"
 
 export PIP_BREAK_SYSTEM_PACKAGES=1

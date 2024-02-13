@@ -167,11 +167,11 @@ function dbat()
 	git diff --name-only --relative --diff-filter=d | xargs batcat --diff
 }
 
-function	mann()
+function	man()
 {
 	local	man="man"
 	[ -x $(type -P batman) ] && man="batman"
-	${man} ${@}
+	/usr/bin/${man} ${@}
 }
 
 ## John
@@ -209,7 +209,14 @@ alias wa="watch --interval 1 --differences --color"
 alias lssh="sudo tail -f -n+1 /var/log/auth.log | grep sshd"
 
 alias ntmux="tmux new -s"
-alias gdb="gdb -x ${HOME}/.config/gdb/.gdbinit --args"
+
+function	gdb()
+{
+	local	config="gdbinit-base"
+
+	[ "${GDB_DISABLE_GEF:-0}" == "1" ] || config="gdbinit-gef"
+	/usr/bin/gdb -x "${HOME}/.config/gdb/${config}"
+}
 
 export SCRCPY_PUSH_TARGET="/storage/emulated/0/Documents"
 
