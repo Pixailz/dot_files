@@ -90,6 +90,9 @@ bindsym $ModWs+Left workspace prev
 bindsym $ModWs+Shift+Right move to workspace next; workspace next
 bindsym $ModWs+Shift+Left move to workspace prev; workspace prev
 
+bindsym $mod+Ctrl+Right move workspace to output right
+bindsym $mod+Ctrl+Left move workspace to output left
+
 # switch to workspace
 bindsym $mod+1 workspace number $ws1
 bindsym $mod+2 workspace number $ws2
