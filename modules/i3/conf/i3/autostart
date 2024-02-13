@@ -26,7 +26,3 @@ exec --no-startup-id /usr/bin/code
 
 exec_always picom --backend glx -b
 exec_always feh --bg-fill "${HOME}/Pictures/selected_wallpaper"
-
-# exec_always xrandr \
-# 	--output Virtual1 --primary --mode 1920x1080 --pos 1080x840 --rotate normal \
-# 	--output Virtual2 --mode 1920x1080 --pos 0x0 --rotate left

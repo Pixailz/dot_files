@@ -23,7 +23,7 @@ launch_poly_bar()
 
 NB_MONITOR="$(xrandr --query | grep -E "[0-9]+ connected" | wc -l)"
 
-case ${NB_MONITOR:-1} in
+case "${NB_MONITOR:-1}" in
 	1)
 		launch_poly_bar "primary_top_full" "DP"
 	;;
