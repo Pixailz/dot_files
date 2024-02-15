@@ -11,8 +11,7 @@ function	install::gdb()
 {
 	[ ! -f "${TARGET_DIR}/gdbinit-gef.py" ] && \
 		curl -# -o "${TARGET_DIR}/gdbinit-gef.py" -L https://gef.blah.cat/py
-	utils::move_file "${MOD_FILE_DIR}/gdbinit-base" "${TARGET_DIR}"
-	utils::move_file "${MOD_FILE_DIR}/gdbinit-gef" "${TARGET_DIR}"
+	utils::move_dir "${MOD_FILE_DIR}" "${TARGET_DIR}" y
 }
 
 # Start

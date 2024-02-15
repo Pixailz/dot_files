@@ -215,7 +215,7 @@ function	gdb()
 	local	config="gdbinit-base"
 
 	[ "${GDB_DISABLE_GEF:-0}" == "1" ] || config="gdbinit-gef"
-	/usr/bin/gdb -x "${HOME}/.config/gdb/${config}"
+	/usr/bin/gdb -x "${HOME}/.config/gdb/${config}" ${@}
 }
 
 export SCRCPY_PUSH_TARGET="/storage/emulated/0/Documents"
