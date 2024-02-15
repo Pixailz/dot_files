@@ -210,3 +210,92 @@ log::main_title "${GRE}DOT FILES${RST}" 1 "${RED}" 1
 [ "${BASH_SOURCE[0]}" -ef "${0}" ] && modules::install
 
 LOG_PAD_STR="${LOG_PAD_STR_BAK}"
+
+exit
+
+function	menu::set::title()
+{
+	TO_RENDER_TITLE="\x1b[0;0HTITLE v1.0.0"
+}
+
+function	menu::set::date()
+{
+	printf -v TO_RENDER_DATE '%(%d-%m-%Y %H:%M:%S)T' -1
+	local	pos=$((SCREEN_SIZE[1] - ${#TO_RENDER_DATE} + 1))
+	TO_RENDER_DATE="\x1b[0;${pos}H${TO_RENDER_DATE}\n\n"
+}
+
+function	menu::set::item()
+{
+	local	i=1
+	TO_RENDER_ITEM="Choose a module to run in the list below and press enter:\n\n"
+
+	for mods in ${MODULE[@]}; do
+		if [ "${i}" == "${SEL_ID}" ]; then
+			TO_RENDER_ITEM+="- ${SEL_FMT_BEG}${mods}${SEL_FMT_END}\n"
+		else
+			TO_RENDER_ITEM+="- ${mods}\n"
+		fi
+		((i++))
+	done
+}
+
+SCREEN_SIZE=($(echo -e "lines\ncols"|tput -S))
+SEL_ID=1
+SEL_MAX=
+SEL_FMT_BEG="\x1b[3m\x1b[5m\x1b[4m\x1b[7m\x1b[1;32m"
+SEL_FMT_END="\x1b[0m"
+menu::set::title
+
+function	render::menu()
+{
+	printf "${CLR_SCR}"
+	menu::set::date
+	menu::set::item
+	TO_RENDER="${TO_RENDER_TITLE}${TO_RENDER_DATE}${TO_RENDER_ITEM}"
+	printf "%b" "${TO_RENDER}"
+}
+
+function	post_key_press()
+{
+	if [ "${KEY_PRESS}" == "UP" -a ${SEL_ID} -gt 1 ]; then
+		((SEL_ID--))
+	elif [ "${KEY_PRESS}" == "DOWN" -a ${SEL_ID} -lt ${#MODULE[@]} ]; then
+		((SEL_ID++))
+	fi
+}
+
+# https://abs.traduc.org/abs-fr/ch05s02.html (chapter 5.3)
+function	key_press()
+{
+	unset T1 T2 T3 KEY_PRESS
+	read -s -N1 T1
+	read -s -N2 -t 0.001 T2
+	read -s -N1 -t 0.001 T3
+	local	mode="$T1$T2$T3"
+
+	case "${mode}" in
+		$'\x1b\x5b\x41')		KEY_PRESS="UP" ;;		# UP ARROW
+		$'\x77')				KEY_PRESS="UP" ;;		# 'w'
+		$'\x1b\x5b\x42')		KEY_PRESS="DOWN" ;;		# DOWN ARROW
+		$'\x73')				KEY_PRESS="DOWN" ;;		# 's'
+		$'\x1b\x5b\x43')		KEY_PRESS="LEFT" ;;		# LEFT ARROW
+		$'\x61')				KEY_PRESS="LEFT" ;;		# 's'
+		$'\x1b\x5b\x44')		KEY_PRESS="RIGHT" ;;	# RIGHT ARROW
+		$'\x64')				KEY_PRESS="RIGHT" ;;	# 'd'
+		$'\x0a')				KEY_PRESS="ENTER" ;;	# ENTER
+		*)
+			printf "UNKNOWN KEY 0x$(printf '%b' ${mode} | xxd -ps)\n"
+			KEY_PRESS="UNKNOWN"
+		;;
+	esac
+	post_key_press
+	render::menu
+	printf "KEY ${KEY_PRESS} PRESSED\n"
+}
+
+render::menu
+
+# keypress
+while key_press; do :; done
+
