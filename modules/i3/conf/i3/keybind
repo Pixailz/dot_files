@@ -115,7 +115,7 @@ bindsym $mod+q kill
 # Application
 bindsym $mod+c exec code
 bindsym $mod+g exec google-chrome-stable
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec termite
 
 bindsym $mod+d exec "rofi -font '$font-style' -modi drun,run -show drun"
 
