@@ -120,3 +120,6 @@ bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+d exec "rofi -font '$font-style' -modi drun,run -show drun"
 
 bindsym $mod+l exec i3lock
+
+bindsym Print exec maim --hidecursor --window $(xdotool getactivewindow) | xclip -selection clipboard -t image/png
+bindsym $mod+Print exec maim --select --hidecursor --nodrag | xclip -selection clipboard -t image/png
