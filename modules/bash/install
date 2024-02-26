@@ -4,6 +4,8 @@
 
 function	pre::install::bash()
 {
+	# make linux use local time in case of dual boot
+	timedatectl set-local-rtc 1 --adjust-system-clock
 	utils::mkdir "${TARGET_DIR}"
 }
 
