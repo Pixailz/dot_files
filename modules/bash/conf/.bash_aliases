@@ -162,7 +162,7 @@ alias la="ls -la"
 alias l="ls"
 
 ## batcat
-function dbat()
+function	dbat()
 {
 	git diff --name-only --relative --diff-filter=d | xargs batcat --diff
 }
