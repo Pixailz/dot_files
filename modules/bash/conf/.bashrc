@@ -311,6 +311,7 @@ export PATH="${HOME}/.local/bin:${PATH}"
 export PIP_BREAK_SYSTEM_PACKAGES=1
 
 # Display previous command as title of the GUI terminal
-trap 'echo -ne "\x1b]2;[$?] $(history 1 | sed "s/^[ ]*[0-9]*[ ]*//g")\007"' DEBUG
+# trap 'echo -ne "\x1b]2;[$?] $(history 1 | sed "s/^[ ]*[0-9]*[ ]*//g")\007"' DEBUG
+# TOFIX: create weird behavior with escaped characters
 
 export DEBUGINFOD_URLS=https://debuginfod.archlinux.org/
