@@ -5,15 +5,47 @@
 function	pre::install::bash()
 {
 	# make linux use local time in case of dual boot
-	timedatectl set-local-rtc 1 --adjust-system-clock
+	sudo timedatectl set-local-rtc 1 --adjust-system-clock
 	utils::mkdir "${TARGET_DIR}"
 }
 
 function	install::bash()
 {
 	utils::move_dir "${MOD_FILE_DIR}" "${TARGET_DIR}" y
+	if ! pkg::is_installed hstr; then
+		if ! grep -oE "# HSTR configuration" ~/.bashrcc &>/dev/null; then
+			cat <<-'HSTRCONFIG' >> ~/.bashrc
+# HSTR configuration
+
+# ensure synchronization between bash memory and history file
+export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"
+function hstrnotiocsti {
+    { READLINE_LINE="$( { </dev/tty hstr ${READLINE_LINE}; } 2>&1 1>&3 3>&- )"; } 3>&1;
+    READLINE_POINT=${#READLINE_LINE}
 }
 
+# if this is interactive shell, then bind hstr to Ctrl-r (for Vi mode check doc)
+[[ $- =~ .*i.* ]] && bind -x '"\C-r": "hstrnotiocsti"'
+
+export HSTR_TIOCSTI=n
+export HSTR_CONFIG=hicolor,prompt-bottom,help-on-opposite-side,case-sensitive,no-confirm,verbose-kill,regexp-matching
+			HSTRCONFIG
+		fi
+	fi
+}
+: <<-'COMMENT'
+
+
+
+function hstrnotiocsti {
+    { READLINE_LINE="$( { </dev/tty hstr ${READLINE_LINE}; } 2>&1 1>&3 3>&- )"; } 3>&1;
+    READLINE_POINT=${#READLINE_LINE}
+}
+# if this is interactive shell, then bind hstr to Ctrl-r (for Vi mode check doc)
+if [[ $- =~ .*i.* ]]; then bind -x '"\C-r": "hstrnotiocsti"'; fi
+export HSTR_TIOCSTI=n
+
+COMMENT
 function	post::install::bash()
 {
 	log::warn "to make effect you have to source your ${RED}~/.bashrc${RST}" 1
