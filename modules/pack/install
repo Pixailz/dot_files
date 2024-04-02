@@ -107,7 +107,13 @@ function	configure::pacman()
 	# activate color
 	sudo sed -i "s/#Color/Color/" "${target}"
 	# best option ever
-	sudo sed -i "38 i ILoveCandy" "${target}"
+	if ! grep ILoveCandy "${target}" &>/dev/null; then
+		sudo sed -i "38 i ILoveCandy" "${target}"
+	fi
+	if ! grep -E "^\[multilib\]" /etc/pacman.conf &>/dev/null; then
+		sudo bash -c 'echo "[multilib]" >> /etc/pacman.conf'
+		sudo bash -c 'echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf'
+	fi
 }
 
 function	install::arch()

@@ -14,11 +14,11 @@ function	install::gtk3()
 	utils::move_dir "${MOD_FILE_DIR}" "${TARGET_DIR}" y
 	pacman -Qi fluent-gtk-theme-git >/dev/null && is_installed=1 || is_installed=0
 	if [ "${is_installed}" == "0" ]; then
-		yay -Syu fluent-gtk-theme-git
+		yay -Syu --noconfirm fluent-gtk-theme-git
 	fi
 	pacman -Qi fluent-icon-theme-git >/dev/null && is_installed=1 || is_installed=0
 	if [ "${is_installed}" == "0" ]; then
-		yay -Syu fluent-icon-theme-git
+		yay -Syu --noconfirm fluent-icon-theme-git
 	fi
 }
 
