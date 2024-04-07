@@ -12,8 +12,8 @@ function	pre::install::bash()
 function	install::bash()
 {
 	utils::move_dir "${MOD_FILE_DIR}" "${TARGET_DIR}" y
-	if ! pkg::is_installed hstr; then
-		if ! grep -oE "# HSTR configuration" ~/.bashrcc &>/dev/null; then
+	if [ "$(is::available hstr)" == "1" ]; then
+		if ! grep -oE "# HSTR configuration" ~/.bashrc &>/dev/null; then
 			cat <<-'HSTRCONFIG' >> ~/.bashrc
 # HSTR configuration
 

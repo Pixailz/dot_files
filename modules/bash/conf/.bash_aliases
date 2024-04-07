@@ -170,7 +170,8 @@ function	dbat()
 function	man()
 {
 	local	man="man"
-	[ -x $(type -P batman) ] && man="batman"
+
+	[ "$(is::available batman)" == "1" ] && man="batman"
 	/usr/bin/${man} ${@}
 }
 
@@ -223,7 +224,7 @@ export SCRCPY_PUSH_TARGET="/storage/emulated/0/Documents"
 if [ -z "${IS_WSL_INSTANCE}" ]; then
 	alias sscrcpy="scrcpy \
 		--hid-keyboard\
-		--push-target=${SCRCPY_PUSH_TARGET} \
+		--push-target="${SCRCPY_PUSH_TARGET}" \
 		--stay-awake \
 		--turn-screen-off \
 		--fullscreen \
@@ -233,3 +234,10 @@ else
 	# TODO
 	# alias sscrcpy="scrcpy "
 fi
+
+# function	ftop()
+# {
+# 	local	prog
+
+# 	if [  ]
+# }

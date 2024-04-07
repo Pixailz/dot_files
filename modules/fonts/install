@@ -28,12 +28,12 @@ function	pre::install::fonts()
 		termux) 			DIR_FONT="${HOME}/.termux"					;;
 		ubuntu|kali|debian|arch)	DIR_FONT="${HOME}/.local/share/fonts"	;;
 	esac
-	if [ "$(is::installed unzip)" == 0 ]; then
+	if [ "$(is::available unzip)" == 0 ]; then
 		NO_UNZIP=1
 		log::warn "unzip isn't installed, installing it"
 		case ${OD_ID} in
 			ubuntu|kali|debian)
-				sudo apt install -Y unzip
+				sudo apt install -y unzip
 			;;
 			"arch")
 				sudo pacman -Syu --noconfirm unzip
