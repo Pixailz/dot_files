@@ -167,14 +167,6 @@ function	dbat()
 	git diff --name-only --relative --diff-filter=d | xargs batcat --diff
 }
 
-function	man()
-{
-	local	man="man"
-
-	[ "$(is::available batman)" == "1" ] && man="batman"
-	/usr/bin/${man} ${@}
-}
-
 ## John
 alias john="/usr/local/bin/john"
 
@@ -234,10 +226,3 @@ else
 	# TODO
 	# alias sscrcpy="scrcpy "
 fi
-
-# function	ftop()
-# {
-# 	local	prog
-
-# 	if [  ]
-# }
