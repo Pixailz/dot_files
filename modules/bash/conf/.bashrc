@@ -315,6 +315,7 @@ export GIT_SSH_COMMAND="ssh -i ${HOME}/.ssh/git"
 export PATH="${HOME}/.local/bin:${PATH}"
 
 export PIP_BREAK_SYSTEM_PACKAGES=1
+export PYTHONDONTWRITEBYTECODE=1
 
 if [ $(is::available "bat") ] || [ $(is::available "batcat") ]; then
 	export MANROFFOPT="-c"
