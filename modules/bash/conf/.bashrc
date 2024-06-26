@@ -85,7 +85,7 @@ tabs 4
 if [ "${color_prompt}" = yes ]; then
 	P_ESC="\[\e"
 	P_END="\]"
-	RST="${P_ESC}[0m${P_END}"
+	P_RST="${P_ESC}[0m${P_END}"
 
 	P_RED="${P_ESC}${ANSI["RED"]}${P_END}"
 	P_GREEN="${P_ESC}${ANSI["GRE"]}${P_END}"
@@ -104,11 +104,11 @@ if [ "${color_prompt}" = yes ]; then
 	WORK_DIR_COLOR="${P_BOLD}${P_DFL_BLUE}"
 	USER_COLOR="${P_BOLD}${P_ORANGE}"
 	COMMAND_COLOR=""
-	PS0="${RST}"
+	PS0="${P_RST}"
 fi
 
 if [ "${SSH_CLIENT}" ]; then
-	P_SSH="[${P_BOLD}${P_RED}${LOGO_SSH}${SSH_CLIENT/ */}${RST}]"
+	P_SSH="[${P_BOLD}${P_RED}${LOGO_SSH}${SSH_CLIENT/ */}${P_RST}]"
 fi
 
 # set shebang because \$ don't work :'(
@@ -159,14 +159,14 @@ esac
 
 export OS_EMOJI
 
-P_EMOJI="${OS_COLOR}${OS_EMOJI}${RST}"
-P_USER="${USER_COLOR}\u${RST}"
-P_AT="${USER_COLOR}@${RST}"
-P_HOST="${USER_COLOR}\h${RST}"
+P_EMOJI="${OS_COLOR}${OS_EMOJI}${P_RST}"
+P_USER="${USER_COLOR}\u${P_RST}"
+P_AT="${USER_COLOR}@${P_RST}"
+P_HOST="${USER_COLOR}\h${P_RST}"
 P_UAH="${P_USER}${P_AT}${P_HOST}"
 
 if [ -f /.dockerenv ]; then
-	P_DOCKER="[${P_CYAN}${LOGO_DOCKER}${RST}]"
+	P_DOCKER="[${P_CYAN}${LOGO_DOCKER}${P_RST}]"
 else
 	P_DOCKER=""
 fi
@@ -174,7 +174,7 @@ fi
 if [ -z "${IS_WSL_INSTANCE}" ]; then
 	P_WSL=""
 else
-	P_WSL="[${P_GREEN}${LOGO_WINDOWS}${RST}]"
+	P_WSL="[${P_GREEN}${LOGO_WINDOWS}${P_RST}]"
 fi
 
 GIT_UNTRACKED="!"
@@ -204,28 +204,28 @@ function	prompt::get_git_status()
 	local	commit_ahead	# ⇡
 
 	branch_name=$(perl -ne "print if s|## (.*?)\..*|\1|g" <<<"${git_status}")
-	branch_name="${P_GREEN}${LOGO_GIT} ${branch_name}${RST}"
+	branch_name="${P_GREEN}${LOGO_GIT} ${branch_name}${P_RST}"
 
 	untracked=$(git ls-files --others --exclude-standard | wc -l)
 	if [ "${untracked}" -ne 0 ]; then
-		untracked="${P_ORANGE}${GIT_UNTRACKED}${untracked}${RST}"
+		untracked="${P_ORANGE}${GIT_UNTRACKED}${untracked}${P_RST}"
 	else untracked="" ; fi
 	unstaged=$(grep -E "^( D| M| A)" <<<"${git_status}" | wc -l)
 	if [ "${unstaged}" -ne 0 ]; then
-		unstaged="${P_CYAN}${GIT_UNSTAGED}${unstaged}${RST}"
+		unstaged="${P_CYAN}${GIT_UNSTAGED}${unstaged}${P_RST}"
 	else unstaged="" ; fi
 	staged=$(grep -E "^(D |M |A )" <<<"${git_status}" | wc -l)
 	if [ "${staged}" -ne 0 ]; then
-		staged="${P_GREEN}${GIT_STAGED}${staged}${RST}"
+		staged="${P_GREEN}${GIT_STAGED}${staged}${P_RST}"
 	else staged="" ; fi
 
 	commit_ahead=$(perl -ne "print if s|^##.*\[ahead ([0-9]*)]|\1|g" <<<"${git_status}")
 	if [ "${commit_ahead:-0}" -ne 0 ]; then
-		commit_ahead="${P_PURPLE}${GIT_COMMIT_AHEAD}${commit_ahead}${RST}"
+		commit_ahead="${P_PURPLE}${GIT_COMMIT_AHEAD}${commit_ahead}${P_RST}"
 	else commit_ahead="" ; fi
 
 	if [ -z "${commit_ahead}" -a -z "${staged}" -a -z "${untracked}" -a -z "${unstaged}" ]; then
-		P_GIT="[ ${branch_name} ${P_GREEN}${GIT_ALL_GOOD}${RST} ]"
+		P_GIT="[ ${branch_name} ${P_GREEN}${GIT_ALL_GOOD}${P_RST} ]"
 	else
 		P_GIT="[ ${branch_name} ${commit_ahead}${staged}${untracked}${unstaged} ]"
 	fi
@@ -249,8 +249,8 @@ function	prompt::PS1() {
 		*)	EXIT="${EXIT}" ;;
 	esac
 
-	P_CWD="${WORK_DIR_COLOR}\w${RST}"
-	P_RET="${status_color}${EXIT}${RST}"
+	P_CWD="${WORK_DIR_COLOR}\w${P_RST}"
+	P_RET="${status_color}${EXIT}${P_RST}"
 	P_TIME="$(date +%T)"
 	TERM_WIDTH=$(tput cols)
 
@@ -260,7 +260,7 @@ function	prompt::PS1() {
 	if [ "${VIRTUAL_ENV:-}" == "" ]; then
 		P_VENV=""
 	else
-		P_VENV="[${P_GREEN}${LOGO_PY}${RST}]"
+		P_VENV="[${P_GREEN}${LOGO_PY}${P_RST}]"
 	fi
 
 	FL_L="[ ${P_EMOJI} ]${P_GIT}[${P_CWD}]"
