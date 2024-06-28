@@ -280,6 +280,8 @@ function	prompt::PS1() {
 	FIRST_LINE="${FL_L}${FL_R_POS}${FL_R}\n"
 	SECOND_LINE="${SL_L}"
 
+	# set cursor shape
+	printf "\x1b[5 q"
 	PS1="${FIRST_LINE}${SECOND_LINE} ${SHEBANG}${COMMAND_COLOR} "
 
 	unset P_GIT
@@ -301,20 +303,17 @@ unset color_prompt force_color_prompt
 # set tab on bash debug
 export PS4="    "
 
-# set cursor shape
-printf "\x1b[5 q"
-
 export LANGUAGE="en_US:en"
 export LC_ALL="en_US.UTF-8"
-export LC_ADDRESS="fr_FR.UTF-8",
-export LC_NAME="fr_FR.UTF-8",
-export LC_MONETARY="fr_FR.UTF-8",
-export LC_PAPER="fr_FR.UTF-8",
-export LC_IDENTIFICATION="fr_FR.UTF-8",
-export LC_TELEPHONE="fr_FR.UTF-8",
-export LC_MEASUREMENT="fr_FR.UTF-8",
-export LC_TIME="fr_FR.UTF-8",
-export LC_NUMERIC="fr_FR.UTF-8",
+export LC_ADDRESS="fr_FR.UTF-8"
+export LC_NAME="fr_FR.UTF-8"
+export LC_MONETARY="fr_FR.UTF-8"
+export LC_PAPER="fr_FR.UTF-8"
+export LC_IDENTIFICATION="fr_FR.UTF-8"
+export LC_TELEPHONE="fr_FR.UTF-8"
+export LC_MEASUREMENT="fr_FR.UTF-8"
+export LC_TIME="fr_FR.UTF-8"
+export LC_NUMERIC="fr_FR.UTF-8"
 export LANG="en_US.UTF-8"
 
 export GIT_SSH_COMMAND="ssh -i ${HOME}/.ssh/git"
