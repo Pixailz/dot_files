@@ -99,6 +99,7 @@ if [ "${color_prompt}" = yes ]; then
 	P_BLACK="${P_ESC}${ANSI["BLA"]}${P_END}"
 	P_GRAY="${P_ESC}${ANSI["GRA"]}${P_END}"
 	P_BOLD="${P_ESC}${ANSI["BOL"]}${P_END}"
+	P_RBOLD="${P_ESC}${ANSI["RBOL"]}${P_END}"
 	P_DFL_BLUE="${P_ESC}[38;5;25m${P_END}"
 
 	WORK_DIR_COLOR="${P_BOLD}${P_DFL_BLUE}"
@@ -177,8 +178,8 @@ else
 	P_WSL="[${P_GREEN}${LOGO_WINDOWS}${P_RST}]"
 fi
 
-GIT_UNTRACKED="!"
-GIT_UNSTAGED="?"
+GIT_UNTRACKED="?"
+GIT_UNSTAGED="!"
 GIT_STAGED="+"
 GIT_COMMIT_AHEAD="⇡"
 GIT_COMMIT_BEHIND="⇣"
@@ -196,17 +197,22 @@ function	prompt::get_git_status()
 	   !42  42 unstaged changes
 	   ?42  42 untracked files
 	"
-	local	git_status=$(git status --porcelain --branch)
+	local	git_status="$(git status --porcelain --untracked-files=all --branch)"
 	local	branch_name
-	local	untracked		# !
-	local	unstaged		# ?
+	local	untracked		# ?
+	local	unstaged		# !
 	local	staged			# +
 	local	commit_ahead	# ⇡
+	local	detached
 
-	branch_name=$(perl -ne "print if s|## (.*?)\..*|\1|g" <<<"${git_status}")
-	branch_name="${P_GREEN}${LOGO_GIT} ${branch_name}${P_RST}"
+	branch_name="$(perl -ne "print if s|## (\b[\w-]*\b).*|\1|g" <<<"${git_status}")"
+	if [ "${branch_name}" == "HEAD" ]; then
+		detached="$(git branch -q | perl -ne 'print if s|.*([a-f0-9]{7}).*|\1|g')"
+		detached="${P_BOLD}~${P_RBOLD}${P_ORANGE}${detached}${P_RST}"
+	fi
+	branch_name="${P_GREEN}${LOGO_GIT} ${branch_name}${P_RST}${detached}"
 
-	untracked=$(git ls-files --others --exclude-standard | wc -l)
+	untracked=$(grep -E "^\?\?" <<<"${git_status}" | wc -l)
 	if [ "${untracked}" -ne 0 ]; then
 		untracked="${P_ORANGE}${GIT_UNTRACKED}${untracked}${P_RST}"
 	else untracked="" ; fi
@@ -317,9 +323,13 @@ export PATH="${HOME}/.local/bin:${PATH}"
 export PIP_BREAK_SYSTEM_PACKAGES=1
 export PYTHONDONTWRITEBYTECODE=1
 
-if [ $(is::available "bat") ] || [ $(is::available "batcat") ]; then
+if [ $(is::available "bat") ]; then
 	export MANROFFOPT="-c"
 	export MANPAGER="sh -c 'col -bx | bat -plman'"
+fi
+if [ $(is::available "batcat") ]; then
+	export MANROFFOPT="-c"
+	export MANPAGER="sh -c 'col -bx | batcat -plman'"
 fi
 
 # Display previous command as title of the GUI terminal
