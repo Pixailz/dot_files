@@ -203,6 +203,7 @@ function	prompt::get_git_status()
 	local	unstaged		# !
 	local	staged			# +
 	local	commit_ahead	# ⇡
+	local	commit_behind	# ⇣
 	local	detached
 
 	branch_name="$(perl -ne "print if s|## (\b[\w-]*\b).*|\1|g" <<<"${git_status}")"
@@ -230,10 +231,19 @@ function	prompt::get_git_status()
 		commit_ahead="${P_PURPLE}${GIT_COMMIT_AHEAD}${commit_ahead}${P_RST}"
 	else commit_ahead="" ; fi
 
-	if [ -z "${commit_ahead}" -a -z "${staged}" -a -z "${untracked}" -a -z "${unstaged}" ]; then
+	commit_behind=$(perl -ne "print if s|^##.*\[behind ([0-9]*)]|\1|g" <<<"${git_status}")
+	if [ "${commit_behind:-0}" -ne 0 ]; then
+		commit_behind="${P_RED}${GIT_COMMIT_BEHIND}${commit_behind}${P_RST}"
+	else commit_behind="" ; fi
+
+	if	[ -z "${commit_ahead}" ] && \
+		[ -z "${commit_behind}" ] && \
+		[ -z "${staged}" ] && \
+		[ -z "${untracked}" ] && \
+		[ -z "${unstaged}" ]; then
 		P_GIT="[ ${branch_name} ${P_GREEN}${GIT_ALL_GOOD}${P_RST} ]"
 	else
-		P_GIT="[ ${branch_name} ${commit_ahead}${staged}${untracked}${unstaged} ]"
+		P_GIT="[ ${branch_name} ${commit_behind}${commit_ahead}${staged}${untracked}${unstaged} ]"
 	fi
 }
 
