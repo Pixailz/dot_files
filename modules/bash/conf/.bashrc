@@ -197,7 +197,7 @@ function	prompt::get_git_status()
 	   !42  42 unstaged changes
 	   ?42  42 untracked files
 	"
-	local	git_status="$(git status --porcelain --untracked-files=all --branch)"
+	local	git_status="$(git status --porcelain --untracked-files=all --branch 2>/dev/null)"
 	local	branch_name
 	local	untracked		# ?
 	local	unstaged		# !
