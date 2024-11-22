@@ -248,7 +248,8 @@ function	prompt::get_git_status()
 }
 
 function	prompt::PS1() {
-	local	exit="${EXIT:-${?}}"
+	local	_exit="${?}"
+	local	exit="${EXIT:-${_exit}}"
 	local	status_color
 	local	is_a_git_dir
 
