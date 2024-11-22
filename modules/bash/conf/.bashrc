@@ -248,25 +248,25 @@ function	prompt::get_git_status()
 }
 
 function	prompt::PS1() {
-	local	EXIT=${?}
+	local	exit="${EXIT:-${?}}"
 	local	status_color
 	local	is_a_git_dir
 
 	PS1=""
 
-	case ${EXIT} in
+	case ${exit} in
 		0)		status_color="${P_GREEN}" ;;
 		130)	status_color="${P_ORANGE}" ;;
 		*)		status_color="${P_RED}" ;;
 	esac
-	case ${#EXIT} in
-		1)	EXIT=" ${EXIT} " ;;
-		2)	EXIT=" ${EXIT}" ;;
-		*)	EXIT="${EXIT}" ;;
+	case ${#exit} in
+		1)	exit=" ${exit} " ;;
+		2)	exit=" ${exit}" ;;
+		*)	exit="${exit}" ;;
 	esac
 
 	P_CWD="${WORK_DIR_COLOR}\w${P_RST}"
-	P_RET="${status_color}${EXIT}${P_RST}"
+	P_RET="${status_color}${exit}${P_RST}"
 	P_TIME="$(date +%T)"
 	TERM_WIDTH=$(tput cols)
 
