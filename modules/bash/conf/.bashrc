@@ -332,11 +332,11 @@ export PATH="${HOME}/.local/bin:${PATH}"
 export PIP_BREAK_SYSTEM_PACKAGES=1
 export PYTHONDONTWRITEBYTECODE=1
 
-if [ "$(is::available "bat")" == 1 ]; then
+if is::available "bat"; then
 	export MANROFFOPT="-c"
 	export MANPAGER="sh -c 'col -bx | bat -plman'"
 fi
-if [ "$(is::available "batcat")" == 1 ]; then
+if is::available "batcat"; then
 	export MANROFFOPT="-c"
 	export MANPAGER="sh -c 'col -bx | batcat -plman'"
 fi
