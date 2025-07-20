@@ -86,7 +86,7 @@ function	clean::package()
 
 function	install::deb()
 {
-	clean::package ${DEB_PACK[@]}
+	clean::package ${DEV_PACK[@]}
 	if [ "${#PARSED_PACK[@]}" == "0" ]; then
 		log::info "Nothing to install" 1
 	else
